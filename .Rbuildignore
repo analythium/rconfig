@@ -1,0 +1,13 @@
+.git*
+.DS_Store
+.*~
+^docs$
+^_pkgdown\.yml$
+^pkgdown$
+^README\.Rmd$
+^README\.md$
+^CODE_OF_CONDUCT\.md$
+^inst/tmp$
+^_build\.sh$
+^.*\.Rproj$
+^\.Rproj\.user$
