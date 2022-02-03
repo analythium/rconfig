@@ -1,7 +1,7 @@
 ## Internal functions for guessing object types
 
-## Shoul we evaluate !expr expressions?
-## env var overrides option
+## Should we evaluate !expr expressions?
+## env var R_RCONFIG_EVAL overrides the rconfig.eval option
 do_eval <- function() {
     default_val <- TRUE
     var <- as.logical(Sys.getenv("R_RCONFIG_EVAL"))
@@ -48,7 +48,9 @@ guess_type <- function(x) {
 convert_type <- function(x) {
     tp <- guess_type(x)
     if (tp == "expr")
-        return(eval(parse(text=substr(x, 7L, nchar(x))), envir = baseenv()))
+        return(eval(
+            expr = parse(text = substr(x, 7L, nchar(x))),
+            envir = baseenv()))
     switch(tp,
         "int"=as.integer(x),
         "num"=as.numeric(x),

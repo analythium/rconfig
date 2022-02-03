@@ -14,9 +14,11 @@ guess_ext <- function(x) {
         "txt")
 }
 
-## Make a nested list
-## parts is a list of nexted names
-## values is a list of values to assign
+## Make a nested list out of period-separated keys
+## a.b.c is parsed as parts (e.g. c("a", "b", "c"))
+## parts turned into named lists (e.g. a$b$c)
+## values is a list of values to assign to the tips (e.g. a$b$c <- v)
+## note: values used as is (no coercion/evaluation)
 make_list <- function(parts, values) {
     to_merge <- list()
     for (i in seq_along(parts)) {
@@ -35,6 +37,8 @@ make_list <- function(parts, values) {
     to_merge
 }
 
+## find the separator for the text parser
+## env var R_RCONFIG_SEP overrides the rconfig.sep option
 txt_sep <- function() {
     default_val <- "="
     var <- as.character(Sys.getenv("R_RCONFIG_SEP"))
@@ -46,7 +50,7 @@ txt_sep <- function() {
     var
 }
 
-## Parse text files (second separator as part of valie must be quoted
+## Parse text files (second separator as part of value must be quoted
 ## because parts beyond that are dropped)
 ## separator is '=' by default, governed by txt_sep()
 parse_txt <- function(x, ...) {
@@ -58,6 +62,7 @@ parse_txt <- function(x, ...) {
 }
 
 ## Parse YAML files
+## !expr evaluation is governed by do_eval()
 parse_yml <- function(x, ...) {
     if (do_eval()) {
     yaml::yaml.load_file(x,
@@ -70,25 +75,33 @@ parse_yml <- function(x, ...) {
     }
 }
 
-## parse JSON string (json can be supplied as argument)
-## convert to YML when !expr evaluation needed
+## Parse JSON string (when --json is supplied as cli argument)
+## convert to YAML when !expr evaluation needed
+## need to work around ! being special char in YAML
+## !expr evaluation is governed by do_eval()
 parse_json_string <- function(x, ...) {
     if (do_eval()) {
         z <- gsub("!expr ", "__excl__expr ", x)
         l <- jsonlite::fromJSON(z, ...)
         y <- yaml::as.yaml(l)
         y <- gsub("__excl__expr ", "!expr ", y)
-        yaml::yaml.load(y,
+        out <- yaml::yaml.load(y,
             eval.expr = FALSE,
             handlers = list(expr = function(x)
                 eval(parse(text = x), envir = baseenv())))
     } else {
-        jsonlite::fromJSON(x, ...)
+        out <- jsonlite::fromJSON(x, ...)
     }
+    attr(out, "rconfig") <- list(
+        kind = "json",
+        value = x)
+    out
 }
 
-## parse JSON file
-## convert to YML when !expr evaluation needed
+## Parse JSON file
+## convert to YAML when !expr evaluation needed
+## need to work around ! being special char in YAML
+## !expr evaluation is governed by do_eval()
 parse_json <- function(x, ...) {
     z <- readLines(x)
     if (do_eval()) {
@@ -107,12 +120,17 @@ parse_json <- function(x, ...) {
 }
 
 ## Parse the file depending on file type (yml, json, txt)
+## note: YAML, JSON, txt accept URLs or file names
 parse_file <- function(x, ...) {
     x <- normalizePath(x, mustWork = FALSE)
-    switch(guess_ext(x),
+    out <- switch(guess_ext(x),
         "yml" = parse_yml(x, ...),
         "json" = parse_json(x, ...),
         "txt" = parse_txt(x, ...))
+    attr(out, "rconfig") <- list(
+        kind = "file",
+        value = x)
+    out
 }
 
 ## Parse default config file
@@ -120,14 +138,21 @@ parse_file <- function(x, ...) {
 parse_default <- function() {
     f <- Sys.getenv("R_RCONFIG_FILE", "config.yml")
     f <- normalizePath(f, mustWork = FALSE)
-    if (!file.exists(f))
+    l <- if (!file.exists(f))
         list() else parse_file(f)
+    attr(l, "rconfig") <- list(
+        kind = "file",
+        value = f)
+    l
 }
 
 ## Parse cli arguments
 ## except for:
 ## -f --file and -j --json
 ## eg: args <- c("--test", "--some.value", "!expr pi", "--another.value", "abc", "def", "--another.stuff", "99.2")
+## note: period-separated command line
+## arguments are parsed as hierarchical lists
+## values are coerced/evaluated using convert_type(value)
 parse_args_other <- function(args) {
     foj <- args %in% c("-f", "--file", "-j", "--json")
     foj[which(foj)+1L] <- TRUE
@@ -150,7 +175,11 @@ parse_args_other <- function(args) {
             values[[flags[i]]] <- convert_type(values[[flags[i]]])
         }
     }
-    make_list(parts, values)
+    l <- make_list(parts, values)
+    attr(l, "rconfig") <- list(
+        kind = "args",
+        value = paste0(args, collapse = " "))
+    l
 }
 
 ## Parse cli arguments for:
@@ -163,12 +192,44 @@ parse_args_file_and_json <- function(args) {
         is_file <- args[idx[i]] %in% c("-f", "--file")
         if (is_file) {
             l <- parse_file(args[idx[i]+1L])
-            attr(l, "file") <- args[idx[i]+1L]
         } else {
             l <- parse_json_string(args[idx[i]+1L])
-            attr(l, "json") <- args[idx[i]+1L]
         }
         ll[[i]] <- l
     }
     ll
+}
+
+## Parse files, json strings, and cli arguments for config
+## this returns all the lists in order of precedence before merging
+##
+## Precedence:
+## 1. R_RCONFIG_FILE value or config.yml
+## 2. json and file args are parsed and applied in order
+## 3. the remaining other cli args are added last
+## 4. config file
+## 5. config list
+##
+## last element overrides previous
+## preserves all the rconfig attributes
+config_list <- function(file = NULL, list = NULL) {
+    args <- commandArgs(trailingOnly=TRUE)
+    l1 <- parse_default()
+    l2 <- parse_args_file_and_json(args)
+    l3 <- parse_args_other(args)
+    lists <- list(l1)
+    for (i in seq_along(l2))
+        lists[length(lists)+1L] <- l2[i]
+    lists[[length(lists)+1L]] <- l3
+    if (!is.null(file)) {
+        l4 <- parse_file(file)
+        lists[[length(lists)+1L]] <- l4
+    }
+    if (!is.null(list)) {
+        attr(list, "rconfig") <- list(
+            kind = "list",
+            value = NULL)
+        lists[[length(lists)+1L]] <- list
+    }
+    lists
 }

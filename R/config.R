@@ -1,31 +1,84 @@
-## config
-
-## Parse cli arguments for:
+#' Merged configuration
+#'
+#' Parses files, JSON strings, and command line arguments for configuration.
+#'
+#' @param file Configuration file name or URL (`NULL` to not use
+#'   this configuration file to override the default behavior).
+#' @param list A list to override other configs (`NULL` to not use
+#'   this list to override the default behavior).
+#'
+#' Configurations are merged in the following order
+#' (key-values from last element override previous values for the same key):
+#'
+#' 1. `R_RCONFIG_FILE` value or `"config.yml"`
+#' 2. JSON strings (following `-j` and `--json` flags)
+#'    and files (following `-f` and `--file` flags)
+#'    provided as command line arguments are parsed and applied
+#'    in the order they appear (key-value pars are separated by space,
+#'    only a atomic values considered, i.e. file name or string)
+#' 3. the remaining other command line arguments, period-separated
+#'    command line flags are parsed as hierarchical lists
+#'    (key-value pars are separated by space, flags must begin
+#'    with `--`, values are treated as vectors when contain spaces)
+#' 4. configuration from the `file` argument
+#' 5. configuration from the `list` argument
+#'
+#' The following environment variables and options can be set to
+#' modify the default behavior:
+#'
+#' * `R_RCONFIG_FILE`: location of the default configuration file,
+#'   it is assumed to be `config.yml` in the current working directory.
+#'   The file name can be an URL or it can can be missing.
+#' * `R_RCONFIG_EVAL`: coerced to logical, indicating whether
+#'   R expressions starting with `!expr` should be evaluated in the
+#'   namespace environment for the base package
+#'   (overrides the value of `getOption("rconfig.eval")`).
+#'   When not set the value is `TRUE`.
+#' * `R_RCONFIG_SEP`: separator for text file parser,
+#'   (overrides the value of `getOption("rconfig.sep")`).
+#'   When not set the value is `"="`.
+#'
+#' When the configuration is a file (file name can also be a URL),
+#' it can be nested structure in JSON, YAML format.
+#' Other text files are parsed using the
+#' separator (`R_RCONFIG_SEP` or `getOption("rconfig.sep")`) and
+#' period-separated keys are parsed as hierarchical lists
+#' (i.e. `a.b.c=12` is treated as `a$b$c = 12`).
+#'
+#' When the configuration is a file or a JSON string,
+#' values starting with `!expr` will be evaluated depending on the
+#' settings `R_RCONFIG_EVAL` and `getOption("rconfig.eval")`.
+#' E.g. `cores: !expr getOption("mc.cores")`, etc.
+#'
+#' For additional details see the package website at
+#'  \href{https://github.com/analythium/rconfig}{https://github.com/analythium/rconfig}.
+#'
+#' @return The configuration value (a named list, or an empty list).
+#'   The `"rconfig"` attribute traces the merged configurations.
+#'
+#' @seealso [utils::modifyList()]
+#'
+#' @export
+## Parse files, json strings, and cli arguments for config
+##
 ## Precedence:
 ## 1. R_RCONFIG_FILE value or config.yml
 ## 2. json and file args are parsed and applied in order
 ## 3. the remaining other cli args are added last
 ## 4. config file
 ## 5. config list
+##
+## this merges the lists to create the final config
+## rconfig attribute traces what was merged
 rconfig <- function(file = NULL, list = NULL) {
-    args <- commandArgs(trailingOnly=TRUE)
-    l1 <- parse_default()
-    l2 <- parse_args_file_and_json(args)
-    l3 <- parse_args_other(args)
-    lists <- list(l1)
-    for (i in seq_along(l2))
-        lists[length(lists)+1L] <- l2[i]
-    lists[[length(lists)+1L]] <- l3
-    if (!is.null(file)) {
-        l4 <- parse_file(file)
-        lists[[length(lists)+1L]] <- l4
-    }
-    if (!is.null(list)) {
-        lists[[length(lists)+1L]] <- list
-    }
+    lists <- config_list(file = file, list = list)
+    at <- lapply(lists, attr, "rconfig")
     out <- list()
     for (i in lists)
         out <- utils::modifyList(out, i)
+    attr(out, "rconfig") <- list(
+        kind = "merged",
+        value = at)
     out
 }
 
