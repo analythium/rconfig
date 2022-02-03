@@ -137,7 +137,7 @@ parse_file <- function(x, ...) {
 ## Parse default config file
 ## defined by R_RCONFIG_FILE
 parse_default <- function() {
-    f <- Sys.getenv("R_RCONFIG_FILE", "config.yml")
+    f <- Sys.getenv("R_RCONFIG_FILE", "rconfig.yml")
     f <- normalizePath(f, mustWork = FALSE)
     if (!file.exists(f))
         return(NULL)
@@ -188,7 +188,7 @@ parse_args_other <- function(args) {
 
 ## Parse cli arguments for:
 ## -f --file and -j --json
-## eg: args <- c("--test", "--some.value", "!expr pi", "--another.value", "abc", "def", "-j", "{\"a\":1, \"b\":\"c\"}", "--another.stuff", "99.2", "-f", "inst/config/config.yml")
+## eg: args <- c("--test", "--some.value", "!expr pi", "--another.value", "abc", "def", "-j", "{\"a\":1, \"b\":\"c\"}", "--another.stuff", "99.2", "-f", "inst/config/rconfig.yml")
 parse_args_file_and_json <- function(args) {
     idx <- which(args %in% c("-f", "--file", "-j", "--json"))
     if (!length(idx))
@@ -210,7 +210,7 @@ parse_args_file_and_json <- function(args) {
 ## this returns all the lists in order of precedence before merging
 ##
 ## Precedence:
-## 1. R_RCONFIG_FILE value or config.yml
+## 1. R_RCONFIG_FILE value or rconfig.yml
 ## 2. json and file args are parsed and applied in order
 ## 3. the remaining other cli args are added last
 ## 4. config file

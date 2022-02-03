@@ -11,7 +11,7 @@
 #' Configurations are merged in the following order
 #' (key-values from last element override previous values for the same key):
 #'
-#' 1. `R_RCONFIG_FILE` value or `"config.yml"`
+#' 1. `R_RCONFIG_FILE` value or `"rconfig.yml"`
 #' 2. JSON strings (following `-j` and `--json` flags)
 #'    and files (following `-f` and `--file` flags)
 #'    provided as command line arguments are parsed and applied
@@ -29,7 +29,7 @@
 #' modify the default behavior:
 #'
 #' * `R_RCONFIG_FILE`: location of the default configuration file,
-#'   it is assumed to be `config.yml` in the current working directory.
+#'   it is assumed to be `rconfig.yml` in the current working directory.
 #'   The file name can be an URL or it can can be missing.
 #' * `R_RCONFIG_EVAL`: coerced to logical, indicating whether
 #'   R expressions starting with `!expr` should be evaluated in the
@@ -79,7 +79,7 @@ NULL
 ## Parse files, json strings, and cli arguments for config
 ##
 ## Precedence:
-## 1. R_RCONFIG_FILE value or config.yml
+## 1. R_RCONFIG_FILE value or rconfig.yml
 ## 2. json and file args are parsed and applied in order
 ## 3. the remaining other cli args are added last
 ## 4. config file
