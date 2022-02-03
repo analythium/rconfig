@@ -1,0 +1,3 @@
+trials=30
+dataset="full-data.csv"
+user.name="real_We4$#z*="
