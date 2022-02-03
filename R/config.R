@@ -21,7 +21,8 @@
 #'    command line flags are parsed as hierarchical lists
 #'    (key-value pars are separated by space, flags must begin
 #'    with `--`, values are treated as vectors when contain spaces)
-#' 4. configuration from the `file` argument
+#' 4. configuration from the `file` argument (one or multiple files,
+#'    parsed and applied in the order they appear)
 #' 5. configuration from the `list` argument
 #'
 #' The following environment variables and options can be set to
@@ -56,8 +57,12 @@
 #'
 #' @param file Configuration file name or URL (`NULL` to not use
 #'   this configuration file to override the default behavior).
+#'   Can be a vector, in which case each element will be treated
+#'   as a configuration file, and these will be parsed and applied
+#'   in the order they appear.
 #' @param list A list to override other configs (`NULL` to not use
-#'   this list to override the default behavior).
+#'   this list to override the default behavior). This argument is treated
+#'   as a single configuration (as opposed to `file`).
 #' @param x A configuration object (named or empty list) of class rconfig.
 #' @param ... Other arguments passed to methods.
 #'

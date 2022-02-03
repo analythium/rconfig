@@ -223,20 +223,19 @@ config_list <- function(file = NULL, list = NULL) {
     l2 <- parse_args_file_and_json(args)
     l3 <- parse_args_other(args)
     lists <- list()
-    if (is.null(l1))
+    if (!is.null(l1))
         lists[[1L]] <- l1
     for (i in seq_along(l2))
         lists[length(lists)+1L] <- l2[i]
     if (!is.null(l3))
         lists[[length(lists)+1L]] <- l3
-    if (!is.null(file)) {
-        l4 <- parse_file(file)
-        lists[[length(lists)+1L]] <- l4
+    for (i in file) {
+        lists[[length(lists)+1L]] <- parse_file(i)
     }
     if (!is.null(list)) {
         attr(list, "rconfig") <- list(
             kind = "list",
-            value = NULL)
+            value = deparse(list))
         lists[[length(lists)+1L]] <- list
     }
     lists

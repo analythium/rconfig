@@ -2,7 +2,7 @@ Package: rconfig
 Type: Package
 Title: Manage R Configuration at the Command Line
 Version: 0.0.1
-Date: 2022-02-02
+Date: 2022-02-03
 Author: 
   Peter Solymos [aut, cre] (<https://orcid.org/0000-0001-7337-1740>), 
   Analythium Solutions Inc. [cph]

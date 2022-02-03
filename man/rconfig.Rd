@@ -11,10 +11,14 @@ rconfig(file = NULL, list = NULL)
 }
 \arguments{
 \item{file}{Configuration file name or URL (\code{NULL} to not use
-this configuration file to override the default behavior).}
+this configuration file to override the default behavior).
+Can be a vector, in which case each element will be treated
+as a configuration file, and these will be parsed and applied
+in the order they appear.}
 
 \item{list}{A list to override other configs (\code{NULL} to not use
-this list to override the default behavior).}
+this list to override the default behavior). This argument is treated
+as a single configuration (as opposed to \code{file}).}
 
 \item{x}{A configuration object (named or empty list) of class rconfig.}
 
@@ -46,7 +50,8 @@ only a atomic values considered, i.e. file name or string)
 command line flags are parsed as hierarchical lists
 (key-value pars are separated by space, flags must begin
 with \verb{--}, values are treated as vectors when contain spaces)
-\item configuration from the \code{file} argument
+\item configuration from the \code{file} argument (one or multiple files,
+parsed and applied in the order they appear)
 \item configuration from the \code{list} argument
 }
 
