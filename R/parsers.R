@@ -71,7 +71,9 @@ parse_yml <- function(x, ...) {
             eval(parse(text = x), envir = baseenv())), ...)
     } else {
         yaml::yaml.load_file(x,
-            eval.expr = FALSE, ...)
+            eval.expr = FALSE,
+            handlers = list(expr = function(x)
+                paste0("!expr ", x)), ...)
     }
 }
 
@@ -108,7 +110,6 @@ parse_json <- function(x, ...) {
         z <- gsub("!expr ", "__excl__expr ", z)
         l <- jsonlite::fromJSON(z, ...)
         y <- yaml::as.yaml(l)
-        cat(y)
         y <- gsub("__excl__expr ", "!expr ", y)
         yaml::yaml.load(y,
             eval.expr = FALSE,
