@@ -35,10 +35,13 @@
 #'   R expressions starting with `!expr` should be evaluated in the
 #'   namespace environment for the base package
 #'   (overrides the value of `getOption("rconfig.eval")`).
-#'   When not set the value is `TRUE`.
+#'   When not set the value assumed is `TRUE`.
 #' * `R_RCONFIG_SEP`: separator for text file parser,
 #'   (overrides the value of `getOption("rconfig.sep")`).
-#'   When not set the value is `"="`.
+#'   When not set the value assumed is `"="`.
+#' * `R_RCONFIG_DEBUG`: coerced to logical, to turn on debug mode
+#'   (overrides the value of `getOption("rconfig.debug")`).
+#'   When not set the value assumed is `FALSE`.
 #'
 #' When the configuration is a file (file name can also be a URL),
 #' it can be nested structure in JSON, YAML format.
@@ -67,7 +70,8 @@
 #' @param ... Other arguments passed to methods.
 #'
 #' @return The configuration value (a named list, or an empty list).
-#'   The `"trace"` attribute traces the merged configurations.
+#'   When debug mode is on, the `"trace"` attribute traces the
+#'   merged configurations.
 #'
 #' @seealso [utils::modifyList()]
 #'
@@ -101,7 +105,8 @@ rconfig <- function(file = NULL, list = NULL) {
                 kind = "merged",
                 value = lapply(lists, attr, "trace"))
         } else attr(lists[[1L]], "trace")
-        attr(out, "trace") <- rc
+        if (do_debug())
+            attr(out, "trace") <- rc
     }
     class(out) <- "rconfig"
     out
@@ -112,6 +117,20 @@ rconfig <- function(file = NULL, list = NULL) {
 print.rconfig <- function(x, ...) {
     xx <- x
     attr(xx, "trace") <- NULL
-    print(unclass(xx))
+    print(unclass(xx), ...)
     invisible(x)
+}
+
+## trace is stored when debug mode is on
+do_debug <- function() {
+    default_val <- FALSE
+    var <- as.logical(Sys.getenv("R_RCONFIG_DEBUG"))
+    if (is.na(var)) {
+        opt <- getOption("rconfig.debug")
+        if (!is.null(opt))
+            opt <- suppressWarnings(as.logical(opt))
+        var <- if (!length(opt) || is.na(opt))
+            default_val else opt
+    }
+    var
 }

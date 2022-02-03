@@ -26,7 +26,8 @@ as a single configuration (as opposed to \code{file}).}
 }
 \value{
 The configuration value (a named list, or an empty list).
-The \code{"trace"} attribute traces the merged configurations.
+When debug mode is on, the \code{"trace"} attribute traces the
+merged configurations.
 }
 \description{
 Manage R configuration using files (JSON, YAML, separated text)
@@ -40,7 +41,7 @@ and command line arguments.
 Configurations are merged in the following order
 (key-values from last element override previous values for the same key):
 \enumerate{
-\item \code{R_RCONFIG_FILE} value or \code{"config.yml"}
+\item \code{R_RCONFIG_FILE} value or \code{"rconfig.yml"}
 \item JSON strings (following \code{-j} and \code{--json} flags)
 and files (following \code{-f} and \code{--file} flags)
 provided as command line arguments are parsed and applied
@@ -59,16 +60,19 @@ The following environment variables and options can be set to
 modify the default behavior:
 \itemize{
 \item \code{R_RCONFIG_FILE}: location of the default configuration file,
-it is assumed to be \code{config.yml} in the current working directory.
+it is assumed to be \code{rconfig.yml} in the current working directory.
 The file name can be an URL or it can can be missing.
 \item \code{R_RCONFIG_EVAL}: coerced to logical, indicating whether
 R expressions starting with \code{!expr} should be evaluated in the
 namespace environment for the base package
 (overrides the value of \code{getOption("rconfig.eval")}).
-When not set the value is \code{TRUE}.
+When not set the value assumed is \code{TRUE}.
 \item \code{R_RCONFIG_SEP}: separator for text file parser,
 (overrides the value of \code{getOption("rconfig.sep")}).
-When not set the value is \code{"="}.
+When not set the value assumed is \code{"="}.
+\item \code{R_RCONFIG_DEBUG}: coerced to logical, to turn on debug mode
+(overrides the value of \code{getOption("rconfig.debug")}).
+When not set the value assumed is \code{FALSE}.
 }
 
 When the configuration is a file (file name can also be a URL),
