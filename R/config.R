@@ -67,7 +67,7 @@
 #' @param ... Other arguments passed to methods.
 #'
 #' @return The configuration value (a named list, or an empty list).
-#'   The `"rconfig"` attribute traces the merged configurations.
+#'   The `"trace"` attribute traces the merged configurations.
 #'
 #' @seealso [utils::modifyList()]
 #'
@@ -88,15 +88,20 @@ NULL
 ## this merges the lists to create the final config
 ## rconfig attribute traces what was merged
 rconfig <- function(file = NULL, list = NULL) {
+    ## unmerged list
     lists <- config_list(file = file, list = list)
-    at <- lapply(lists, attr, "rconfig")
+    ## merged list
     out <- list()
     for (i in lists)
         out <- utils::modifyList(out, i)
-    if (length(out)) {
-        attr(out, "rconfig") <- list(
-            kind = "merged",
-            value = at)
+    ## trace
+    if (length(lists)) {
+        rc <- if (length(lists) > 1L) {
+            list(
+                kind = "merged",
+                value = lapply(lists, attr, "rconfig"))
+        } else attr(lists[[1L]], "rconfig")
+        attr(out, "trace") <- rc
     }
     class(out) <- "rconfig"
     out
@@ -106,7 +111,7 @@ rconfig <- function(file = NULL, list = NULL) {
 #' @rdname rconfig
 print.rconfig <- function(x, ...) {
     xx <- x
-    attr(xx, "rconfig") <- NULL
+    attr(xx, "trace") <- NULL
     print(unclass(xx))
     invisible(x)
 }

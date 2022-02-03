@@ -26,7 +26,7 @@ as a single configuration (as opposed to \code{file}).}
 }
 \value{
 The configuration value (a named list, or an empty list).
-The \code{"rconfig"} attribute traces the merged configurations.
+The \code{"trace"} attribute traces the merged configurations.
 }
 \description{
 Manage R configuration using files (JSON, YAML, separated text)

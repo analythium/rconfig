@@ -92,7 +92,7 @@ parse_json_string <- function(x, ...) {
     } else {
         out <- jsonlite::fromJSON(x, ...)
     }
-    attr(out, "rconfig") <- list(
+    attr(out, "trace") <- list(
         kind = "json",
         value = x)
     out
@@ -127,7 +127,7 @@ parse_file <- function(x, ...) {
         "yml" = parse_yml(x, ...),
         "json" = parse_json(x, ...),
         "txt" = parse_txt(x, ...))
-    attr(out, "rconfig") <- list(
+    attr(out, "trace") <- list(
         kind = "file",
         value = x)
     out
@@ -141,7 +141,7 @@ parse_default <- function() {
     if (!file.exists(f))
         return(NULL)
     l <- parse_file(f)
-    attr(l, "rconfig") <- list(
+    attr(l, "trace") <- list(
         kind = "file",
         value = f)
     l
@@ -179,7 +179,7 @@ parse_args_other <- function(args) {
         }
     }
     l <- make_list(parts, values)
-    attr(l, "rconfig") <- list(
+    attr(l, "trace") <- list(
         kind = "args",
         value = paste0(args, collapse = " "))
     l
@@ -233,7 +233,7 @@ config_list <- function(file = NULL, list = NULL) {
         lists[[length(lists)+1L]] <- parse_file(i)
     }
     if (!is.null(list)) {
-        attr(list, "rconfig") <- list(
+        attr(list, "trace") <- list(
             kind = "list",
             value = deparse(list))
         lists[[length(lists)+1L]] <- list
