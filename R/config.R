@@ -1,12 +1,13 @@
-#' Merged configuration
+#' Manage R Configuration at the Command Line
 #'
-#' Parses files, JSON strings, and command line arguments for configuration.
+#' Manage R configuration using files (JSON, YAML, separated text)
+#' JSON strings and command line arguments. Command line arguments
+#' can be used to override configuration. Period-separated command line
+#' flags are parsed as hierarchical lists.
 #'
-#' @param file Configuration file name or URL (`NULL` to not use
-#'   this configuration file to override the default behavior).
-#' @param list A list to override other configs (`NULL` to not use
-#'   this list to override the default behavior).
-#'
+#' @details
+#' Merges configuration after parsing files, JSON strings,
+#' and command line arguments.
 #' Configurations are merged in the following order
 #' (key-values from last element override previous values for the same key):
 #'
@@ -52,6 +53,11 @@
 #'
 #' For additional details see the package website at
 #'  \href{https://github.com/analythium/rconfig}{https://github.com/analythium/rconfig}.
+#'
+#' @param file Configuration file name or URL (`NULL` to not use
+#'   this configuration file to override the default behavior).
+#' @param list A list to override other configs (`NULL` to not use
+#'   this list to override the default behavior).
 #'
 #' @return The configuration value (a named list, or an empty list).
 #'   The `"rconfig"` attribute traces the merged configurations.
