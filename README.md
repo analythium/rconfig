@@ -89,5 +89,5 @@ Rscript test.R -j '{"trials":30,"dataset":"full-data.csv","user":{"name": "real_
 
 ## License
 
-[MIT License]](./LICENSE)
+[MIT License](./LICENSE)
 Copyright (c) 2022 Peter Solymos and Analythium Solutions Inc.
