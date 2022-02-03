@@ -99,8 +99,8 @@ rconfig <- function(file = NULL, list = NULL) {
         rc <- if (length(lists) > 1L) {
             list(
                 kind = "merged",
-                value = lapply(lists, attr, "rconfig"))
-        } else attr(lists[[1L]], "rconfig")
+                value = lapply(lists, attr, "trace"))
+        } else attr(lists[[1L]], "trace")
         attr(out, "trace") <- rc
     }
     class(out) <- "rconfig"
