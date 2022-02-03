@@ -138,8 +138,9 @@ parse_file <- function(x, ...) {
 parse_default <- function() {
     f <- Sys.getenv("R_RCONFIG_FILE", "config.yml")
     f <- normalizePath(f, mustWork = FALSE)
-    l <- if (!file.exists(f))
-        list() else parse_file(f)
+    if (!file.exists(f))
+        return(NULL)
+    l <- parse_file(f)
     attr(l, "rconfig") <- list(
         kind = "file",
         value = f)
@@ -157,6 +158,8 @@ parse_args_other <- function(args) {
     foj <- args %in% c("-f", "--file", "-j", "--json")
     foj[which(foj)+1L] <- TRUE
     args <- args[!foj]
+    if (!length(args) || identical(args, ""))
+        return(NULL)
     idx <- which(startsWith(args, "--"))
     flags <- substr(args[idx], 3, nchar(args[idx]))
     parts <- strsplit(flags, "\\.")
@@ -187,6 +190,8 @@ parse_args_other <- function(args) {
 ## eg: args <- c("--test", "--some.value", "!expr pi", "--another.value", "abc", "def", "-j", "{\"a\":1, \"b\":\"c\"}", "--another.stuff", "99.2", "-f", "inst/config/config.yml")
 parse_args_file_and_json <- function(args) {
     idx <- which(args %in% c("-f", "--file", "-j", "--json"))
+    if (!length(idx))
+        return(NULL)
     ll <- list()
     for (i in seq_along(idx)) {
         is_file <- args[idx[i]] %in% c("-f", "--file")
@@ -217,10 +222,13 @@ config_list <- function(file = NULL, list = NULL) {
     l1 <- parse_default()
     l2 <- parse_args_file_and_json(args)
     l3 <- parse_args_other(args)
-    lists <- list(l1)
+    lists <- list()
+    if (is.null(l1))
+        lists[[1L]] <- l1
     for (i in seq_along(l2))
         lists[length(lists)+1L] <- l2[i]
-    lists[[length(lists)+1L]] <- l3
+    if (!is.null(l3))
+        lists[[length(lists)+1L]] <- l3
     if (!is.null(file)) {
         l4 <- parse_file(file)
         lists[[length(lists)+1L]] <- l4

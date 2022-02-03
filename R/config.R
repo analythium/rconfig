@@ -58,13 +58,19 @@
 #'   this configuration file to override the default behavior).
 #' @param list A list to override other configs (`NULL` to not use
 #'   this list to override the default behavior).
+#' @param x A configuration object (named or empty list) of class rconfig.
+#' @param ... Other arguments passed to methods.
 #'
 #' @return The configuration value (a named list, or an empty list).
 #'   The `"rconfig"` attribute traces the merged configurations.
 #'
 #' @seealso [utils::modifyList()]
 #'
+#' @name rconfig
+NULL
+
 #' @export
+#' @rdname rconfig
 ## Parse files, json strings, and cli arguments for config
 ##
 ## Precedence:
@@ -82,9 +88,20 @@ rconfig <- function(file = NULL, list = NULL) {
     out <- list()
     for (i in lists)
         out <- utils::modifyList(out, i)
-    attr(out, "rconfig") <- list(
-        kind = "merged",
-        value = at)
+    if (length(out)) {
+        attr(out, "rconfig") <- list(
+            kind = "merged",
+            value = at)
+    }
+    class(out) <- "rconfig"
     out
 }
 
+#' @export
+#' @rdname rconfig
+print.rconfig <- function(x, ...) {
+    xx <- x
+    attr(xx, "rconfig") <- NULL
+    print(unclass(xx))
+    invisible(x)
+}
