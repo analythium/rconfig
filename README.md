@@ -13,9 +13,73 @@ flags are parsed as hierarchical lists.
 remotes::install_packages("analythium/rconfig")
 ```
 
+## Another config package?
+
+There are other R packages to manage configs:
+
+- [config](https://rstudio.github.io/config/) has nice inheritance rules, and it even scans parent directories for YAML config files
+- [configr](https://CRAN.R-project.org/package=configr) has nice substitution/interpolation features and supports YAML, JSON, TOML, and INI file formats
+
+These package are fantastic if you are managing deployments at different stages of the life cycle, i.e. testing/staging/production.
+
+However, when you use Rscript from the command line, you often do not want to manage too many configuration files, but want a quick way to override some of the default settings.
+
+The rconfig package provides various ways to override defaults, and instead of changing active configuration (as in the config package), you can merge lists in order to arrive at a final configuration. These are very similar concepts, but not quite the same.
+
+The rconfig has the following features:
+
+- uses default configuration file
+- file based override with the `-f` or `--file` flags (accepts JSON, YAML, and plain text files)
+- JSON string based override with the `-j` or `--json` flags
+- other command line arguments are merged too, e.g. `--cores 4`
+- heuristic rules are used to coerce command line values to the right type
+- R expressions starting with `!expr` are evaluated by default, this behavior can be turned off (same feature can be found in the yaml and config packages, but here it works with plain text and JSON too)
+- period-separated command line arguments are parsed as hierarchical lists, e.g. `--user.name Joe` will be added as `user$name` to the config list
+- command line flags without a value will evaluate to `TRUE`, e.g. `--verbose`
+
+If you are not yet convinced, here is a quick teaser.
+This is the content of the default configuration file, `rconfig.yml`:
+
+```yaml
+trials: 5
+dataset: "demo-data.csv"
+cores: !expr getOption("mc.cores", 1L)
+user:
+  name: "demo"
+```
+
+Let's use a simple R script to print out the configs:
+
+```R
+#!/usr/bin/env Rscript
+str(rconfig::rconfig())
+```
+
+Now we can override the default configuration using another file, a JSON string, and some other flags
+
+```bash
+Rscript --vanilla test.R \
+  -f rconfig-prod.yml \
+  -j '{"trials":30,"dataset":"full-data.csv"}' \
+  --user.name "Joe" \
+  --verbose
+
+# List of 4
+#  $ trials : int 30
+#  $ dataset: chr "full-data.csv"
+#  $ cores  : int 1
+#  $ user   :List of 1
+#   ..$ name: chr "Joe"
+#  $ verbose: logi TRUE
+```
+
+The package was inspired by the config package, docker/docker-compose/kubectl and other cloud-native CLI tools, and was motivated by some real world need when managing background processing on cloud instances.
+
 ## Usage
 
-R command line usage:
+### R command line usage
+
+Open the project in RStudio or set the work directory to the folder root after cloning/downloading the repo.
 
 ```R
 ## no default found
@@ -65,7 +129,9 @@ str(rconfig::rconfig(file = "inst/examples/rconfig.yml"))
 str(rconfig::rconfig(file = "inst/examples/rconfig.json"))
 ```
 
-Using with Rscript:
+### Using with Rscript
+
+Set the work directory to the `inst/examples` folder cloning/downloading the repo.
 
 ```bash
 ## Default config if found
