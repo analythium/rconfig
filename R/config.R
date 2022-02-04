@@ -66,8 +66,6 @@
 #' @param list A list to override other configs (`NULL` to not use
 #'   this list to override the default behavior). This argument is treated
 #'   as a single configuration (as opposed to `file`).
-#' @param x A configuration object (named or empty list) of class rconfig.
-#' @param ... Other arguments passed to methods.
 #'
 #' @return The configuration value (a named list, or an empty list).
 #'   When debug mode is on, the `"trace"` attribute traces the
@@ -90,11 +88,7 @@
 #'
 #' @seealso [utils::modifyList()]
 #'
-#' @name rconfig
-NULL
-
 #' @export
-#' @rdname rconfig
 ## Parse files, json strings, and cli arguments for config
 ##
 ## Precedence:
@@ -125,15 +119,6 @@ rconfig <- function(file = NULL, list = NULL) {
     }
     class(out) <- "rconfig"
     out
-}
-
-#' @export
-#' @rdname rconfig
-print.rconfig <- function(x, ...) {
-    xx <- x
-    attr(xx, "trace") <- NULL
-    print(unclass(xx), ...)
-    invisible(x)
 }
 
 ## trace is stored when debug mode is on

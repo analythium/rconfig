@@ -2,12 +2,9 @@
 % Please edit documentation in R/config.R
 \name{rconfig}
 \alias{rconfig}
-\alias{print.rconfig}
 \title{Manage R Configuration at the Command Line}
 \usage{
 rconfig(file = NULL, list = NULL)
-
-\method{print}{rconfig}(x, ...)
 }
 \arguments{
 \item{file}{Configuration file name or URL (\code{NULL} to not use
@@ -19,10 +16,6 @@ in the order they appear.}
 \item{list}{A list to override other configs (\code{NULL} to not use
 this list to override the default behavior). This argument is treated
 as a single configuration (as opposed to \code{file}).}
-
-\item{x}{A configuration object (named or empty list) of class rconfig.}
-
-\item{...}{Other arguments passed to methods.}
 }
 \value{
 The configuration value (a named list, or an empty list).
