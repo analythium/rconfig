@@ -66,7 +66,7 @@ Rscript --vanilla test.R \
   --user.name $USER \
   --verbose
 
-# List of 4
+# List of 5
 #  $ trials : int 30
 #  $ dataset: chr "full-data.csv"
 #  $ cores  : int 1
