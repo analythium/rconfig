@@ -3,9 +3,9 @@ Type: Package
 Title: Manage R Configuration at the Command Line
 Version: 0.0.1
 Date: 2022-02-03
-Author: 
-  Peter Solymos [aut, cre] (<https://orcid.org/0000-0001-7337-1740>), 
-  Analythium Solutions Inc. [cph]
+Author: Peter Solymos [aut, cre]
+        (<https://orcid.org/0000-0001-7337-1740>), Analythium Solutions
+        Inc. [cph]
 Maintainer: Peter Solymos <peter@analythium.io>
 Description: Manage R configuration using files (JSON, YAML, separated text)
   JSON strings and command line arguments. Command line arguments
@@ -14,7 +14,7 @@ Description: Manage R configuration using files (JSON, YAML, separated text)
 License: MIT + file LICENSE
 LazyLoad: yes
 Imports: yaml, jsonlite
-Suggests: config
+Suggests: config, tinytest
 RoxygenNote: 7.1.1
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)

@@ -90,6 +90,22 @@ E.g. \verb{cores: !expr getOption("mc.cores")}, etc.
 For additional details see the package website at
 \href{https://github.com/analythium/rconfig}{https://github.com/analythium/rconfig}.
 }
+\examples{
+cfile <- function(file) {
+    system.file("examples", file, package = "rconfig")
+}
+
+rconfig::rconfig()
+
+rconfig::rconfig(
+    file = cfile("rconfig.yml"))
+
+rconfig::rconfig(
+    file = c(cfile("rconfig.json"),
+             cfile("rconfig-prod.txt")),
+    list = list(user = list(name = "Jack")))
+
+}
 \seealso{
 \code{\link[utils:modifyList]{utils::modifyList()}}
 }

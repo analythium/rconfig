@@ -73,6 +73,21 @@
 #'   When debug mode is on, the `"trace"` attribute traces the
 #'   merged configurations.
 #'
+#' @examples
+#' cfile <- function(file) {
+#'     system.file("examples", file, package = "rconfig")
+#' }
+#'
+#' rconfig::rconfig()
+#'
+#' rconfig::rconfig(
+#'     file = cfile("rconfig.yml"))
+#'
+#' rconfig::rconfig(
+#'     file = c(cfile("rconfig.json"),
+#'              cfile("rconfig-prod.txt")),
+#'     list = list(user = list(name = "Jack")))
+#'
 #' @seealso [utils::modifyList()]
 #'
 #' @name rconfig

@@ -131,6 +131,19 @@ str(rconfig::rconfig(file = "inst/examples/rconfig.yml"))
 str(rconfig::rconfig(file = "inst/examples/rconfig.json"))
 ```
 
+Using alongside of the config package:
+
+```R
+conf <- config::get(
+    config = "production",
+    file = "inst/examples/config.yml",
+    use_parent = FALSE)
+
+str(rconfig::rconfig(
+    file = "inst/examples/rconfig.yml",
+    list = conf))
+```
+
 ### Using with Rscript
 
 Set the work directory to the `inst/examples` folder cloning/downloading the repo.
