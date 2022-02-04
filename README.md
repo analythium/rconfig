@@ -55,13 +55,15 @@ Let's use a simple R script to print out the configs:
 str(rconfig::rconfig())
 ```
 
-Now we can override the default configuration using another file, a JSON string, and some other flags
+Now you can override the default configuration using another file, a JSON string, and some other flags. Notice the variable substitution for user name!
 
 ```bash
+export USER=Jane
+
 Rscript --vanilla test.R \
   -f rconfig-prod.yml \
   -j '{"trials":30,"dataset":"full-data.csv"}' \
-  --user.name "Joe" \
+  --user.name $USER \
   --verbose
 
 # List of 4
@@ -69,7 +71,7 @@ Rscript --vanilla test.R \
 #  $ dataset: chr "full-data.csv"
 #  $ cores  : int 1
 #  $ user   :List of 1
-#   ..$ name: chr "Joe"
+#   ..$ name: chr "Jane"
 #  $ verbose: logi TRUE
 ```
 
