@@ -26,7 +26,7 @@ However, when you use Rscript from the command line, you often do not want to ma
 
 The rconfig package provides various ways to override defaults, and instead of changing active configuration (as in the config package), you can merge lists in order to arrive at a final configuration. These are very similar concepts, but not quite the same.
 
-The rconfig has the following features:
+The rconfig package has the following features:
 
 - uses default configuration file
 - file based override with the `-f` or `--file` flags (accepts JSON, YAML, and plain text files)
@@ -73,7 +73,7 @@ Rscript --vanilla test.R \
 #  $ verbose: logi TRUE
 ```
 
-The package was inspired by the config package, docker/docker-compose/kubectl and other cloud-native CLI tools, and was motivated by some real world need when managing background processing on cloud instances.
+The package was inspired by the config package, docker-compose/kubectl/caddy and other CLI tools, and was motivated by some real world need when managing background processing on cloud instances.
 
 ## Usage
 
