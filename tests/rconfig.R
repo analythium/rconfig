@@ -40,3 +40,11 @@ str(rconfig::rconfig(file = cfile("rconfig.json")))
 options("rconfig.eval"=NULL)
 str(rconfig::rconfig(file = cfile("rconfig.yml")))
 str(rconfig::rconfig(file = cfile("rconfig.json")))
+
+## flatten
+rconfig::rconfig(
+    file = c(cfile("rconfig.json"),
+             cfile("rconfig-prod.txt")),
+    list = list(user = list(name = "Jack")),
+    flatten = TRUE)
+
