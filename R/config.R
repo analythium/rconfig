@@ -129,30 +129,55 @@ rconfig <- function(file = NULL,
                     sep = "=",
                     ...) {
     ## handle eval
-    oeval <- Sys.getenv("R_RCONFIG_EVAL")
+    oeval <- Sys.getenv("R_RCONFIG_EVAL", unset = NA)
     Sys.setenv("R_RCONFIG_EVAL"=eval)
-    on.exit(Sys.setenv("R_RCONFIG_EVAL"=oeval), add = TRUE)
+    on.exit({
+        if (!is.na(oeval))
+            Sys.setenv("R_RCONFIG_EVAL"=oeval)
+        else
+            Sys.unsetenv("R_RCONFIG_EVAL")
+    }, add = TRUE)
+
     ## handle sep
-    osep <- Sys.getenv("R_RCONFIG_SEP")
+    osep <- Sys.getenv("R_RCONFIG_SEP", unset = NA)
     Sys.setenv("R_RCONFIG_SEP"=sep)
-    on.exit(Sys.setenv("R_RCONFIG_SEP"=osep), add = TRUE)
+    on.exit({
+        if (!is.na(oeval))
+            Sys.setenv("R_RCONFIG_SEP"=osep)
+        else
+            Sys.unsetenv("R_RCONFIG_SEP")
+    }, add = TRUE)
+
     ## handle debug
-    odebug <- Sys.getenv("R_RCONFIG_DEBUG")
+    odebug <- Sys.getenv("R_RCONFIG_DEBUG", unset = NA)
     Sys.setenv("R_RCONFIG_DEBUG"=debug)
-    on.exit(Sys.setenv("R_RCONFIG_DEBUG"=odebug), add = TRUE)
+    on.exit({
+        if (!is.na(oeval))
+            Sys.setenv("R_RCONFIG_DEBUG"=odebug)
+        else
+            Sys.unsetenv("R_RCONFIG_DEBUG")
+    }, add = TRUE)
+
     ## handle flatten
-    oflatten <- Sys.getenv("R_RCONFIG_FLATTEN")
+    oflatten <- Sys.getenv("R_RCONFIG_FLATTEN", unset = NA)
     Sys.setenv("R_RCONFIG_FLATTEN"=flatten)
-    on.exit(Sys.setenv("R_RCONFIG_FLATTEN"=oflatten), add = TRUE)
+    on.exit({
+        if (!is.na(oeval))
+            Sys.setenv("R_RCONFIG_FLATTEN"=oflatten)
+        else
+            Sys.unsetenv("R_RCONFIG_FLATTEN")
+    }, add = TRUE)
 
     ## unmerged list
     lists <- config_list(file = file, list = list, ...)
+
     ## merged list
     out <- list()
     for (i in lists)
         out <- utils::modifyList(out, i)
     if (do_flatten())
         out <- flatten_list(out)
+
     ## trace
     if (length(lists)) {
         rc <- if (length(lists) > 1L) {
@@ -163,6 +188,7 @@ rconfig <- function(file = NULL,
         if (do_debug())
             attr(out, "trace") <- rc
     }
+
     class(out) <- "rconfig"
     out
 }
