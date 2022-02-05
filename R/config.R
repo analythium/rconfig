@@ -36,16 +36,16 @@
 #'   namespace environment for the base package
 #'   (overrides the value of `getOption("rconfig.eval")`).
 #'   When not set the value assumed is `TRUE`.
-#' * `R_RCONFIG_SEP`: separator for text file parser,
-#'   (overrides the value of `getOption("rconfig.sep")`).
-#'   When not set the value assumed is `"="`.
-#' * `R_RCONFIG_DEBUG`: coerced to logical, to turn on debug mode
-#'   (overrides the value of `getOption("rconfig.debug")`).
-#'   When not set the value assumed is `FALSE`.
 #' * `R_RCONFIG_FLATTEN`: coerced to logical, flatten nested lists,
 #'   i.e. `a$b$c` becomes the key `a.b.c`
 #'   (overrides the value of `getOption("rconfig.flatten")`).
 #'   When not set the value assumed is `FALSE`.
+#' * `R_RCONFIG_DEBUG`: coerced to logical, to turn on debug mode
+#'   (overrides the value of `getOption("rconfig.debug")`).
+#'   When not set the value assumed is `FALSE`.
+#' * `R_RCONFIG_SEP`: separator for text file parser,
+#'   (overrides the value of `getOption("rconfig.sep")`).
+#'   When not set the value assumed is `"="`.
 #'
 #' When the configuration is a file (file name can also be a URL),
 #' it can be nested structure in JSON, YAML format.
@@ -71,12 +71,12 @@
 #'   this list to override the default behavior). This argument is treated
 #'   as a single configuration (as opposed to `file`).
 #' @param eval Logical, evaluate `!expr` R expressions.
-#' @param sep Character, separator for text files.
-#' @param debug Logical, when debug mode is on the configuration
-#'   source information are attached as the `"trace"` attribute.
 #' @param flatten Logical, should config contain nested lists or should
 #'   results be flat, i.e. `a$b$c` to flattened into the key `a.b.c`;
 #'   like [unlist()] but returning a list and preserving the value types.
+#' @param debug Logical, when debug mode is on the configuration
+#'   source information are attached as the `"trace"` attribute.
+#' @param sep Character, separator for text files.
 #' @param ... Other arguments passed to file parsers:
 #'   [yaml::yaml.load_file()] for YAML,
 #'   [jsonlite::fromJSON()] for JSON, and
@@ -101,6 +101,12 @@
 #'              cfile("rconfig-prod.txt")),
 #'     list = list(user = list(name = "Jack")))
 #'
+#' rconfig::rconfig(
+#'     file = c(cfile("rconfig.json"),
+#'              cfile("rconfig-prod.txt")),
+#'     list = list(user = list(name = "Jack")),
+#'     flatten = TRUE)
+#'
 #' @seealso [utils::modifyList()]
 #'
 #' @export
@@ -118,9 +124,9 @@
 rconfig <- function(file = NULL,
                     list = NULL,
                     eval = TRUE,
-                    sep = "=",
-                    debug = FALSE,
                     flatten = FALSE,
+                    debug = FALSE,
+                    sep = "=",
                     ...) {
     ## handle eval
     oeval <- Sys.getenv("R_RCONFIG_EVAL")
