@@ -35,6 +35,7 @@ The rconfig package has the following features:
 - heuristic rules are used to coerce command line values to the right type
 - R expressions starting with `!expr` are evaluated by default, this behavior can be turned off (same feature can be found in the yaml and config packages, but here it works with plain text and JSON too)
 - period-separated command line arguments are parsed as hierarchical lists, e.g. `--user.name Joe` will be added as `user$name` to the config list
+- nested configurations can also be flattened 
 - command line flags without a value will evaluate to `TRUE`, e.g. `--verbose`
 
 If you are not yet convinced, here is a quick teaser.

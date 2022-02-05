@@ -4,7 +4,15 @@
 \alias{rconfig}
 \title{Manage R Configuration at the Command Line}
 \usage{
-rconfig(file = NULL, list = NULL)
+rconfig(
+  file = NULL,
+  list = NULL,
+  eval = TRUE,
+  sep = "=",
+  debug = FALSE,
+  flatten = FALSE,
+  ...
+)
 }
 \arguments{
 \item{file}{Configuration file name or URL (\code{NULL} to not use
@@ -16,6 +24,22 @@ in the order they appear.}
 \item{list}{A list to override other configs (\code{NULL} to not use
 this list to override the default behavior). This argument is treated
 as a single configuration (as opposed to \code{file}).}
+
+\item{eval}{Logical, evaluate \code{!expr} R expressions.}
+
+\item{sep}{Character, separator for text files.}
+
+\item{debug}{Logical, when debug mode is on the configuration
+source information are attached as the \code{"trace"} attribute.}
+
+\item{flatten}{Logical, should config contain nested lists or should
+results be flat, i.e. \code{a$b$c} to flattened into the key \code{a.b.c};
+like \code{\link[=unlist]{unlist()}} but returning a list and preserving the value types.}
+
+\item{...}{Other arguments passed to file parsers:
+\code{\link[yaml:yaml.load]{yaml::yaml.load_file()}} for YAML,
+\code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}} for JSON, and
+\code{\link[utils:read.table]{utils::read.table()}} for text files.}
 }
 \value{
 The configuration value (a named list, or an empty list).
@@ -65,6 +89,10 @@ When not set the value assumed is \code{TRUE}.
 When not set the value assumed is \code{"="}.
 \item \code{R_RCONFIG_DEBUG}: coerced to logical, to turn on debug mode
 (overrides the value of \code{getOption("rconfig.debug")}).
+When not set the value assumed is \code{FALSE}.
+\item \code{R_RCONFIG_FLATTEN}: coerced to logical, flatten nested lists,
+i.e. \code{a$b$c} becomes the key \code{a.b.c}
+(overrides the value of \code{getOption("rconfig.flatten")}).
 When not set the value assumed is \code{FALSE}.
 }
 
