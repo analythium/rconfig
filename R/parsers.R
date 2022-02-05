@@ -24,12 +24,14 @@ make_list <- function(parts, values) {
     for (i in seq_along(parts)) {
         v <- rev(parts[[i]])
         l <- list()
-        for (j in v) {
-            if (j == v[1L]) {
+        for (u in seq_along(v)) {
+            j <- v[u]
+            if (u == 1L) {
                 l[[j]] <- values[[i]]
             } else {
                 l[[j]] <- l
-                l <- l[2L]
+                if (j != v[u - 1L])
+                    l <- l[2L]
             }
         }
         to_merge <- utils::modifyList(to_merge, l)
@@ -136,12 +138,12 @@ parse_file <- function(x, ...) {
 
 ## Parse default config file
 ## defined by R_RCONFIG_FILE
-parse_default <- function() {
+parse_default <- function(...) {
     f <- Sys.getenv("R_RCONFIG_FILE", "rconfig.yml")
     f <- normalizePath(f, mustWork = FALSE)
     if (!file.exists(f))
         return(NULL)
-    l <- parse_file(f)
+    l <- parse_file(f, ...)
     attr(l, "trace") <- list(
         kind = "file",
         value = f)
@@ -189,7 +191,7 @@ parse_args_other <- function(args) {
 ## Parse cli arguments for:
 ## -f --file and -j --json
 ## eg: args <- c("--test", "--some.value", "!expr pi", "--another.value", "abc", "def", "-j", "{\"a\":1, \"b\":\"c\"}", "--another.stuff", "99.2", "-f", "inst/config/rconfig.yml")
-parse_args_file_and_json <- function(args) {
+parse_args_file_and_json <- function(args, ...) {
     idx <- which(args %in% c("-f", "--file", "-j", "--json"))
     if (!length(idx))
         return(NULL)
@@ -197,7 +199,7 @@ parse_args_file_and_json <- function(args) {
     for (i in seq_along(idx)) {
         is_file <- args[idx[i]] %in% c("-f", "--file")
         if (is_file) {
-            l <- parse_file(args[idx[i]+1L])
+            l <- parse_file(args[idx[i]+1L], ...)
         } else {
             l <- parse_json_string(args[idx[i]+1L])
         }
@@ -218,10 +220,10 @@ parse_args_file_and_json <- function(args) {
 ##
 ## last element overrides previous
 ## preserves all the rconfig attributes
-config_list <- function(file = NULL, list = NULL) {
+config_list <- function(file = NULL, list = NULL, ...) {
     args <- commandArgs(trailingOnly=TRUE)
     l1 <- parse_default()
-    l2 <- parse_args_file_and_json(args)
+    l2 <- parse_args_file_and_json(args, ...)
     l3 <- parse_args_other(args)
     lists <- list()
     if (!is.null(l1))
@@ -231,7 +233,7 @@ config_list <- function(file = NULL, list = NULL) {
     if (!is.null(l3))
         lists[[length(lists)+1L]] <- l3
     for (i in file) {
-        lists[[length(lists)+1L]] <- parse_file(i)
+        lists[[length(lists)+1L]] <- parse_file(i, ...)
     }
     if (!is.null(list)) {
         attr(list, "trace") <- list(
