@@ -8,9 +8,9 @@ rconfig(
   file = NULL,
   list = NULL,
   eval = TRUE,
-  sep = "=",
-  debug = FALSE,
   flatten = FALSE,
+  debug = FALSE,
+  sep = "=",
   ...
 )
 }
@@ -27,14 +27,14 @@ as a single configuration (as opposed to \code{file}).}
 
 \item{eval}{Logical, evaluate \code{!expr} R expressions.}
 
-\item{sep}{Character, separator for text files.}
+\item{flatten}{Logical, should config contain nested lists or should
+results be flat, i.e. \code{a$b$c} to flattened into the key \code{a.b.c};
+like \code{\link[=unlist]{unlist()}} but returning a list and preserving the value types.}
 
 \item{debug}{Logical, when debug mode is on the configuration
 source information are attached as the \code{"trace"} attribute.}
 
-\item{flatten}{Logical, should config contain nested lists or should
-results be flat, i.e. \code{a$b$c} to flattened into the key \code{a.b.c};
-like \code{\link[=unlist]{unlist()}} but returning a list and preserving the value types.}
+\item{sep}{Character, separator for text files.}
 
 \item{...}{Other arguments passed to file parsers:
 \code{\link[yaml:yaml.load]{yaml::yaml.load_file()}} for YAML,
@@ -84,16 +84,16 @@ R expressions starting with \code{!expr} should be evaluated in the
 namespace environment for the base package
 (overrides the value of \code{getOption("rconfig.eval")}).
 When not set the value assumed is \code{TRUE}.
-\item \code{R_RCONFIG_SEP}: separator for text file parser,
-(overrides the value of \code{getOption("rconfig.sep")}).
-When not set the value assumed is \code{"="}.
-\item \code{R_RCONFIG_DEBUG}: coerced to logical, to turn on debug mode
-(overrides the value of \code{getOption("rconfig.debug")}).
-When not set the value assumed is \code{FALSE}.
 \item \code{R_RCONFIG_FLATTEN}: coerced to logical, flatten nested lists,
 i.e. \code{a$b$c} becomes the key \code{a.b.c}
 (overrides the value of \code{getOption("rconfig.flatten")}).
 When not set the value assumed is \code{FALSE}.
+\item \code{R_RCONFIG_DEBUG}: coerced to logical, to turn on debug mode
+(overrides the value of \code{getOption("rconfig.debug")}).
+When not set the value assumed is \code{FALSE}.
+\item \code{R_RCONFIG_SEP}: separator for text file parser,
+(overrides the value of \code{getOption("rconfig.sep")}).
+When not set the value assumed is \code{"="}.
 }
 
 When the configuration is a file (file name can also be a URL),
@@ -125,6 +125,12 @@ rconfig::rconfig(
     file = c(cfile("rconfig.json"),
              cfile("rconfig-prod.txt")),
     list = list(user = list(name = "Jack")))
+
+rconfig::rconfig(
+    file = c(cfile("rconfig.json"),
+             cfile("rconfig-prod.txt")),
+    list = list(user = list(name = "Jack")),
+    flatten = TRUE)
 
 }
 \seealso{
