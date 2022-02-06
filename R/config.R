@@ -123,50 +123,59 @@
 ## rconfig attribute traces what was merged
 rconfig <- function(file = NULL,
                     list = NULL,
-                    eval = TRUE,
-                    flatten = FALSE,
-                    debug = FALSE,
-                    sep = "=",
+                    eval = NULL,
+                    flatten = NULL,
+                    debug = NULL,
+                    sep = NULL,
                     ...) {
+
     ## handle eval
-    oeval <- Sys.getenv("R_RCONFIG_EVAL", unset = NA)
-    Sys.setenv("R_RCONFIG_EVAL"=eval)
-    on.exit({
-        if (!is.na(oeval))
-            Sys.setenv("R_RCONFIG_EVAL"=oeval)
-        else
-            Sys.unsetenv("R_RCONFIG_EVAL")
-    }, add = TRUE)
+    if (!is.null(eval)) {
+        oeval <- Sys.getenv("R_RCONFIG_EVAL", unset = NA)
+        Sys.setenv("R_RCONFIG_EVAL"=eval)
+        on.exit({
+            if (!is.na(oeval))
+                Sys.setenv("R_RCONFIG_EVAL"=oeval)
+            else
+                Sys.unsetenv("R_RCONFIG_EVAL")
+        }, add = TRUE)
+    }
 
     ## handle sep
-    osep <- Sys.getenv("R_RCONFIG_SEP", unset = NA)
-    Sys.setenv("R_RCONFIG_SEP"=sep)
-    on.exit({
-        if (!is.na(oeval))
-            Sys.setenv("R_RCONFIG_SEP"=osep)
-        else
-            Sys.unsetenv("R_RCONFIG_SEP")
-    }, add = TRUE)
+    if (!is.null(sep)) {
+        osep <- Sys.getenv("R_RCONFIG_SEP", unset = NA)
+        Sys.setenv("R_RCONFIG_SEP"=sep)
+        on.exit({
+            if (!is.na(osep))
+                Sys.setenv("R_RCONFIG_SEP"=osep)
+            else
+                Sys.unsetenv("R_RCONFIG_SEP")
+        }, add = TRUE)
+    }
 
     ## handle debug
-    odebug <- Sys.getenv("R_RCONFIG_DEBUG", unset = NA)
-    Sys.setenv("R_RCONFIG_DEBUG"=debug)
-    on.exit({
-        if (!is.na(oeval))
-            Sys.setenv("R_RCONFIG_DEBUG"=odebug)
-        else
-            Sys.unsetenv("R_RCONFIG_DEBUG")
-    }, add = TRUE)
+    if (!is.null(debug)) {
+        odebug <- Sys.getenv("R_RCONFIG_DEBUG", unset = NA)
+        Sys.setenv("R_RCONFIG_DEBUG"=debug)
+        on.exit({
+            if (!is.na(odebug))
+                Sys.setenv("R_RCONFIG_DEBUG"=odebug)
+            else
+                Sys.unsetenv("R_RCONFIG_DEBUG")
+        }, add = TRUE)
+    }
 
     ## handle flatten
-    oflatten <- Sys.getenv("R_RCONFIG_FLATTEN", unset = NA)
-    Sys.setenv("R_RCONFIG_FLATTEN"=flatten)
-    on.exit({
-        if (!is.na(oeval))
-            Sys.setenv("R_RCONFIG_FLATTEN"=oflatten)
-        else
-            Sys.unsetenv("R_RCONFIG_FLATTEN")
-    }, add = TRUE)
+    if (!is.null(flatten)) {
+        oflatten <- Sys.getenv("R_RCONFIG_FLATTEN", unset = NA)
+        Sys.setenv("R_RCONFIG_FLATTEN"=flatten)
+        on.exit({
+            if (!is.na(oflatten))
+                Sys.setenv("R_RCONFIG_FLATTEN"=oflatten)
+            else
+                Sys.unsetenv("R_RCONFIG_FLATTEN")
+        }, add = TRUE)
+    }
 
     ## unmerged list
     lists <- config_list(file = file, list = list, ...)

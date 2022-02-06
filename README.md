@@ -91,6 +91,21 @@ Rscript --vanilla test.R \
 #  $ user   :List of 1
 #   ..$ name: chr "Jane"
 #  $ verbose: logi TRUE
+#  - attr(*, "trace")=List of 2
+#   ..$ kind : chr "merged"
+#   ..$ value:List of 4
+#   .. ..$ :List of 2
+#   .. .. ..$ kind : chr "file"
+#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"
+#   .. ..$ :List of 2
+#   .. .. ..$ kind : chr "file"
+#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig-prod.yml"
+#   .. ..$ :List of 2
+#   .. .. ..$ kind : chr "json"
+#   .. .. ..$ value: chr "{\"trials\":30,\"dataset\":\"full-data.csv\"}"
+#   .. ..$ :List of 2
+#   .. .. ..$ kind : chr "args"
+#   .. .. ..$ value: chr "--user.name Jane --verbose"
 #  - attr(*, "class")= chr "rconfig"
 ```
 
@@ -186,6 +201,9 @@ Rscript test.R
 #  $ cores  : int 1
 #  $ user   :List of 1
 #   ..$ name: chr "demo"
+#  - attr(*, "trace")=List of 2
+#   ..$ kind : chr "file"
+#   ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"
 #  - attr(*, "class")= chr "rconfig"
 ```
 
@@ -211,6 +229,9 @@ R_RCONFIG_FILE="rconfig-prod.yml" Rscript test.R
 #  $ dataset: chr "full-data.csv"
 #  $ user   :List of 1
 #   ..$ name: chr "real_We4$#z*="
+#  - attr(*, "trace")=List of 2
+#   ..$ kind : chr "file"
+#   ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig-prod.yml"
 #  - attr(*, "class")= chr "rconfig"
 ```
 
@@ -236,6 +257,18 @@ Rscript test.R -f rconfig-prod.yml --user.name "unreal_Zh5z*$#="
 #  $ cores  : int 1
 #  $ user   :List of 1
 #   ..$ name: chr "unreal_Zh5z*0="
+#  - attr(*, "trace")=List of 2
+#   ..$ kind : chr "merged"
+#   ..$ value:List of 3
+#   .. ..$ :List of 2
+#   .. .. ..$ kind : chr "file"
+#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"
+#   .. ..$ :List of 2
+#   .. .. ..$ kind : chr "file"
+#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig-prod.yml"
+#   .. ..$ :List of 2
+#   .. .. ..$ kind : chr "args"
+#   .. .. ..$ value: chr "--user.name unreal_Zh5z*0="
 #  - attr(*, "class")= chr "rconfig"
 ```
 
@@ -251,6 +284,18 @@ Rscript test.R \
 #  $ cores  : int 1
 #  $ user   :List of 1
 #   ..$ name: chr "unreal_Zh5z*0="
+#  - attr(*, "trace")=List of 2
+#   ..$ kind : chr "merged"
+#   ..$ value:List of 3
+#   .. ..$ :List of 2
+#   .. .. ..$ kind : chr "file"
+#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"
+#   .. ..$ :List of 2
+#   .. .. ..$ kind : chr "json"
+#   .. .. ..$ value: chr "{\"trials\":30,\"dataset\":\"full-data.csv\",\"user\":{\"name\": \"real_We4$#z*=\"}}"
+#   .. ..$ :List of 2
+#   .. .. ..$ kind : chr "args"
+#   .. .. ..$ value: chr "--user.name unreal_Zh5z*0="
 #  - attr(*, "class")= chr "rconfig"
 ```
 

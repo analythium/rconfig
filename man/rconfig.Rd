@@ -7,10 +7,10 @@
 rconfig(
   file = NULL,
   list = NULL,
-  eval = TRUE,
-  flatten = FALSE,
-  debug = FALSE,
-  sep = "=",
+  eval = NULL,
+  flatten = NULL,
+  debug = NULL,
+  sep = NULL,
   ...
 )
 }
