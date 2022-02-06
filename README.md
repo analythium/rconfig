@@ -2,7 +2,7 @@
 
 > Manage R Configuration at the Command Line
 
-[![status](https://github.com/analythium/rconfig/actions/workflows/check.yml/badge.svg)](https://github.com/analythium/rconfig/actions)
+![status](https://github.com/analythium/rconfig/actions/workflows/check.yml/badge.svg)
 
 Manage R configuration using files (JSON, YAML, separated text) JSON
 strings and command line arguments. Command line arguments can be used
@@ -300,5 +300,5 @@ Rscript test.R \
 
 ## License
 
-[MIT License](./LICENSE) Copyright (c) 2022 Peter Solymos and Analythium
-Solutions Inc.
+[MIT License](./LICENSE) © 2022 Peter Solymos and Analythium Solutions
+Inc.

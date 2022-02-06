@@ -2,3 +2,15 @@ template:
   bootstrap: 5
   includes:
     in_header: <script src="https://cdn.usefathom.com/script.js" data-site="XXTESXHY" defer></script>
+navbar:
+  structure:
+    right: [search, twitter, github]
+  components:
+    twitter:
+      icon: fa-twitter
+      href: http://twitter.com/analythium
+      aria-label: Twitter
+    github:
+      icon: fa-github
+      href: http://github.com/analythium
+      aria-label: GitHub

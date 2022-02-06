@@ -165,4 +165,4 @@ Rscript test.R \
 ## License
 
 [MIT License](./LICENSE)
-Copyright (c) 2022 Peter Solymos and Analythium Solutions Inc.
+© 2022 Peter Solymos and Analythium Solutions Inc.
