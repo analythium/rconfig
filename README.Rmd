@@ -1,15 +1,30 @@
+---
+output:
+  md_document:
+    variant: gfm
+---
+
+```{r, echo = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "README-"
+)
+set.seed(0)
+```
+
 # rconfig
 
 > Manage R Configuration at the Command Line
 
-Manage R configuration using files (JSON, YAML, separated text) JSON
-strings and command line arguments. Command line arguments can be used
-to override configuration. Period-separated command line flags are
-parsed as hierarchical lists.
+Manage R configuration using files (JSON, YAML, separated text)
+JSON strings and command line arguments. Command line arguments
+can be used to override configuration. Period-separated command line
+flags are parsed as hierarchical lists.
 
 ## Install
 
-``` r
+```{r eval=FALSE}
 remotes::install_packages("analythium/rconfig")
 ```
 
@@ -17,47 +32,31 @@ remotes::install_packages("analythium/rconfig")
 
 There are other R packages to manage configs:
 
--   [config](https://rstudio.github.io/config/) has nice inheritance
-    rules, and it even scans parent directories for YAML config files
--   [configr](https://CRAN.R-project.org/package=configr) has nice
-    substitution/interpolation features and supports YAML, JSON, TOML,
-    and INI file formats
+- [config](https://rstudio.github.io/config/) has nice inheritance rules, and it even scans parent directories for YAML config files
+- [configr](https://CRAN.R-project.org/package=configr) has nice substitution/interpolation features and supports YAML, JSON, TOML, and INI file formats
 
-These package are fantastic if you are managing deployments at different
-stages of the life cycle, i.e. testing/staging/production.
+These package are fantastic if you are managing deployments at different stages of the life cycle, i.e. testing/staging/production.
 
-However, when you use Rscript from the command line, you often do not
-want to manage too many configuration files, but want a quick way to
-override some of the default settings.
+However, when you use Rscript from the command line, you often do not want to manage too many configuration files, but want a quick way to override some of the default settings.
 
-The rconfig package provides various ways to override defaults, and
-instead of changing active configuration (as in the config package), you
-can merge lists in order to arrive at a final configuration. These are
-very similar concepts, but not quite the same.
+The rconfig package provides various ways to override defaults, and instead of changing active configuration (as in the config package), you can merge lists in order to arrive at a final configuration. These are very similar concepts, but not quite the same.
 
 The rconfig package has the following features:
 
--   uses default configuration file
--   file based override with the `-f` or `--file` flags (accepts JSON,
-    YAML, and plain text files)
--   JSON string based override with the `-j` or `--json` flags
--   other command line arguments are merged too, e.g. `--cores 4`
--   heuristic rules are used to coerce command line values to the right
-    type
--   R expressions starting with `!expr` are evaluated by default, this
-    behavior can be turned off (same feature can be found in the yaml
-    and config packages, but here it works with plain text and JSON too)
--   period-separated command line arguments are parsed as hierarchical
-    lists, e.g. `--user.name Joe` will be added as `user$name` to the
-    config list
--   nested configurations can also be flattened
--   command line flags without a value will evaluate to `TRUE`,
-    e.g. `--verbose`
+- uses default configuration file
+- file based override with the `-f` or `--file` flags (accepts JSON, YAML, and plain text files)
+- JSON string based override with the `-j` or `--json` flags
+- other command line arguments are merged too, e.g. `--cores 4`
+- heuristic rules are used to coerce command line values to the right type
+- R expressions starting with `!expr` are evaluated by default, this behavior can be turned off (same feature can be found in the yaml and config packages, but here it works with plain text and JSON too)
+- period-separated command line arguments are parsed as hierarchical lists, e.g. `--user.name Joe` will be added as `user$name` to the config list
+- nested configurations can also be flattened 
+- command line flags without a value will evaluate to `TRUE`, e.g. `--verbose`
 
-If you are not yet convinced, here is a quick teaser. This is the
-content of the default configuration file, `rconfig.yml`:
+If you are not yet convinced, here is a quick teaser.
+This is the content of the default configuration file, `rconfig.yml`:
 
-``` yaml
+```yaml
 trials: 5
 dataset: "demo-data.csv"
 cores: !expr getOption("mc.cores", 1L)
@@ -65,18 +64,16 @@ user:
   name: "demo"
 ```
 
-Let’s use a simple R script to print out the configs:
+Let's use a simple R script to print out the configs:
 
-``` r
+```R
 #!/usr/bin/env Rscript
 str(rconfig::rconfig())
 ```
 
-Now you can override the default configuration using another file, a
-JSON string, and some other flags. Notice the variable substitution for
-user name!
+Now you can override the default configuration using another file, a JSON string, and some other flags. Notice the variable substitution for user name!
 
-``` bash
+```bash
 export USER=Jane
 
 Rscript --vanilla test.R \
@@ -94,19 +91,15 @@ Rscript --vanilla test.R \
 #  $ verbose: logi TRUE
 ```
 
-The package was inspired by the config package,
-docker-compose/kubectl/caddy and other CLI tools, and was motivated by
-some real world need when managing background processing on cloud
-instances.
+The package was inspired by the config package, docker-compose/kubectl/caddy and other CLI tools, and was motivated by some real world need when managing background processing on cloud instances.
 
 ## Usage
 
 ### R command line usage
 
-Open the project in RStudio or set the work directory to the folder root
-after cloning/downloading the repo.
+Open the project in RStudio or set the work directory to the folder root after cloning/downloading the repo.
 
-``` r
+```{r eval=FALSE}
 ## no default found
 str(rconfig::rconfig())
 
@@ -156,7 +149,7 @@ str(rconfig::rconfig(file = "inst/examples/rconfig.json"))
 
 Using alongside of the config package:
 
-``` r
+```{r eval=FALSE}
 conf <- config::get(
     config = "production",
     file = "inst/examples/config.yml",
@@ -169,10 +162,9 @@ str(rconfig::rconfig(
 
 ### Using with Rscript
 
-Set the work directory to the `inst/examples` folder cloning/downloading
-the repo.
+Set the work directory to the `inst/examples` folder cloning/downloading the repo.
 
-``` bash
+```bash
 ## Default config if found
 Rscript test.R
 
@@ -194,5 +186,5 @@ Rscript test.R -j '{"trials":30,"dataset":"full-data.csv","user":{"name": "real_
 
 ## License
 
-[MIT License](./LICENSE) Copyright (c) 2022 Peter Solymos and Analythium
-Solutions Inc.
+[MIT License](./LICENSE)
+Copyright (c) 2022 Peter Solymos and Analythium Solutions Inc.
