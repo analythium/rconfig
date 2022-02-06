@@ -2,6 +2,9 @@
 
 > Manage R Configuration at the Command Line
 
+![build
+status](https://github.com/analythium/rconfig/actions/workflows/check.yml/badge.svg)
+
 Manage R configuration using files (JSON, YAML, separated text) JSON
 strings and command line arguments. Command line arguments can be used
 to override configuration. Period-separated command line flags are
