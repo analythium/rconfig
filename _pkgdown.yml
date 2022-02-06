@@ -1,0 +1,18 @@
+template:
+  bootstrap: 5
+  bootswatch: cyborg
+  theme: arrow-dark
+  bslib:
+    base_font: {google: "Roboto"}
+    heading_font: {google: "Roboto Slab"}
+    code_font: {google: "JetBrains Mono"}
+  includes:
+    in_header: <script src="https://cdn.usefathom.com/script.js" data-site="XXTESXHY" defer></script>
+navbar:
+  structure:
+    right: [twitter, github]
+  components:
+    twitter:
+      icon: fa-twitter
+      href: http://twitter.com/analythium
+      aria-label: Twitter
