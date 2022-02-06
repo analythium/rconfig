@@ -60,20 +60,17 @@ The rconfig package has the following features:
 If you are not yet convinced, here is a quick teaser. This is the
 content of the default configuration file, `rconfig.yml`:
 
-``` yaml
-trials: 5
-dataset: "demo-data.csv"
-cores: !expr getOption("mc.cores", 1L)
-user:
-  name: "demo"
-```
+    # trials: 5
+    # dataset: "demo-data.csv"
+    # cores: !expr getOption("mc.cores", 1L)
+    # user:
+    #   name: "demo"
 
 Let’s use a simple R script to print out the configs:
 
-``` r
-#!/usr/bin/env Rscript
-str(rconfig::rconfig())
-```
+    # #!/usr/bin/env Rscript
+    # options("rconfig.debug"=TRUE)
+    # str(rconfig::rconfig())
 
 Now you can override the default configuration using another file, a
 JSON string, and some other flags. Notice the variable substitution for
@@ -87,7 +84,6 @@ Rscript --vanilla test.R \
   -j '{"trials":30,"dataset":"full-data.csv"}' \
   --user.name $USER \
   --verbose
-
 # List of 5
 #  $ trials : int 30
 #  $ dataset: chr "full-data.csv"
@@ -95,6 +91,7 @@ Rscript --vanilla test.R \
 #  $ user   :List of 1
 #   ..$ name: chr "Jane"
 #  $ verbose: logi TRUE
+#  - attr(*, "class")= chr "rconfig"
 ```
 
 The package was inspired by the config package,
@@ -110,51 +107,48 @@ Open the project in RStudio or set the work directory to the folder root
 after cloning/downloading the repo.
 
 ``` r
-## no default found
 str(rconfig::rconfig())
+# List of 4
+#  $ trials : int 5
+#  $ dataset: chr "demo-data.csv"
+#  $ cores  : int 1
+#  $ user   :List of 1
+#   ..$ name: chr "demo"
+#  - attr(*, "class")= chr "rconfig"
 
-## use a list override
-str(rconfig::rconfig(list = list(a = 1)))
+str(rconfig::rconfig(
+    file = "rconfig-prod.yml"))
+# List of 4
+#  $ trials : int 30
+#  $ dataset: chr "full-data.csv"
+#  $ cores  : int 1
+#  $ user   :List of 1
+#   ..$ name: chr "real_We4$#z*="
+#  - attr(*, "class")= chr "rconfig"
 
-## Try different YAML files
-str(rconfig::rconfig(file = "inst/examples/rconfig.yml"))
-str(rconfig::rconfig(file = "inst/examples/rconfig-prod.yml"))
-
-## prod config overrides the default
-str(rconfig::rconfig(file = c(
-    "inst/examples/rconfig.yml",
-    "inst/examples/rconfig-prod.yml")))
-
-## a list overrides the prod that overrides the default
-str(rconfig::rconfig(file = c(
-    "inst/examples/rconfig.yml",
-    "inst/examples/rconfig-prod.yml"),
+str(rconfig::rconfig(
+    file = c("rconfig.json",
+             "rconfig-prod.txt"),
     list = list(user = list(name = "Jack"))))
+# List of 4
+#  $ trials : int 30
+#  $ dataset: chr "full-data.csv"
+#  $ cores  : int 1
+#  $ user   :List of 1
+#   ..$ name: chr "Jack"
+#  - attr(*, "class")= chr "rconfig"
 
-## Parse YAML from URL
-str(rconfig::rconfig(file = "https://raw.githubusercontent.com/analythium/docker-compose-shiny-example/main/docker-compose.yml"))
-
-## Use a JSON file
-str(rconfig::rconfig(file = "inst/examples/rconfig.json"))
-str(rconfig::rconfig(file = "inst/examples/rconfig-prod.json"))
-str(rconfig::rconfig(file = c(
-    "inst/examples/rconfig.json",
-    "inst/examples/rconfig-prod.json")))
-
-## Use a text file
-str(rconfig::rconfig(file = "inst/examples/rconfig.txt"))
-str(rconfig::rconfig(file = "inst/examples/rconfig-prod.txt"))
-str(rconfig::rconfig(file = c(
-    "inst/examples/rconfig.txt",
-    "inst/examples/rconfig-prod.txt")))
-
-## Evaluating R expressions (!expr)
-options("rconfig.eval"=FALSE)
-str(rconfig::rconfig(file = "inst/examples/rconfig.yml"))
-str(rconfig::rconfig(file = "inst/examples/rconfig.json"))
-options("rconfig.eval"=NULL)
-str(rconfig::rconfig(file = "inst/examples/rconfig.yml"))
-str(rconfig::rconfig(file = "inst/examples/rconfig.json"))
+str(rconfig::rconfig(
+    file = c("rconfig.json",
+             "rconfig-prod.txt"),
+    list = list(user = list(name = "Jack")),
+    flatten = TRUE))
+# List of 4
+#  $ trials   : int 30
+#  $ dataset  : chr "full-data.csv"
+#  $ cores    : int 1
+#  $ user.name: chr "Jack"
+#  - attr(*, "class")= chr "rconfig"
 ```
 
 Using alongside of the config package:
@@ -162,12 +156,19 @@ Using alongside of the config package:
 ``` r
 conf <- config::get(
     config = "production",
-    file = "inst/examples/config.yml",
+    file = "config.yml",
     use_parent = FALSE)
 
 str(rconfig::rconfig(
-    file = "inst/examples/rconfig.yml",
+    file = "rconfig.yml",
     list = conf))
+# List of 4
+#  $ trials : int 30
+#  $ dataset: chr "data.csv"
+#  $ cores  : int 1
+#  $ user   :List of 1
+#   ..$ name: chr "demo"
+#  - attr(*, "class")= chr "rconfig"
 ```
 
 ### Using with Rscript
@@ -175,24 +176,82 @@ str(rconfig::rconfig(
 Set the work directory to the `inst/examples` folder cloning/downloading
 the repo.
 
+Default config if found:
+
 ``` bash
-## Default config if found
 Rscript test.R
+# List of 4
+#  $ trials : int 5
+#  $ dataset: chr "demo-data.csv"
+#  $ cores  : int 1
+#  $ user   :List of 1
+#   ..$ name: chr "demo"
+#  - attr(*, "class")= chr "rconfig"
+```
 
-## Default with debug mode on
+Default with debug mode on:
+
+``` bash
 R_RCONFIG_DEBUG="FALSE" Rscript test.R
+# List of 4
+#  $ trials : int 5
+#  $ dataset: chr "demo-data.csv"
+#  $ cores  : int 1
+#  $ user   :List of 1
+#   ..$ name: chr "demo"
+#  - attr(*, "class")= chr "rconfig"
+```
 
-## Change defult config file
+Change defult config file:
+
+``` bash
 R_RCONFIG_FILE="rconfig-prod.yml" Rscript test.R
+# List of 3
+#  $ trials : int 30
+#  $ dataset: chr "full-data.csv"
+#  $ user   :List of 1
+#   ..$ name: chr "real_We4$#z*="
+#  - attr(*, "class")= chr "rconfig"
+```
 
-## Change defult config file and debug on
+Change defult config file and debug on:
+
+``` bash
 R_RCONFIG_FILE="rconfig-prod.yml" R_RCONFIG_DEBUG="FALSE" Rscript test.R
+# List of 3
+#  $ trials : int 30
+#  $ dataset: chr "full-data.csv"
+#  $ user   :List of 1
+#   ..$ name: chr "real_We4$#z*="
+#  - attr(*, "class")= chr "rconfig"
+```
 
-## Use file and other props to override default
+Use file and other props to override default:
+
+``` bash
 Rscript test.R -f rconfig-prod.yml --user.name "unreal_Zh5z*$#="
+# List of 4
+#  $ trials : int 30
+#  $ dataset: chr "full-data.csv"
+#  $ cores  : int 1
+#  $ user   :List of 1
+#   ..$ name: chr "unreal_Zh5z*0="
+#  - attr(*, "class")= chr "rconfig"
+```
 
-## Use JSON string and other props to override default
-Rscript test.R -j '{"trials":30,"dataset":"full-data.csv","user":{"name": "real_We4$#z*="}}' --user.name "unreal_Zh5z*$#="
+Use JSON string and other props to override default:
+
+``` bash
+Rscript test.R \
+  -j '{"trials":30,"dataset":"full-data.csv","user":{"name": "real_We4$#z*="}}' \
+  --user.name "unreal_Zh5z*$#="
+# List of 4
+#  $ trials : int 30
+#  $ dataset: chr "full-data.csv"
+#  $ cores  : int 1
+#  $ user   :List of 1
+#   ..$ name: chr "unreal_Zh5z*0="
+#  - attr(*, "class")= chr "rconfig"
 ```
 
 ## License
