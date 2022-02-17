@@ -16,7 +16,7 @@ flags are parsed as hierarchical lists."><!-- mathjax --><script src="https://cd
     
     <a class="navbar-brand me-2" href="../index.html">rconfig</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,7 +85,8 @@ in the order they appear.</p></dd>
 <dt>list</dt>
 <dd><p>A list to override other configs (<code>NULL</code> to not use
 this list to override the default behavior). This argument is treated
-as a single configuration (as opposed to <code>file</code>).</p></dd>
+as a single configuration (as opposed to <code>file</code>). List names need
+to be unique.</p></dd>
 <dt>eval</dt>
 <dd><p>Logical, evaluate <code>!expr</code> R expressions.</p></dd>
 <dt>flatten</dt>
@@ -112,18 +113,21 @@ merged configurations.</p>
     <div class="section level2">
     <h2 id="details">Details<a class="anchor" aria-label="anchor" href="#details"></a></h2>
     <p>Merges configuration after parsing files, JSON strings,
-and command line arguments.
+and command line arguments. Note that rconfig only considers
+trailing command line arguments from Rscript.
 Configurations are merged in the following order
-(key-values from last element override previous values for the same key):</p><ol><li><p><code>R_RCONFIG_FILE</code> value or <code>"rconfig.yml"</code></p></li>
+(key-values from last element override previous values for the same key):</p><ol><li><p><code>R_RCONFIG_FILE</code> value or <code>"rconfig.yml"</code> from working directory</p></li>
 <li><p>JSON strings (following <code>-j</code> and <code>--json</code> flags)
 and files (following <code>-f</code> and <code>--file</code> flags)
 provided as command line arguments are parsed and applied
-in the order they appear (key-value pars are separated by space,
-only a atomic values considered, i.e. file name or string)</p></li>
+in the order they appear (key-value pairs are separated by space,
+only atomic values considered, i.e. file name or string)
+for each flag, but multiple file/JSON flags are accepted in sequence</p></li>
 <li><p>the remaining other command line arguments, period-separated
 command line flags are parsed as hierarchical lists
-(key-value pars are separated by space, flags must begin
-with <code>--</code>, values are treated as vectors when contain spaces)</p></li>
+(key-value pairs are separated by space, flags must begin
+with <code>--</code>, values are treated as vectors when contain spaces,
+i.e. <code>--key 1 2 3</code>)</p></li>
 <li><p>configuration from the <code>file</code> argument (one or multiple files,
 parsed and applied in the order they appear)</p></li>
 <li><p>configuration from the <code>list</code> argument</p></li>
@@ -147,11 +151,11 @@ When not set the value assumed is <code>FALSE</code>.</p></li>
 (overrides the value of <code>getOption("rconfig.sep")</code>).
 When not set the value assumed is <code>"="</code>.</p></li>
 </ul><p>When the configuration is a file (file name can also be a URL),
-it can be nested structure in JSON, YAML format.
+it can be nested structure in JSON or YAML format.
 Other text files are parsed using the
 separator (<code>R_RCONFIG_SEP</code> or <code>getOption("rconfig.sep")</code>) and
 period-separated keys are parsed as hierarchical lists
-(i.e. <code>a.b.c=12</code> is treated as <code>a$b$c = 12</code>).</p>
+(i.e. <code>a.b.c=12</code> is treated as <code>a$b$c = 12</code>) by default.</p>
 <p>When the configuration is a file or a JSON string,
 values starting with <code>!expr</code> will be evaluated depending on the
 settings <code>R_RCONFIG_EVAL</code> and <code>getOption("rconfig.eval")</code>.
