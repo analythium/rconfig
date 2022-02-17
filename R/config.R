@@ -7,20 +7,23 @@
 #'
 #' @details
 #' Merges configuration after parsing files, JSON strings,
-#' and command line arguments.
+#' and command line arguments. Note that rconfig only considers
+#' trailing command line arguments from Rscript.
 #' Configurations are merged in the following order
 #' (key-values from last element override previous values for the same key):
 #'
-#' 1. `R_RCONFIG_FILE` value or `"rconfig.yml"`
+#' 1. `R_RCONFIG_FILE` value or `"rconfig.yml"` from working directory
 #' 2. JSON strings (following `-j` and `--json` flags)
 #'    and files (following `-f` and `--file` flags)
 #'    provided as command line arguments are parsed and applied
-#'    in the order they appear (key-value pars are separated by space,
-#'    only a atomic values considered, i.e. file name or string)
+#'    in the order they appear (key-value pairs are separated by space,
+#'    only atomic values considered, i.e. file name or string)
+#'    for each flag, but multiple file/JSON flags are accepted in sequence
 #' 3. the remaining other command line arguments, period-separated
 #'    command line flags are parsed as hierarchical lists
-#'    (key-value pars are separated by space, flags must begin
-#'    with `--`, values are treated as vectors when contain spaces)
+#'    (key-value pairs are separated by space, flags must begin
+#'    with `--`, values are treated as vectors when contain spaces,
+#'    i.e. `--key 1 2 3`)
 #' 4. configuration from the `file` argument (one or multiple files,
 #'    parsed and applied in the order they appear)
 #' 5. configuration from the `list` argument
@@ -48,11 +51,11 @@
 #'   When not set the value assumed is `"="`.
 #'
 #' When the configuration is a file (file name can also be a URL),
-#' it can be nested structure in JSON, YAML format.
+#' it can be nested structure in JSON or YAML format.
 #' Other text files are parsed using the
 #' separator (`R_RCONFIG_SEP` or `getOption("rconfig.sep")`) and
 #' period-separated keys are parsed as hierarchical lists
-#' (i.e. `a.b.c=12` is treated as `a$b$c = 12`).
+#' (i.e. `a.b.c=12` is treated as `a$b$c = 12`) by default.
 #'
 #' When the configuration is a file or a JSON string,
 #' values starting with `!expr` will be evaluated depending on the
@@ -69,7 +72,8 @@
 #'   in the order they appear.
 #' @param list A list to override other configs (`NULL` to not use
 #'   this list to override the default behavior). This argument is treated
-#'   as a single configuration (as opposed to `file`).
+#'   as a single configuration (as opposed to `file`). List names need
+#'   to be unique.
 #' @param eval Logical, evaluate `!expr` R expressions.
 #' @param flatten Logical, should config contain nested lists or should
 #'   results be flat, i.e. `a$b$c` to flattened into the key `a.b.c`;
