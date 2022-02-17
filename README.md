@@ -234,7 +234,7 @@ R_RCONFIG_FILE="rconfig-prod.yml" Rscript test.R
 #  - attr(*, "class")= chr "rconfig"
 ```
 
-Change default config file and debug on:
+Change default config file and debug off:
 
 ``` bash
 R_RCONFIG_FILE="rconfig-prod.yml" R_RCONFIG_DEBUG="FALSE" Rscript test.R
