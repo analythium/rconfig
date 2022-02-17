@@ -238,6 +238,8 @@ config_list <- function(file = NULL, list = NULL, ...) {
         lists[[length(lists)+1L]] <- parse_file(i, ...)
     }
     if (!is.null(list)) {
+        ## this will error in non unique names
+        flist <- flatten_list(list, check=FALSE)
         attr(list, "trace") <- list(
             kind = "list",
             value = deparse(list))
