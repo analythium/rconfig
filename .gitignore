@@ -40,3 +40,5 @@ vignettes/*.pdf
 
 # pkgdown
 docs
+
+inst/tmp
