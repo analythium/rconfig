@@ -190,7 +190,7 @@ str(rconfig::rconfig(
 Set the work directory to the `inst/examples` folder cloning/downloading
 the repo.
 
-Default config if found:
+Default config if found (the script has debug mode on):
 
 ``` bash
 Rscript test.R
@@ -206,7 +206,7 @@ Rscript test.R
 #  - attr(*, "class")= chr "rconfig"
 ```
 
-Default with debug mode on:
+Default with debug mode off:
 
 ``` bash
 R_RCONFIG_DEBUG="FALSE" Rscript test.R
@@ -219,7 +219,7 @@ R_RCONFIG_DEBUG="FALSE" Rscript test.R
 #  - attr(*, "class")= chr "rconfig"
 ```
 
-Change defult config file:
+Change default config file:
 
 ``` bash
 R_RCONFIG_FILE="rconfig-prod.yml" Rscript test.R
@@ -234,7 +234,7 @@ R_RCONFIG_FILE="rconfig-prod.yml" Rscript test.R
 #  - attr(*, "class")= chr "rconfig"
 ```
 
-Change defult config file and debug on:
+Change default config file and debug on:
 
 ``` bash
 R_RCONFIG_FILE="rconfig-prod.yml" R_RCONFIG_DEBUG="FALSE" Rscript test.R
