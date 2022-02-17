@@ -2,7 +2,9 @@
 
 ## File extension of x
 file_ext <- function(x) {
-    rev((x |> basename() |> strsplit("\\."))[[1L]])[1L]
+    #rev((x |> basename() |> strsplit("\\."))[[1L]])[1L]
+    ## make it functional on old R versions w/o native pipe
+    rev(strsplit(basename(x), "\\.")[[1L]])[1L]
 }
 
 ## Guess file extension
