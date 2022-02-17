@@ -256,7 +256,7 @@ root after cloning/downloading the repo.</p>
 </h3>
 <p>Set the work directory to the <code>inst/examples</code> folder
 cloning/downloading the repo.</p>
-<p>Default config if found:</p>
+<p>Default config if found (the script has debug mode on):</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> test.R</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 4</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ trials : int 5</span></span>
@@ -268,7 +268,7 @@ cloning/downloading the repo.</p>
 <span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ kind : chr "file"</span></span>
 <span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"</span></span>
 <span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
-<p>Default with debug mode on:</p>
+<p>Default with debug mode off:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="va">R_RCONFIG_DEBUG</span><span class="op">=</span><span class="st">"FALSE"</span> <span class="ex">Rscript</span> test.R</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 4</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ trials : int 5</span></span>
@@ -277,7 +277,7 @@ cloning/downloading the repo.</p>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ user   :List of 1</span></span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ name: chr "demo"</span></span>
 <span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
-<p>Change defult config file:</p>
+<p>Change default config file:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="va">R_RCONFIG_FILE</span><span class="op">=</span><span class="st">"rconfig-prod.yml"</span> <span class="ex">Rscript</span> test.R</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 3</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ trials : int 30</span></span>
@@ -288,7 +288,7 @@ cloning/downloading the repo.</p>
 <span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ kind : chr "file"</span></span>
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig-prod.yml"</span></span>
 <span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
-<p>Change defult config file and debug on:</p>
+<p>Change default config file and debug on:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="va">R_RCONFIG_FILE</span><span class="op">=</span><span class="st">"rconfig-prod.yml"</span> <span class="va">R_RCONFIG_DEBUG</span><span class="op">=</span><span class="st">"FALSE"</span> <span class="ex">Rscript</span> test.R</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 3</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ trials : int 30</span></span>
