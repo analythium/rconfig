@@ -6,6 +6,7 @@
 ^pkgdown$
 ^README\.Rmd$
 ^README\.md$
+^LICENSE\.md$
 ^CODE_OF_CONDUCT\.md$
 ^inst/tmp$
 ^_build\.sh$
