@@ -118,7 +118,7 @@ instances.
 ### R command line usage
 
 Open the project in RStudio or set the work directory to the folder root
-after cloning/downloading the repo.
+after cloning/downloading the repository.
 
 ``` r
 str(rconfig::rconfig())

@@ -12,3 +12,4 @@
 ^_build\.sh$
 ^.*\.Rproj$
 ^\.Rproj\.user$
+^RELEASE\.R$
