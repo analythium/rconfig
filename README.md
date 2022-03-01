@@ -2,7 +2,9 @@
 
 > Manage R Configuration at the Command Line
 
-[![](https://github.com/analythium/rconfig/actions/workflows/check.yml/badge.svg)](https://github.com/analythium/rconfig/actions)
+[![Build status](https://github.com/analythium/rconfig/actions/workflows/check.yml/badge.svg)](https://github.com/analythium/rconfig/actions)
+[![CRAN version](http://www.r-pkg.org/badges/version/pbapply)](https://CRAN.R-project.org/package=rconfig)
+[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/grand-total/rconfig)](https://hub.analythium.io/rconfig/)
 
 Manage R configuration using files (JSON, YAML, separated text) JSON
 strings and command line arguments. Command line arguments can be used
