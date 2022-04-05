@@ -1,3 +1,7 @@
+# Version 0.1.2
+
+* Added `value()` method (#2).
+
 # Version 0.1.1
 
 * Added `LICENSE.md` with explicit MIT text and `LICENSE` with 2 lines only.
