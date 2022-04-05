@@ -85,6 +85,9 @@
 #'   [yaml::yaml.load_file()] for YAML,
 #'   [jsonlite::fromJSON()] for JSON, and
 #'   [utils::read.table()] for text files.
+#' @param x A list, e.g. the `rconfig()` output.
+#' @param default A default value to be used when a configuration
+#'   entry is not set.
 #'
 #' @return The configuration value (a named list, or an empty list).
 #'   When debug mode is on, the `"trace"` attribute traces the
@@ -111,8 +114,17 @@
 #'     list = list(user = list(name = "Jack")),
 #'     flatten = TRUE)
 #'
-#' @seealso [utils::modifyList()]
+#' CONFIG <- rconfig::rconfig(
+#'     file = cfile("rconfig.yml"))
+#' value(CONFIG$cores, 2L)   # set to 1L
+#' value(CONFIG$test, FALSE) # unset
 #'
+#' @seealso [utils::modifyList()]
+#' @keywords models regression
+#' @name rconfig
+NULL
+
+#' @rdname rconfig
 #' @export
 ## Parse files, json strings, and cli arguments for config
 ##
@@ -204,6 +216,20 @@ rconfig <- function(file = NULL,
 
     class(out) <- "rconfig"
     out
+}
+
+#' @rdname rconfig
+#' @export
+value <- function(x, ...) {
+    UseMethod("value")
+}
+
+#' @rdname rconfig
+#' @export
+#' @method value default
+value.default <- function(x, default = NULL, ...) {
+    if (is.null(x))
+        default else x
 }
 
 ## trace is stored when debug mode is on
