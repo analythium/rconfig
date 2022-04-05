@@ -74,7 +74,12 @@ flags are parsed as hierarchical lists.</p>
   debug <span class="op">=</span> <span class="cn">NULL</span>,
   sep <span class="op">=</span> <span class="cn">NULL</span>,
   <span class="va">...</span>
-<span class="op">)</span></code></pre></div>
+<span class="op">)</span>
+
+<span class="fu">value</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span>
+
+<span class="co"># S3 method for default</span>
+<span class="fu">value</span><span class="op">(</span><span class="va">x</span>, default <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -106,6 +111,11 @@ source information are attached as the <code>"trace"</code> attribute.</p></dd>
 <code><a href="https://rdrr.io/pkg/yaml/man/yaml.load.html" class="external-link">yaml::yaml.load_file()</a></code> for YAML,
 <code><a href="https://rdrr.io/pkg/jsonlite/man/fromJSON.html" class="external-link">jsonlite::fromJSON()</a></code> for JSON, and
 <code><a href="https://rdrr.io/r/utils/read.table.html" class="external-link">utils::read.table()</a></code> for text files.</p></dd>
+<dt>x</dt>
+<dd><p>A list, e.g. the <code>rconfig()</code> output.</p></dd>
+<dt>default</dt>
+<dd><p>A default value to be used when a configuration
+entry is not set.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -241,6 +251,13 @@ E.g. <code>cores: !expr getOption("mc.cores")</code>, etc.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> attr(,"class")</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> [1] "rconfig"</span>
+<span class="r-in"></span>
+<span class="r-in"><span class="va">CONFIG</span> <span class="op">&lt;-</span> <span class="fu">rconfig</span><span class="fu">::</span><span class="fu">rconfig</span><span class="op">(</span></span>
+<span class="r-in">    file <span class="op">=</span> <span class="fu">cfile</span><span class="op">(</span><span class="st">"rconfig.yml"</span><span class="op">)</span><span class="op">)</span></span>
+<span class="r-in"><span class="fu">value</span><span class="op">(</span><span class="va">CONFIG</span><span class="op">$</span><span class="va">cores</span>, <span class="fl">2L</span><span class="op">)</span>   <span class="co"># set to 1L</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] 1</span>
+<span class="r-in"><span class="fu">value</span><span class="op">(</span><span class="va">CONFIG</span><span class="op">$</span><span class="va">test</span>, <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># unset</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> [1] FALSE</span>
 <span class="r-in"></span>
 </code></pre></div>
     </div>

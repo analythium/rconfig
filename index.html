@@ -236,8 +236,17 @@ root after cloning/downloading the repository.</p>
 <span class="co">#  $ cores    : int 1</span>
 <span class="co">#  $ user.name: chr "Jack"</span>
 <span class="co">#  - attr(*, "class")= chr "rconfig"</span></code></pre></div>
-<p>Using alongside of the config package:</p>
+<p>Set defaults in case some values are undefined:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="va">CONFIG</span> <span class="op">&lt;-</span> <span class="fu">rconfig</span><span class="fu">::</span><span class="fu"><a href="reference/rconfig.html">rconfig</a></span><span class="op">(</span>
+    file <span class="op">=</span> <span class="st">"rconfig-prod.yml"</span><span class="op">)</span>
+
+<span class="fu">rconfig</span><span class="fu">::</span><span class="fu"><a href="reference/rconfig.html">value</a></span><span class="op">(</span><span class="va">CONFIG</span><span class="op">$</span><span class="va">cores</span>, <span class="fl">2L</span><span class="op">)</span>   <span class="co"># set to 1L</span>
+<span class="co"># [1] 1</span>
+<span class="fu">rconfig</span><span class="fu">::</span><span class="fu"><a href="reference/rconfig.html">value</a></span><span class="op">(</span><span class="va">CONFIG</span><span class="op">$</span><span class="va">test</span>, <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># unset</span>
+<span class="co"># [1] FALSE</span></code></pre></div>
+<p>Using alongside of the config package:</p>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">conf</span> <span class="op">&lt;-</span> <span class="fu">config</span><span class="fu">::</span><span class="fu">get</span><span class="op">(</span>
     config <span class="op">=</span> <span class="st">"production"</span>,
     file <span class="op">=</span> <span class="st">"config.yml"</span>,
@@ -260,89 +269,89 @@ root after cloning/downloading the repository.</p>
 <p>Set the work directory to the <code>inst/examples</code> folder
 cloning/downloading the repo.</p>
 <p>Default config if found (the script has debug mode on):</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> test.R</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 4</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ trials : int 5</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ dataset: chr "demo-data.csv"</span></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ cores  : int 1</span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ user   :List of 1</span></span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ name: chr "demo"</span></span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "trace")=List of 2</span></span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ kind : chr "file"</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"</span></span>
-<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
-<p>Default with debug mode off:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="va">R_RCONFIG_DEBUG</span><span class="op">=</span><span class="st">"FALSE"</span> <span class="ex">Rscript</span> test.R</span>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> test.R</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 4</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ trials : int 5</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ dataset: chr "demo-data.csv"</span></span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ cores  : int 1</span></span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ user   :List of 1</span></span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ name: chr "demo"</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "trace")=List of 2</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ kind : chr "file"</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
+<p>Default with debug mode off:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="va">R_RCONFIG_DEBUG</span><span class="op">=</span><span class="st">"FALSE"</span> <span class="ex">Rscript</span> test.R</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 4</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ trials : int 5</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ dataset: chr "demo-data.csv"</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ cores  : int 1</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ user   :List of 1</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ name: chr "demo"</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
 <p>Change default config file:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="va">R_RCONFIG_FILE</span><span class="op">=</span><span class="st">"rconfig-prod.yml"</span> <span class="ex">Rscript</span> test.R</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 3</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ trials : int 30</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ dataset: chr "full-data.csv"</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ user   :List of 1</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ name: chr "real_We4$#z*="</span></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "trace")=List of 2</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ kind : chr "file"</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig-prod.yml"</span></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
-<p>Change default config file and debug off:</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="va">R_RCONFIG_FILE</span><span class="op">=</span><span class="st">"rconfig-prod.yml"</span> <span class="va">R_RCONFIG_DEBUG</span><span class="op">=</span><span class="st">"FALSE"</span> <span class="ex">Rscript</span> test.R</span>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="va">R_RCONFIG_FILE</span><span class="op">=</span><span class="st">"rconfig-prod.yml"</span> <span class="ex">Rscript</span> test.R</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 3</span></span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ trials : int 30</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ dataset: chr "full-data.csv"</span></span>
 <span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ user   :List of 1</span></span>
 <span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ name: chr "real_We4$#z*="</span></span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
-<p>Use file and other props to override default:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> test.R <span class="at">-f</span> rconfig-prod.yml <span class="at">--user.name</span> <span class="st">"unreal_Zh5z*</span><span class="va">$#</span><span class="st">="</span></span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 4</span></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "trace")=List of 2</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ kind : chr "file"</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig-prod.yml"</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
+<p>Change default config file and debug off:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="va">R_RCONFIG_FILE</span><span class="op">=</span><span class="st">"rconfig-prod.yml"</span> <span class="va">R_RCONFIG_DEBUG</span><span class="op">=</span><span class="st">"FALSE"</span> <span class="ex">Rscript</span> test.R</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 3</span></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ trials : int 30</span></span>
 <span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ dataset: chr "full-data.csv"</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ cores  : int 1</span></span>
-<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ user   :List of 1</span></span>
-<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ name: chr "unreal_Zh5z*0="</span></span>
-<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "trace")=List of 2</span></span>
-<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ kind : chr "merged"</span></span>
-<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ value:List of 3</span></span>
-<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
-<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "file"</span></span>
-<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"</span></span>
-<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
-<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "file"</span></span>
-<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig-prod.yml"</span></span>
-<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
-<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "args"</span></span>
-<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "--user.name unreal_Zh5z*0="</span></span>
-<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ user   :List of 1</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ name: chr "real_We4$#z*="</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
+<p>Use file and other props to override default:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> test.R <span class="at">-f</span> rconfig-prod.yml <span class="at">--user.name</span> <span class="st">"unreal_Zh5z*</span><span class="va">$#</span><span class="st">="</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 4</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ trials : int 30</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ dataset: chr "full-data.csv"</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ cores  : int 1</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ user   :List of 1</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ name: chr "unreal_Zh5z*0="</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "trace")=List of 2</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ kind : chr "merged"</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ value:List of 3</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "file"</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "file"</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig-prod.yml"</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "args"</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "--user.name unreal_Zh5z*0="</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
 <p>Use JSON string and other props to override default:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> test.R <span class="dt">\</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-j</span> <span class="st">'{"trials":30,"dataset":"full-data.csv","user":{"name": "real_We4$#z*="}}'</span> <span class="dt">\</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--user.name</span> <span class="st">"unreal_Zh5z*</span><span class="va">$#</span><span class="st">="</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 4</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ trials : int 30</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ dataset: chr "full-data.csv"</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ cores  : int 1</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ user   :List of 1</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ name: chr "unreal_Zh5z*0="</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "trace")=List of 2</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ kind : chr "merged"</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ value:List of 3</span></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "file"</span></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"</span></span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "json"</span></span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "{\"trials\":30,\"dataset\":\"full-data.csv\",\"user\":{\"name\": \"real_We4$#z*=\"}}"</span></span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "args"</span></span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "--user.name unreal_Zh5z*0="</span></span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> test.R <span class="dt">\</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-j</span> <span class="st">'{"trials":30,"dataset":"full-data.csv","user":{"name": "real_We4$#z*="}}'</span> <span class="dt">\</span></span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--user.name</span> <span class="st">"unreal_Zh5z*</span><span class="va">$#</span><span class="st">="</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 4</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ trials : int 30</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ dataset: chr "full-data.csv"</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ cores  : int 1</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ user   :List of 1</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ name: chr "unreal_Zh5z*0="</span></span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "trace")=List of 2</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ kind : chr "merged"</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ value:List of 3</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "file"</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "json"</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "{\"trials\":30,\"dataset\":\"full-data.csv\",\"user\":{\"name\": \"real_We4$#z*=\"}}"</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "args"</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "--user.name unreal_Zh5z*0="</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
