@@ -10,6 +10,7 @@ devtools::build_readme()
 urlchecker::url_check()
 
 # local checks
+devtools::document()
 devtools::check()
 
 # multi-arch checks
