@@ -2,9 +2,12 @@
 
 > Manage R Configuration at the Command Line
 
-[![Build status](https://github.com/analythium/rconfig/actions/workflows/check.yml/badge.svg)](https://github.com/analythium/rconfig/actions)
-[![CRAN version](http://www.r-pkg.org/badges/version/rconfig)](https://CRAN.R-project.org/package=rconfig)
-[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/grand-total/rconfig)](https://hub.analythium.io/rconfig/)
+[![Build
+status](https://github.com/analythium/rconfig/actions/workflows/check.yml/badge.svg)](https://github.com/analythium/rconfig/actions)
+[![CRAN
+version](http://www.r-pkg.org/badges/version/rconfig)](https://CRAN.R-project.org/package=rconfig)
+[![CRAN RStudio mirror
+downloads](http://cranlogs.r-pkg.org/badges/grand-total/rconfig)](https://hub.analythium.io/rconfig/)
 
 Manage R configuration using files (JSON, YAML, separated text) JSON
 strings and command line arguments. Command line arguments can be used
@@ -165,6 +168,18 @@ str(rconfig::rconfig(
 #  $ cores    : int 1
 #  $ user.name: chr "Jack"
 #  - attr(*, "class")= chr "rconfig"
+```
+
+Set defaults in case some values are undefined:
+
+``` r
+CONFIG <- rconfig::rconfig(
+    file = "rconfig-prod.yml")
+
+rconfig::value(CONFIG$cores, 2L)   # set to 1L
+# [1] 1
+rconfig::value(CONFIG$test, FALSE) # unset
+# [1] FALSE
 ```
 
 Using alongside of the config package:

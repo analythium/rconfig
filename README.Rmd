@@ -109,6 +109,16 @@ str(rconfig::rconfig(
     flatten = TRUE))
 ```
 
+Set defaults in case some values are undefined:
+
+```{r}
+CONFIG <- rconfig::rconfig(
+    file = "rconfig-prod.yml")
+
+rconfig::value(CONFIG$cores, 2L)   # set to 1L
+rconfig::value(CONFIG$test, FALSE) # unset
+```
+
 Using alongside of the config package:
 
 ```{r}
