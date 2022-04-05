@@ -174,9 +174,45 @@ Rscript test.R \
   --user.name "unreal_Zh5z*$#="
 ```
 
+For a more realistic but still small example, let's use the `iris` data and get summaries by species using command line arguments:
+
+```{bash}
+Rscript iris.R --species virginica
+```
+
+```{bash}
+Rscript iris.R --species setosa --verbose
+```
+
+```{bash error=TRUE}
+Rscript iris.R --species maxima --verbose
+```
+
+```{bash error=TRUE}
+Rscript iris.R
+```
+
+Another illustration using the `mtcars` data set to fit linear models to different variables:
+
+```{bash}
+Rscript mtcars.R
+```
+
+```{bash}
+Rscript mtcars.R --verbose --vars cyl
+```
+
+```{bash error=TRUE}
+Rscript mtcars.R --verbose --vars cal
+```
+
+```{bash}
+Rscript mtcars.R --vars cyl disp hp
+```
+
 ### Shiny
 
-An example to configure a Shiny app with command line flags:
+An example to configure a [Shiny app](https://shiny.rstudio.com/) with command line flags:
 
 ```
 Rscript shiny/app.R
@@ -188,9 +224,29 @@ Rscript shiny/app.R \
   --title 'Only Testing'
 ```
 
+An example to configure a Shiny app using the [golem](https://golemverse.org/) with command line flags:
+
+```
+# app.R
+CONFIG <- rconfig()
+yourpkg::run_app(
+  title = value(CONFIG$title, "Hello Shiny!"),
+  test = value(CONFIG$test, FALSE),
+  color = value(CONFIG$color, "purple"),
+  options = list(port = value(CONFIG$port, 8080)))
+
+## then in terminal
+Rscript app.R \
+  --test \
+  --value 1000 \
+  --color 'pink' \
+  --title 'Only Testing' \
+  --port 3838
+```
+
 ### Plumber
 
-An example to configure a Plumber API with command line flags:
+An example to configure a [Plumber API](https://www.rplumber.io/) with command line flags:
 
 ```
 cd plumber

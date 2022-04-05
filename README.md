@@ -315,9 +315,83 @@ Rscript test.R \
 #  - attr(*, "class")= chr "rconfig"
 ```
 
+For a more realistic but still small example, let’s use the `iris` data
+and get summaries by species using command line arguments:
+
+``` bash
+Rscript iris.R --species virginica
+#   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
+#  Min.   :4.900   Min.   :2.200   Min.   :4.500   Min.   :1.400  
+#  1st Qu.:6.225   1st Qu.:2.800   1st Qu.:5.100   1st Qu.:1.800  
+#  Median :6.500   Median :3.000   Median :5.550   Median :2.000  
+#  Mean   :6.588   Mean   :2.974   Mean   :5.552   Mean   :2.026  
+#  3rd Qu.:6.900   3rd Qu.:3.175   3rd Qu.:5.875   3rd Qu.:2.300  
+#  Max.   :7.900   Max.   :3.800   Max.   :6.900   Max.   :2.500
+```
+
+``` bash
+Rscript iris.R --species setosa --verbose
+# 2022-04-05 13:55:52 - Started
+# Getting summaries for species setosa
+#   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
+#  Min.   :4.300   Min.   :2.300   Min.   :1.000   Min.   :0.100  
+#  1st Qu.:4.800   1st Qu.:3.200   1st Qu.:1.400   1st Qu.:0.200  
+#  Median :5.000   Median :3.400   Median :1.500   Median :0.200  
+#  Mean   :5.006   Mean   :3.428   Mean   :1.462   Mean   :0.246  
+#  3rd Qu.:5.200   3rd Qu.:3.675   3rd Qu.:1.575   3rd Qu.:0.300  
+#  Max.   :5.800   Max.   :4.400   Max.   :1.900   Max.   :0.600  
+# 2022-04-05 13:55:52 - Done
+```
+
+``` bash
+Rscript iris.R --species maxima --verbose
+# 2022-04-05 13:55:52 - Started
+# Error: Provide a valid species
+# Execution halted
+```
+
+``` bash
+Rscript iris.R
+# Error: Species not provided
+# Execution halted
+```
+
+Another illustration using the `mtcars` data set to fit linear models to
+different variables:
+
+``` bash
+Rscript mtcars.R
+# (Intercept)         cyl        disp          hp        drat          wt 
+# 12.30337416 -0.11144048  0.01333524 -0.02148212  0.78711097 -3.71530393 
+#        qsec          vs          am        gear        carb 
+#  0.82104075  0.31776281  2.52022689  0.65541302 -0.19941925
+```
+
+``` bash
+Rscript mtcars.R --verbose --vars cyl
+# 2022-04-05 13:55:53 - Started
+# (Intercept)         cyl 
+#    37.88458    -2.87579 
+# 2022-04-05 13:55:53 - Done
+```
+
+``` bash
+Rscript mtcars.R --verbose --vars cal
+# 2022-04-05 13:55:53 - Started
+# Error: Not valid variable
+# Execution halted
+```
+
+``` bash
+Rscript mtcars.R --vars cyl disp hp
+# (Intercept)         cyl        disp          hp 
+# 34.18491917 -1.22741994 -0.01883809 -0.01467933
+```
+
 ### Shiny
 
-An example to configure a Shiny app with command line flags:
+An example to configure a [Shiny app](https://shiny.rstudio.com/) with
+command line flags:
 
     Rscript shiny/app.R
 
@@ -327,9 +401,29 @@ An example to configure a Shiny app with command line flags:
       --color 'pink' \
       --title 'Only Testing'
 
+An example to configure a Shiny app using the
+[golem](https://golemverse.org/) with command line flags:
+
+    # app.R
+    CONFIG <- rconfig()
+    yourpkg::run_app(
+      title = value(CONFIG$title, "Hello Shiny!"),
+      test = value(CONFIG$test, FALSE),
+      color = value(CONFIG$color, "purple"),
+      options = list(port = value(CONFIG$port, 8080)))
+
+    ## then in terminal
+    Rscript app.R \
+      --test \
+      --value 1000 \
+      --color 'pink' \
+      --title 'Only Testing' \
+      --port 3838
+
 ### Plumber
 
-An example to configure a Plumber API with command line flags:
+An example to configure a [Plumber API](https://www.rplumber.io/) with
+command line flags:
 
     cd plumber
 
