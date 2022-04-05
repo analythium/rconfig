@@ -315,6 +315,37 @@ Rscript test.R \
 #  - attr(*, "class")= chr "rconfig"
 ```
 
+### Shiny
+
+An example to configure a Shiny app with command line flags:
+
+    Rscript shiny/app.R
+
+    Rscript shiny/app.R \
+      --test \
+      --value 1000 \
+      --color 'pink' \
+      --title 'Only Testing'
+
+### Plumber
+
+An example to configure a Plumber API with command line flags:
+
+    cd plumber
+
+    Rscript index.R
+
+    # httr::POST("http://127.0.0.1:8080/echo?msg=Cool") |> httr::content()
+    # httr::GET("http://127.0.0.1:8080/test") |> httr::content()
+
+    Rscript index.R \
+      --test \
+      --port 8000 \
+      --title 'The echoed message is'
+
+    # httr::POST("http://127.0.0.1:8000/echo?msg=Cool") |> httr::content()
+    # httr::GET("http://127.0.0.1:8000/test") |> httr::content()
+
 ## License
 
 [MIT License](./LICENSE) © 2022 Peter Solymos and Analythium Solutions
