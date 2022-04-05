@@ -2,6 +2,8 @@
 % Please edit documentation in R/config.R
 \name{rconfig}
 \alias{rconfig}
+\alias{value}
+\alias{value.default}
 \title{Manage R Configuration at the Command Line}
 \usage{
 rconfig(
@@ -13,6 +15,10 @@ rconfig(
   sep = NULL,
   ...
 )
+
+value(x, ...)
+
+\method{value}{default}(x, default = NULL, ...)
 }
 \arguments{
 \item{file}{Configuration file name or URL (\code{NULL} to not use
@@ -41,6 +47,11 @@ source information are attached as the \code{"trace"} attribute.}
 \code{\link[yaml:yaml.load]{yaml::yaml.load_file()}} for YAML,
 \code{\link[jsonlite:fromJSON]{jsonlite::fromJSON()}} for JSON, and
 \code{\link[utils:read.table]{utils::read.table()}} for text files.}
+
+\item{x}{A list, e.g. the \code{rconfig()} output.}
+
+\item{default}{A default value to be used when a configuration
+entry is not set.}
 }
 \value{
 The configuration value (a named list, or an empty list).
@@ -136,7 +147,14 @@ rconfig::rconfig(
     list = list(user = list(name = "Jack")),
     flatten = TRUE)
 
+CONFIG <- rconfig::rconfig(
+    file = cfile("rconfig.yml"))
+value(CONFIG$cores, 2L)   # set to 1L
+value(CONFIG$test, FALSE) # unset
+
 }
 \seealso{
 \code{\link[utils:modifyList]{utils::modifyList()}}
 }
+\keyword{models}
+\keyword{regression}
