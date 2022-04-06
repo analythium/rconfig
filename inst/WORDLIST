@@ -11,6 +11,7 @@ config
 configr
 configs
 github
+golem
 https
 kubectl
 parsers
