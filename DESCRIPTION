@@ -3,10 +3,14 @@ Type: Package
 Title: Manage R Configuration at the Command Line
 Version: 0.1.2
 Date: 2022-04-04
-Author: Peter Solymos [aut, cre]
-        (<https://orcid.org/0000-0001-7337-1740>), Analythium Solutions
-        Inc. [cph]
-Maintainer: Peter Solymos <peter@analythium.io>
+Authors@R: c(
+  person(given = "Peter",
+    family = "Solymos",
+    comment = c(ORCID = "0000-0001-7337-1740"),
+    role = c("aut", "cre"),
+    email = "peter@analythium.io"),
+  person(given = "Analythium Solutions Inc.",
+    role = c("cph", "fnd")))
 Description: Configuration management using files (JSON, YAML, separated text),
   JSON strings, and command line arguments. Command line arguments
   can be used to override configuration. Period-separated command line
@@ -14,8 +18,9 @@ Description: Configuration management using files (JSON, YAML, separated text),
 License: MIT + file LICENSE
 LazyLoad: yes
 Imports: yaml, jsonlite
-RoxygenNote: 7.1.1
+RoxygenNote: 7.1.2
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 BugReports: https://github.com/analythium/rconfig/issues
 URL: https://github.com/analythium/rconfig
+Language: en-US
