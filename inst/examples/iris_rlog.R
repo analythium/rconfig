@@ -10,23 +10,26 @@
 #'
 #' Note: this script requires the rlog package
 
-options(digits.secs = 3)
-abort <- function(...) {
+info <- function(...) {
+    rlog::log_info(paste(...))
+}
+error <- function(...) {
     rlog::log_error(paste(...))
     if (!interactive())
         q(status = 1)
 }
-info <- function(...) {
-    rlog::log_info(paste(...))
+abort <- function(...) {
+    error(geterrmessage())
 }
+options(digits.secs = 3, error = abort)
 CONFIG <- rconfig::rconfig()
 
 info("Started")
 species <- rconfig::value(
     CONFIG$species,
-    abort("Species not provided"))
+    error("Species not provided"))
 if (!(species %in% iris$Species))
-    abort("Provide a valid species")
+    error("Provide a valid species")
 info("Getting summaries for species", species)
 summary(iris[iris$Species == species, 1:4])
 info("Done")
