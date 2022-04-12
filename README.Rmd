@@ -58,17 +58,19 @@ The rconfig package has the following features:
 - nested configurations can also be flattened 
 - command line flags without a value will evaluate to `TRUE`, e.g. `--verbose`
 
+This looks very similar to what [litter](https://CRAN.R-project.org/package=littler), [getopt](https://CRAN.R-project.org/package=getopt), and [optparse](https://CRAN.R-project.org/package=optparse) are supposed to do. You are right. These packages offer amazing command line experience once you have a solid interface. In an iterative and evolving research and development situation, however, rconfig gives you agility.
+
 If you are not yet convinced, here is a quick teaser.
 This is the content of the default configuration file, `rconfig.yml`:
 
 ```{r echo=FALSE}
-cat(readLines("rconfig.yml"),sep="\n")
+cat(readLines("rconfig.yml"), sep="\n")
 ```
 
 Let's use a simple R script to print out the configs:
 
 ```{r echo=FALSE}
-cat(readLines("test.R"),sep="\n")
+cat(readLines("test.R"), sep="\n")
 ```
 
 Now you can override the default configuration using another file, a JSON string, and some other flags. Notice the variable substitution for user name!
@@ -191,6 +193,8 @@ Rscript iris.R --species maxima --verbose
 ```{bash error=TRUE}
 Rscript iris.R
 ```
+
+Check out the [`iris_rlog.R`](inst/examples/iris_rlog.R) file to see an example with proper logging.
 
 Another illustration using the `mtcars` data set to fit linear models to different variables:
 
