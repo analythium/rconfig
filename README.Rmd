@@ -27,6 +27,8 @@ JSON strings and command line arguments. Command line arguments
 can be used to override configuration. Period-separated command line
 flags are parsed as hierarchical lists.
 
+_Try rconfig in your browser: click the Gitpod button, then `cd inst/examples` in the VS Code terminal to run the `Rscript` example from this README!_
+
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/analythium/rconfig)
 
 ## Install
