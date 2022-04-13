@@ -13,3 +13,5 @@
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^RELEASE\.R$
+^\.gitpod\.yml$
+^\.gitpod\.Dockerfile$
