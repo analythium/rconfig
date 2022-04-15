@@ -16,7 +16,7 @@ parsed as hierarchical lists.
 
 *Try rconfig in your browser: click the Gitpod button, then
 `cd inst/examples` in the VS Code terminal to run the `Rscript` example
-from this README!*
+from this README. Yes, that applies to Plumber and Shiny too!*
 
 [![Open in
 Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/analythium/rconfig)
@@ -423,6 +423,7 @@ An example to configure a Shiny app using the
 [golem](https://golemverse.org/) with command line flags:
 
     # app.R
+    library(rconfig)
     CONFIG <- rconfig()
     yourpkg::run_app(
       title = value(CONFIG$title, "Hello Shiny!"),
