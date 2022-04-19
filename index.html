@@ -32,7 +32,7 @@
     
     <a class="navbar-brand me-2" href="index.html">rconfig</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -85,8 +85,7 @@ to override configuration. Period-separated command line flags are
 parsed as hierarchical lists.</p>
 <p><em>Try rconfig in your browser: click the Gitpod button, then
 <code>cd inst/examples</code> in the VS Code terminal to run the
-<code>Rscript</code> example from this README. Yes, that applies to
-Plumber and Shiny too!</em></p>
+<code>Rscript</code> example from this README!</em></p>
 <p><a href="https://gitpod.io/#https://github.com/analythium/rconfig" class="external-link"><img src="https://gitpod.io/button/open-in-gitpod.svg" alt="Open in Gitpod"></a></p>
 <div class="section level2">
 <h2 id="install">Install<a class="anchor" aria-label="anchor" href="#install"></a>
@@ -152,7 +151,10 @@ content of the default configuration file, <code>rconfig.yml</code>:</p>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># dataset: "demo-data.csv"</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># cores: !expr getOption("mc.cores", 1L)</span></span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># user:</span></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   name: "demo"</span></span></code></pre></div>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">#   name: "demo"</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="co"># description: |</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   This is a multi line</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co">#   description.</span></span></code></pre></div>
 <p>Let’s use a simple R script to print out the configs:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># #!/usr/bin/env Rscript</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># options("rconfig.debug"=TRUE)</span></span>
@@ -167,29 +169,30 @@ user name!</p>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-j</span> <span class="st">'{"trials":30,"dataset":"full-data.csv"}'</span> <span class="dt">\</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">--user.name</span> <span class="va">$USER</span> <span class="dt">\</span></span>
 <span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">--verbose</span></span>
-<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 5</span></span>
-<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ trials : int 30</span></span>
-<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ dataset: chr "full-data.csv"</span></span>
-<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ cores  : int 1</span></span>
-<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ user   :List of 1</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 6</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ trials     : int 30</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ dataset    : chr "full-data.csv"</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ cores      : int 1</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ user       :List of 1</span></span>
 <span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ name: chr "Jane"</span></span>
-<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ verbose: logi TRUE</span></span>
-<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "trace")=List of 2</span></span>
-<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ kind : chr "merged"</span></span>
-<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ value:List of 4</span></span>
-<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
-<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "file"</span></span>
-<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"</span></span>
-<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
-<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "file"</span></span>
-<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig-prod.yml"</span></span>
-<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
-<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "json"</span></span>
-<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "{\"trials\":30,\"dataset\":\"full-data.csv\"}"</span></span>
-<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
-<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "args"</span></span>
-<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "--user.name Jane --verbose"</span></span>
-<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ description: chr "This is a multi line\ndescription."</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ verbose    : logi TRUE</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "trace")=List of 2</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ kind : chr "merged"</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ value:List of 4</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "file"</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "file"</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig-prod.yml"</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "json"</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "{\"trials\":30,\"dataset\":\"full-data.csv\"}"</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "args"</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "--user.name Jane --verbose"</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
 <p>The package was inspired by the config package,
 docker-compose/kubectl/caddy and other CLI tools, and was motivated by
 some real world need when managing background processing on cloud
@@ -205,34 +208,37 @@ instances.</p>
 root after cloning/downloading the repository.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">rconfig</span><span class="fu">::</span><span class="fu"><a href="reference/rconfig.html">rconfig</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="co"># List of 4</span>
-<span class="co">#  $ trials : int 5</span>
-<span class="co">#  $ dataset: chr "demo-data.csv"</span>
-<span class="co">#  $ cores  : int 1</span>
-<span class="co">#  $ user   :List of 1</span>
+<span class="co"># List of 5</span>
+<span class="co">#  $ trials     : int 5</span>
+<span class="co">#  $ dataset    : chr "demo-data.csv"</span>
+<span class="co">#  $ cores      : int 1</span>
+<span class="co">#  $ user       :List of 1</span>
 <span class="co">#   ..$ name: chr "demo"</span>
+<span class="co">#  $ description: chr "This is a multi line\ndescription."</span>
 <span class="co">#  - attr(*, "class")= chr "rconfig"</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">rconfig</span><span class="fu">::</span><span class="fu"><a href="reference/rconfig.html">rconfig</a></span><span class="op">(</span>
     file <span class="op">=</span> <span class="st">"rconfig-prod.yml"</span><span class="op">)</span><span class="op">)</span>
-<span class="co"># List of 4</span>
-<span class="co">#  $ trials : int 30</span>
-<span class="co">#  $ dataset: chr "full-data.csv"</span>
-<span class="co">#  $ cores  : int 1</span>
-<span class="co">#  $ user   :List of 1</span>
+<span class="co"># List of 5</span>
+<span class="co">#  $ trials     : int 30</span>
+<span class="co">#  $ dataset    : chr "full-data.csv"</span>
+<span class="co">#  $ cores      : int 1</span>
+<span class="co">#  $ user       :List of 1</span>
 <span class="co">#   ..$ name: chr "real_We4$#z*="</span>
+<span class="co">#  $ description: chr "This is a multi line\ndescription."</span>
 <span class="co">#  - attr(*, "class")= chr "rconfig"</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">rconfig</span><span class="fu">::</span><span class="fu"><a href="reference/rconfig.html">rconfig</a></span><span class="op">(</span>
     file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rconfig.json"</span>,
              <span class="st">"rconfig-prod.txt"</span><span class="op">)</span>,
     list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>user <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Jack"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="co"># List of 4</span>
-<span class="co">#  $ trials : int 30</span>
-<span class="co">#  $ dataset: chr "full-data.csv"</span>
-<span class="co">#  $ cores  : int 1</span>
-<span class="co">#  $ user   :List of 1</span>
+<span class="co"># List of 5</span>
+<span class="co">#  $ trials     : int 30</span>
+<span class="co">#  $ dataset    : chr "full-data.csv"</span>
+<span class="co">#  $ cores      : int 1</span>
+<span class="co">#  $ user       :List of 1</span>
 <span class="co">#   ..$ name: chr "Jack"</span>
+<span class="co">#  $ description: chr "This is a multi line\ndescription."</span>
 <span class="co">#  - attr(*, "class")= chr "rconfig"</span>
 
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">rconfig</span><span class="fu">::</span><span class="fu"><a href="reference/rconfig.html">rconfig</a></span><span class="op">(</span>
@@ -240,11 +246,12 @@ root after cloning/downloading the repository.</p>
              <span class="st">"rconfig-prod.txt"</span><span class="op">)</span>,
     list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>user <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Jack"</span><span class="op">)</span><span class="op">)</span>,
     flatten <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
-<span class="co"># List of 4</span>
-<span class="co">#  $ trials   : int 30</span>
-<span class="co">#  $ dataset  : chr "full-data.csv"</span>
-<span class="co">#  $ cores    : int 1</span>
-<span class="co">#  $ user.name: chr "Jack"</span>
+<span class="co"># List of 5</span>
+<span class="co">#  $ trials     : int 30</span>
+<span class="co">#  $ dataset    : chr "full-data.csv"</span>
+<span class="co">#  $ cores      : int 1</span>
+<span class="co">#  $ user.name  : chr "Jack"</span>
+<span class="co">#  $ description: chr "This is a multi line\ndescription."</span>
 <span class="co">#  - attr(*, "class")= chr "rconfig"</span></code></pre></div>
 <p>Set defaults in case some values are undefined:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -265,12 +272,13 @@ root after cloning/downloading the repository.</p>
 <span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">rconfig</span><span class="fu">::</span><span class="fu"><a href="reference/rconfig.html">rconfig</a></span><span class="op">(</span>
     file <span class="op">=</span> <span class="st">"rconfig.yml"</span>,
     list <span class="op">=</span> <span class="va">conf</span><span class="op">)</span><span class="op">)</span>
-<span class="co"># List of 4</span>
-<span class="co">#  $ trials : int 30</span>
-<span class="co">#  $ dataset: chr "data.csv"</span>
-<span class="co">#  $ cores  : int 1</span>
-<span class="co">#  $ user   :List of 1</span>
+<span class="co"># List of 5</span>
+<span class="co">#  $ trials     : int 30</span>
+<span class="co">#  $ dataset    : chr "data.csv"</span>
+<span class="co">#  $ cores      : int 1</span>
+<span class="co">#  $ user       :List of 1</span>
 <span class="co">#   ..$ name: chr "demo"</span>
+<span class="co">#  $ description: chr "This is a multi line\ndescription."</span>
 <span class="co">#  - attr(*, "class")= chr "rconfig"</span></code></pre></div>
 </div>
 <div class="section level3">
@@ -280,25 +288,27 @@ root after cloning/downloading the repository.</p>
 cloning/downloading the repo.</p>
 <p>Default config if found (the script has debug mode on):</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> test.R</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 4</span></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ trials : int 5</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ dataset: chr "demo-data.csv"</span></span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ cores  : int 1</span></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ user   :List of 1</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 5</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ trials     : int 5</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ dataset    : chr "demo-data.csv"</span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ cores      : int 1</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ user       :List of 1</span></span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ name: chr "demo"</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "trace")=List of 2</span></span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ kind : chr "file"</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ description: chr "This is a multi line\ndescription."</span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "trace")=List of 2</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ kind : chr "file"</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
 <p>Default with debug mode off:</p>
 <div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="va">R_RCONFIG_DEBUG</span><span class="op">=</span><span class="st">"FALSE"</span> <span class="ex">Rscript</span> test.R</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 4</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ trials : int 5</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ dataset: chr "demo-data.csv"</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ cores  : int 1</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ user   :List of 1</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 5</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ trials     : int 5</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ dataset    : chr "demo-data.csv"</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ cores      : int 1</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ user       :List of 1</span></span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ name: chr "demo"</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ description: chr "This is a multi line\ndescription."</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
 <p>Change default config file:</p>
 <div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="va">R_RCONFIG_FILE</span><span class="op">=</span><span class="st">"rconfig-prod.yml"</span> <span class="ex">Rscript</span> test.R</span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 3</span></span>
@@ -320,48 +330,50 @@ cloning/downloading the repo.</p>
 <span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
 <p>Use file and other props to override default:</p>
 <div class="sourceCode" id="cb12"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> test.R <span class="at">-f</span> rconfig-prod.yml <span class="at">--user.name</span> <span class="st">"unreal_Zh5z*</span><span class="va">$#</span><span class="st">="</span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 4</span></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ trials : int 30</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ dataset: chr "full-data.csv"</span></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ cores  : int 1</span></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ user   :List of 1</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 5</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ trials     : int 30</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ dataset    : chr "full-data.csv"</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ cores      : int 1</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ user       :List of 1</span></span>
 <span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ name: chr "unreal_Zh5z*0="</span></span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "trace")=List of 2</span></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ kind : chr "merged"</span></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ value:List of 3</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "file"</span></span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"</span></span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "file"</span></span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig-prod.yml"</span></span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "args"</span></span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "--user.name unreal_Zh5z*0="</span></span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ description: chr "This is a multi line\ndescription."</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "trace")=List of 2</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ kind : chr "merged"</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ value:List of 3</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "file"</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"</span></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "file"</span></span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig-prod.yml"</span></span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "args"</span></span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "--user.name unreal_Zh5z*0="</span></span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
 <p>Use JSON string and other props to override default:</p>
 <div class="sourceCode" id="cb13"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> test.R <span class="dt">\</span></span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">-j</span> <span class="st">'{"trials":30,"dataset":"full-data.csv","user":{"name": "real_We4$#z*="}}'</span> <span class="dt">\</span></span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--user.name</span> <span class="st">"unreal_Zh5z*</span><span class="va">$#</span><span class="st">="</span></span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 4</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ trials : int 30</span></span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ dataset: chr "full-data.csv"</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ cores  : int 1</span></span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ user   :List of 1</span></span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 5</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ trials     : int 30</span></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ dataset    : chr "full-data.csv"</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ cores      : int 1</span></span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ user       :List of 1</span></span>
 <span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ name: chr "unreal_Zh5z*0="</span></span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "trace")=List of 2</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ kind : chr "merged"</span></span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ value:List of 3</span></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "file"</span></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"</span></span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "json"</span></span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "{\"trials\":30,\"dataset\":\"full-data.csv\",\"user\":{\"name\": \"real_We4$#z*=\"}}"</span></span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "args"</span></span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "--user.name unreal_Zh5z*0="</span></span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="co">#  $ description: chr "This is a multi line\ndescription."</span></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "trace")=List of 2</span></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ kind : chr "merged"</span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="co">#   ..$ value:List of 3</span></span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "file"</span></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"</span></span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "json"</span></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "{\"trials\":30,\"dataset\":\"full-data.csv\",\"user\":{\"name\": \"real_We4$#z*=\"}}"</span></span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. ..$ :List of 2</span></span>
+<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "args"</span></span>
+<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "--user.name unreal_Zh5z*0="</span></span>
+<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
 <p>For a more realistic but still small example, let’s use the
 <code>iris</code> data and get summaries by species using command line
 arguments:</p>
@@ -374,7 +386,7 @@ arguments:</p>
 <span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:6.900   3rd Qu.:3.175   3rd Qu.:5.875   3rd Qu.:2.300  </span></span>
 <span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :7.900   Max.   :3.800   Max.   :6.900   Max.   :2.500</span></span></code></pre></div>
 <div class="sourceCode" id="cb15"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> iris.R <span class="at">--species</span> setosa <span class="at">--verbose</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 2022-04-14 21:57:45 - Started</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 2022-04-18 19:03:36 - Started</span></span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Getting summaries for species setosa</span></span>
 <span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="co">#   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   </span></span>
 <span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :4.300   Min.   :2.300   Min.   :1.000   Min.   :0.100  </span></span>
@@ -383,9 +395,9 @@ arguments:</p>
 <span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co">#  Mean   :5.006   Mean   :3.428   Mean   :1.462   Mean   :0.246  </span></span>
 <span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a><span class="co">#  3rd Qu.:5.200   3rd Qu.:3.675   3rd Qu.:1.575   3rd Qu.:0.300  </span></span>
 <span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a><span class="co">#  Max.   :5.800   Max.   :4.400   Max.   :1.900   Max.   :0.600  </span></span>
-<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 2022-04-14 21:57:45 - Done</span></span></code></pre></div>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co"># 2022-04-18 19:03:36 - Done</span></span></code></pre></div>
 <div class="sourceCode" id="cb16"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> iris.R <span class="at">--species</span> maxima <span class="at">--verbose</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 2022-04-14 21:57:46 - Started</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 2022-04-18 19:03:36 - Started</span></span>
 <span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Error: Provide a valid species</span></span>
 <span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Execution halted</span></span></code></pre></div>
 <div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> iris.R</span>
@@ -401,12 +413,12 @@ linear models to different variables:</p>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="co">#        qsec          vs          am        gear        carb </span></span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="co">#  0.82104075  0.31776281  2.52022689  0.65541302 -0.19941925</span></span></code></pre></div>
 <div class="sourceCode" id="cb19"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> mtcars.R <span class="at">--verbose</span> <span class="at">--vars</span> cyl</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 2022-04-14 21:57:46 - Started</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 2022-04-18 19:03:37 - Started</span></span>
 <span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="co"># (Intercept)         cyl </span></span>
 <span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co">#    37.88458    -2.87579 </span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 2022-04-14 21:57:46 - Done</span></span></code></pre></div>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="co"># 2022-04-18 19:03:37 - Done</span></span></code></pre></div>
 <div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> mtcars.R <span class="at">--verbose</span> <span class="at">--vars</span> cal</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 2022-04-14 21:57:47 - Started</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 2022-04-18 19:03:37 - Started</span></span>
 <span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Error: Not valid variable</span></span>
 <span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Execution halted</span></span></code></pre></div>
 <div class="sourceCode" id="cb21"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> mtcars.R <span class="at">--vars</span> cyl disp hp</span>
@@ -427,21 +439,20 @@ app</a> with command line flags:</p>
 <span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>title <span class="st">'Only Testing'</span></span></code></pre></div>
 <p>An example to configure a Shiny app using the <a href="https://golemverse.org/" class="external-link">golem</a> with command line flags:</p>
 <div class="sourceCode" id="cb23"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># app.R</span></span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(rconfig)</span>
-<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>CONFIG <span class="ot">&lt;-</span> <span class="fu">rconfig</span>()</span>
-<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>yourpkg<span class="sc">::</span><span class="fu">run_app</span>(</span>
-<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">title =</span> <span class="fu">value</span>(CONFIG<span class="sc">$</span>title, <span class="st">"Hello Shiny!"</span>),</span>
-<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">test =</span> <span class="fu">value</span>(CONFIG<span class="sc">$</span>test, <span class="cn">FALSE</span>),</span>
-<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">color =</span> <span class="fu">value</span>(CONFIG<span class="sc">$</span>color, <span class="st">"purple"</span>),</span>
-<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">options =</span> <span class="fu">list</span>(<span class="at">port =</span> <span class="fu">value</span>(CONFIG<span class="sc">$</span>port, <span class="dv">8080</span>)))</span>
-<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a><span class="do">## then in terminal</span></span>
-<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>Rscript app.R \</span>
-<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>test \</span>
-<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>value <span class="dv">1000</span> \</span>
-<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>color <span class="st">'pink'</span> \</span>
-<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>title <span class="st">'Only Testing'</span> \</span>
-<span id="cb23-16"><a href="#cb23-16" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>port <span class="dv">3838</span></span></code></pre></div>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>CONFIG <span class="ot">&lt;-</span> <span class="fu">rconfig</span>()</span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>yourpkg<span class="sc">::</span><span class="fu">run_app</span>(</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">title =</span> <span class="fu">value</span>(CONFIG<span class="sc">$</span>title, <span class="st">"Hello Shiny!"</span>),</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">test =</span> <span class="fu">value</span>(CONFIG<span class="sc">$</span>test, <span class="cn">FALSE</span>),</span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">color =</span> <span class="fu">value</span>(CONFIG<span class="sc">$</span>color, <span class="st">"purple"</span>),</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">options =</span> <span class="fu">list</span>(<span class="at">port =</span> <span class="fu">value</span>(CONFIG<span class="sc">$</span>port, <span class="dv">8080</span>)))</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="do">## then in terminal</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>Rscript app.R \</span>
+<span id="cb23-11"><a href="#cb23-11" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>test \</span>
+<span id="cb23-12"><a href="#cb23-12" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>value <span class="dv">1000</span> \</span>
+<span id="cb23-13"><a href="#cb23-13" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>color <span class="st">'pink'</span> \</span>
+<span id="cb23-14"><a href="#cb23-14" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>title <span class="st">'Only Testing'</span> \</span>
+<span id="cb23-15"><a href="#cb23-15" aria-hidden="true" tabindex="-1"></a>  <span class="sc">--</span>port <span class="dv">3838</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="plumber">Plumber<a class="anchor" aria-label="anchor" href="#plumber"></a>
