@@ -16,7 +16,7 @@ parsed as hierarchical lists.
 
 *Try rconfig in your browser: click the Gitpod button, then
 `cd inst/examples` in the VS Code terminal to run the `Rscript` example
-from this README. Yes, that applies to Plumber and Shiny too!*
+from this README!*
 
 [![Open in
 Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/analythium/rconfig)
@@ -84,6 +84,9 @@ content of the default configuration file, `rconfig.yml`:
     # cores: !expr getOption("mc.cores", 1L)
     # user:
     #   name: "demo"
+    # description: |
+    #   This is a multi line
+    #   description.
 
 Let’s use a simple R script to print out the configs:
 
@@ -103,13 +106,14 @@ Rscript --vanilla test.R \
   -j '{"trials":30,"dataset":"full-data.csv"}' \
   --user.name $USER \
   --verbose
-# List of 5
-#  $ trials : int 30
-#  $ dataset: chr "full-data.csv"
-#  $ cores  : int 1
-#  $ user   :List of 1
+# List of 6
+#  $ trials     : int 30
+#  $ dataset    : chr "full-data.csv"
+#  $ cores      : int 1
+#  $ user       :List of 1
 #   ..$ name: chr "Jane"
-#  $ verbose: logi TRUE
+#  $ description: chr "This is a multi line\ndescription."
+#  $ verbose    : logi TRUE
 #  - attr(*, "trace")=List of 2
 #   ..$ kind : chr "merged"
 #   ..$ value:List of 4
@@ -142,34 +146,37 @@ after cloning/downloading the repository.
 
 ``` r
 str(rconfig::rconfig())
-# List of 4
-#  $ trials : int 5
-#  $ dataset: chr "demo-data.csv"
-#  $ cores  : int 1
-#  $ user   :List of 1
+# List of 5
+#  $ trials     : int 5
+#  $ dataset    : chr "demo-data.csv"
+#  $ cores      : int 1
+#  $ user       :List of 1
 #   ..$ name: chr "demo"
+#  $ description: chr "This is a multi line\ndescription."
 #  - attr(*, "class")= chr "rconfig"
 
 str(rconfig::rconfig(
     file = "rconfig-prod.yml"))
-# List of 4
-#  $ trials : int 30
-#  $ dataset: chr "full-data.csv"
-#  $ cores  : int 1
-#  $ user   :List of 1
+# List of 5
+#  $ trials     : int 30
+#  $ dataset    : chr "full-data.csv"
+#  $ cores      : int 1
+#  $ user       :List of 1
 #   ..$ name: chr "real_We4$#z*="
+#  $ description: chr "This is a multi line\ndescription."
 #  - attr(*, "class")= chr "rconfig"
 
 str(rconfig::rconfig(
     file = c("rconfig.json",
              "rconfig-prod.txt"),
     list = list(user = list(name = "Jack"))))
-# List of 4
-#  $ trials : int 30
-#  $ dataset: chr "full-data.csv"
-#  $ cores  : int 1
-#  $ user   :List of 1
+# List of 5
+#  $ trials     : int 30
+#  $ dataset    : chr "full-data.csv"
+#  $ cores      : int 1
+#  $ user       :List of 1
 #   ..$ name: chr "Jack"
+#  $ description: chr "This is a multi line\ndescription."
 #  - attr(*, "class")= chr "rconfig"
 
 str(rconfig::rconfig(
@@ -177,11 +184,12 @@ str(rconfig::rconfig(
              "rconfig-prod.txt"),
     list = list(user = list(name = "Jack")),
     flatten = TRUE))
-# List of 4
-#  $ trials   : int 30
-#  $ dataset  : chr "full-data.csv"
-#  $ cores    : int 1
-#  $ user.name: chr "Jack"
+# List of 5
+#  $ trials     : int 30
+#  $ dataset    : chr "full-data.csv"
+#  $ cores      : int 1
+#  $ user.name  : chr "Jack"
+#  $ description: chr "This is a multi line\ndescription."
 #  - attr(*, "class")= chr "rconfig"
 ```
 
@@ -208,12 +216,13 @@ conf <- config::get(
 str(rconfig::rconfig(
     file = "rconfig.yml",
     list = conf))
-# List of 4
-#  $ trials : int 30
-#  $ dataset: chr "data.csv"
-#  $ cores  : int 1
-#  $ user   :List of 1
+# List of 5
+#  $ trials     : int 30
+#  $ dataset    : chr "data.csv"
+#  $ cores      : int 1
+#  $ user       :List of 1
 #   ..$ name: chr "demo"
+#  $ description: chr "This is a multi line\ndescription."
 #  - attr(*, "class")= chr "rconfig"
 ```
 
@@ -226,12 +235,13 @@ Default config if found (the script has debug mode on):
 
 ``` bash
 Rscript test.R
-# List of 4
-#  $ trials : int 5
-#  $ dataset: chr "demo-data.csv"
-#  $ cores  : int 1
-#  $ user   :List of 1
+# List of 5
+#  $ trials     : int 5
+#  $ dataset    : chr "demo-data.csv"
+#  $ cores      : int 1
+#  $ user       :List of 1
 #   ..$ name: chr "demo"
+#  $ description: chr "This is a multi line\ndescription."
 #  - attr(*, "trace")=List of 2
 #   ..$ kind : chr "file"
 #   ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"
@@ -242,12 +252,13 @@ Default with debug mode off:
 
 ``` bash
 R_RCONFIG_DEBUG="FALSE" Rscript test.R
-# List of 4
-#  $ trials : int 5
-#  $ dataset: chr "demo-data.csv"
-#  $ cores  : int 1
-#  $ user   :List of 1
+# List of 5
+#  $ trials     : int 5
+#  $ dataset    : chr "demo-data.csv"
+#  $ cores      : int 1
+#  $ user       :List of 1
 #   ..$ name: chr "demo"
+#  $ description: chr "This is a multi line\ndescription."
 #  - attr(*, "class")= chr "rconfig"
 ```
 
@@ -282,12 +293,13 @@ Use file and other props to override default:
 
 ``` bash
 Rscript test.R -f rconfig-prod.yml --user.name "unreal_Zh5z*$#="
-# List of 4
-#  $ trials : int 30
-#  $ dataset: chr "full-data.csv"
-#  $ cores  : int 1
-#  $ user   :List of 1
+# List of 5
+#  $ trials     : int 30
+#  $ dataset    : chr "full-data.csv"
+#  $ cores      : int 1
+#  $ user       :List of 1
 #   ..$ name: chr "unreal_Zh5z*0="
+#  $ description: chr "This is a multi line\ndescription."
 #  - attr(*, "trace")=List of 2
 #   ..$ kind : chr "merged"
 #   ..$ value:List of 3
@@ -309,12 +321,13 @@ Use JSON string and other props to override default:
 Rscript test.R \
   -j '{"trials":30,"dataset":"full-data.csv","user":{"name": "real_We4$#z*="}}' \
   --user.name "unreal_Zh5z*$#="
-# List of 4
-#  $ trials : int 30
-#  $ dataset: chr "full-data.csv"
-#  $ cores  : int 1
-#  $ user   :List of 1
+# List of 5
+#  $ trials     : int 30
+#  $ dataset    : chr "full-data.csv"
+#  $ cores      : int 1
+#  $ user       :List of 1
 #   ..$ name: chr "unreal_Zh5z*0="
+#  $ description: chr "This is a multi line\ndescription."
 #  - attr(*, "trace")=List of 2
 #   ..$ kind : chr "merged"
 #   ..$ value:List of 3
@@ -346,7 +359,7 @@ Rscript iris.R --species virginica
 
 ``` bash
 Rscript iris.R --species setosa --verbose
-# 2022-04-14 21:57:45 - Started
+# 2022-04-18 19:03:36 - Started
 # Getting summaries for species setosa
 #   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
 #  Min.   :4.300   Min.   :2.300   Min.   :1.000   Min.   :0.100  
@@ -355,12 +368,12 @@ Rscript iris.R --species setosa --verbose
 #  Mean   :5.006   Mean   :3.428   Mean   :1.462   Mean   :0.246  
 #  3rd Qu.:5.200   3rd Qu.:3.675   3rd Qu.:1.575   3rd Qu.:0.300  
 #  Max.   :5.800   Max.   :4.400   Max.   :1.900   Max.   :0.600  
-# 2022-04-14 21:57:45 - Done
+# 2022-04-18 19:03:36 - Done
 ```
 
 ``` bash
 Rscript iris.R --species maxima --verbose
-# 2022-04-14 21:57:46 - Started
+# 2022-04-18 19:03:36 - Started
 # Error: Provide a valid species
 # Execution halted
 ```
@@ -387,15 +400,15 @@ Rscript mtcars.R
 
 ``` bash
 Rscript mtcars.R --verbose --vars cyl
-# 2022-04-14 21:57:46 - Started
+# 2022-04-18 19:03:37 - Started
 # (Intercept)         cyl 
 #    37.88458    -2.87579 
-# 2022-04-14 21:57:46 - Done
+# 2022-04-18 19:03:37 - Done
 ```
 
 ``` bash
 Rscript mtcars.R --verbose --vars cal
-# 2022-04-14 21:57:47 - Started
+# 2022-04-18 19:03:37 - Started
 # Error: Not valid variable
 # Execution halted
 ```
@@ -423,7 +436,6 @@ An example to configure a Shiny app using the
 [golem](https://golemverse.org/) with command line flags:
 
     # app.R
-    library(rconfig)
     CONFIG <- rconfig()
     yourpkg::run_app(
       title = value(CONFIG$title, "Hello Shiny!"),

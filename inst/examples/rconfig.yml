@@ -3,3 +3,6 @@ dataset: "demo-data.csv"
 cores: !expr getOption("mc.cores", 1L)
 user:
   name: "demo"
+description: |
+  This is a multi line
+  description.
