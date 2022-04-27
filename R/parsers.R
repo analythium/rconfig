@@ -167,6 +167,8 @@ parse_args_other <- function(args) {
         return(NULL)
     idx <- which(startsWith(args, "--"))
     flags <- substr(args[idx], 3, nchar(args[idx]))
+    if (any(flags == ""))
+        stop("Empty keys not allowed.")
     parts <- strsplit(flags, "\\.")
     if (any(duplicated(flags)))
         stop("Duplicated flags found.")
