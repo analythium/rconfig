@@ -79,13 +79,8 @@
 <p>Manage R Configuration at the Command Line</p>
 </blockquote>
 <p><a href="https://github.com/analythium/rconfig/actions" class="external-link"><img src="https://github.com/analythium/rconfig/actions/workflows/check.yml/badge.svg" alt="Build status"></a> <a href="https://CRAN.R-project.org/package=rconfig" class="external-link"><img src="http://www.r-pkg.org/badges/version/rconfig" alt="CRAN version"></a> <a href="https://hub.analythium.io/rconfig/" class="external-link"><img src="http://cranlogs.r-pkg.org/badges/grand-total/rconfig" alt="CRAN RStudio mirror downloads"></a></p>
-<p>Manage R configuration using files (JSON, YAML, separated text) JSON
-strings and command line arguments. Command line arguments can be used
-to override configuration. Period-separated command line flags are
-parsed as hierarchical lists.</p>
-<p><em>Try rconfig in your browser: click the Gitpod button, then
-<code>cd inst/examples</code> in the VS Code terminal to run the
-<code>Rscript</code> example from this README!</em></p>
+<p>Manage R configuration using files (JSON, YAML, separated text) JSON strings and command line arguments. Command line arguments can be used to override configuration. Period-separated command line flags are parsed as hierarchical lists.</p>
+<p><em>Try rconfig in your browser: click the Gitpod button, then <code>cd inst/examples</code> in the VS Code terminal to run the <code>Rscript</code> example from this README!</em></p>
 <p><a href="https://gitpod.io/#https://github.com/analythium/rconfig" class="external-link"><img src="https://gitpod.io/button/open-in-gitpod.svg" alt="Open in Gitpod"></a></p>
 <div class="section level2">
 <h2 id="install">Install<a class="anchor" aria-label="anchor" href="#install"></a>
@@ -99,54 +94,29 @@ parsed as hierarchical lists.</p>
 <p>There are other R packages to manage configs:</p>
 <ul>
 <li>
-<a href="https://rstudio.github.io/config/" class="external-link">config</a> has nice
-inheritance rules, and it even scans parent directories for YAML config
-files</li>
+<a href="https://rstudio.github.io/config/" class="external-link">config</a> has nice inheritance rules, and it even scans parent directories for YAML config files</li>
 <li>
-<a href="https://CRAN.R-project.org/package=configr" class="external-link">configr</a> has
-nice substitution/interpolation features and supports YAML, JSON, TOML,
-and INI file formats</li>
+<a href="https://CRAN.R-project.org/package=configr" class="external-link">configr</a> has nice substitution/interpolation features and supports YAML, JSON, TOML, and INI file formats</li>
 </ul>
-<p>These package are fantastic if you are managing deployments at
-different stages of the life cycle, i.e. testing/staging/production.</p>
-<p>However, when you use Rscript from the command line, you often do not
-want to manage too many configuration files, but want a quick way to
-override some of the default settings.</p>
-<p>The rconfig package provides various ways to override defaults, and
-instead of changing active configuration (as in the config package), you
-can merge lists in order to arrive at a final configuration. These are
-very similar concepts, but not quite the same.</p>
+<p>These package are fantastic if you are managing deployments at different stages of the life cycle, i.e. testing/staging/production.</p>
+<p>However, when you use Rscript from the command line, you often do not want to manage too many configuration files, but want a quick way to override some of the default settings.</p>
+<p>The rconfig package provides various ways to override defaults, and instead of changing active configuration (as in the config package), you can merge lists in order to arrive at a final configuration. These are very similar concepts, but not quite the same.</p>
 <p>The rconfig package has the following features:</p>
 <ul>
 <li>uses default configuration file</li>
-<li>file based override with the <code>-f</code> or <code>--file</code>
-flags (accepts JSON, YAML, and plain text files)</li>
-<li>JSON string based override with the <code>-j</code> or
-<code>--json</code> flags</li>
-<li>other command line arguments are merged too,
-e.g. <code>--cores 4</code>
+<li>file based override with the <code>-f</code> or <code>--file</code> flags (accepts JSON, YAML, and plain text files)</li>
+<li>JSON string based override with the <code>-j</code> or <code>--json</code> flags</li>
+<li>other command line arguments are merged too, e.g. <code>--cores 4</code>
 </li>
-<li>heuristic rules are used to coerce command line values to the right
-type</li>
-<li>R expressions starting with <code>!expr</code> are evaluated by
-default, this behavior can be turned off (same feature can be found in
-the yaml and config packages, but here it works with plain text and JSON
-too)</li>
-<li>period-separated command line arguments are parsed as hierarchical
-lists, e.g. <code>--user.name Joe</code> will be added as
-<code>user$name</code> to the config list</li>
+<li>heuristic rules are used to coerce command line values to the right type</li>
+<li>R expressions starting with <code>!expr</code> are evaluated by default, this behavior can be turned off (same feature can be found in the yaml and config packages, but here it works with plain text and JSON too)</li>
+<li>period-separated command line arguments are parsed as hierarchical lists, e.g. <code>--user.name Joe</code> will be added as <code>user$name</code> to the config list</li>
 <li>nested configurations can also be flattened</li>
-<li>command line flags without a value will evaluate to
-<code>TRUE</code>, e.g. <code>--verbose</code>
+<li>command line flags without a value will evaluate to <code>TRUE</code>, e.g. <code>--verbose</code>
 </li>
 </ul>
-<p>This looks very similar to what <a href="https://CRAN.R-project.org/package=littler" class="external-link">litter</a>, <a href="https://CRAN.R-project.org/package=getopt" class="external-link">getopt</a>, and <a href="https://CRAN.R-project.org/package=optparse" class="external-link">optparse</a> are
-supposed to do. You are right. These packages offer amazing command line
-experience once you have a solid interface. In an iterative and evolving
-research and development situation, however, rconfig gives you
-agility.</p>
-<p>If you are not yet convinced, here is a quick teaser. This is the
-content of the default configuration file, <code>rconfig.yml</code>:</p>
+<p>This looks very similar to what <a href="https://CRAN.R-project.org/package=littler" class="external-link">litter</a>, <a href="https://CRAN.R-project.org/package=getopt" class="external-link">getopt</a>, and <a href="https://CRAN.R-project.org/package=optparse" class="external-link">optparse</a> are supposed to do. You are right. These packages offer amazing command line experience once you have a solid interface. In an iterative and evolving research and development situation, however, rconfig gives you agility.</p>
+<p>If you are not yet convinced, here is a quick teaser. This is the content of the default configuration file, <code>rconfig.yml</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># trials: 5</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># dataset: "demo-data.csv"</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># cores: !expr getOption("mc.cores", 1L)</span></span>
@@ -159,9 +129,7 @@ content of the default configuration file, <code>rconfig.yml</code>:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># #!/usr/bin/env Rscript</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co"># options("rconfig.debug"=TRUE)</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co"># str(rconfig::rconfig())</span></span></code></pre></div>
-<p>Now you can override the default configuration using another file, a
-JSON string, and some other flags. Notice the variable substitution for
-user name!</p>
+<p>Now you can override the default configuration using another file, a JSON string, and some other flags. Notice the variable substitution for user name!</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">USER</span><span class="op">=</span>Jane</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> test.R <span class="dt">\</span></span>
@@ -193,10 +161,7 @@ user name!</p>
 <span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "args"</span></span>
 <span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "--user.name Jane --verbose"</span></span>
 <span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
-<p>The package was inspired by the config package,
-docker-compose/kubectl/caddy and other CLI tools, and was motivated by
-some real world need when managing background processing on cloud
-instances.</p>
+<p>The package was inspired by the config package, docker-compose/kubectl/caddy and other CLI tools, and was motivated by some real world need when managing background processing on cloud instances.</p>
 </div>
 <div class="section level2">
 <h2 id="usage">Usage<a class="anchor" aria-label="anchor" href="#usage"></a>
@@ -204,8 +169,7 @@ instances.</p>
 <div class="section level3">
 <h3 id="r-command-line-usage">R command line usage<a class="anchor" aria-label="anchor" href="#r-command-line-usage"></a>
 </h3>
-<p>Open the project in RStudio or set the work directory to the folder
-root after cloning/downloading the repository.</p>
+<p>Open the project in RStudio or set the work directory to the folder root after cloning/downloading the repository.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">rconfig</span><span class="fu">::</span><span class="fu"><a href="reference/rconfig.html">rconfig</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
 <span class="co"># List of 5</span>
@@ -284,8 +248,7 @@ root after cloning/downloading the repository.</p>
 <div class="section level3">
 <h3 id="using-with-rscript">Using with Rscript<a class="anchor" aria-label="anchor" href="#using-with-rscript"></a>
 </h3>
-<p>Set the work directory to the <code>inst/examples</code> folder
-cloning/downloading the repo.</p>
+<p>Set the work directory to the <code>inst/examples</code> folder cloning/downloading the repo.</p>
 <p>Default config if found (the script has debug mode on):</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> test.R</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co"># List of 5</span></span>
@@ -374,9 +337,7 @@ cloning/downloading the repo.</p>
 <span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ kind : chr "args"</span></span>
 <span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="co">#   .. .. ..$ value: chr "--user.name unreal_Zh5z*0="</span></span>
 <span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
-<p>For a more realistic but still small example, let’s use the
-<code>iris</code> data and get summaries by species using command line
-arguments:</p>
+<p>For a more realistic but still small example, let’s use the <code>iris</code> data and get summaries by species using command line arguments:</p>
 <div class="sourceCode" id="cb14"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> iris.R <span class="at">--species</span> virginica</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co">#   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   </span></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">#  Min.   :4.900   Min.   :2.200   Min.   :4.500   Min.   :1.400  </span></span>
@@ -403,10 +364,8 @@ arguments:</p>
 <div class="sourceCode" id="cb17"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> iris.R</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Error: Species not provided</span></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Execution halted</span></span></code></pre></div>
-<p>Check out the <a href="inst/examples/iris_rlog.R"><code>iris_rlog.R</code></a> file to
-see an example with proper logging.</p>
-<p>Another illustration using the <code>mtcars</code> data set to fit
-linear models to different variables:</p>
+<p>Check out the <a href="inst/examples/iris_rlog.R"><code>iris_rlog.R</code></a> file to see an example with proper logging.</p>
+<p>Another illustration using the <code>mtcars</code> data set to fit linear models to different variables:</p>
 <div class="sourceCode" id="cb18"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> mtcars.R</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="co"># (Intercept)         cyl        disp          hp        drat          wt </span></span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="co"># 12.30337416 -0.11144048  0.01333524 -0.02148212  0.78711097 -3.71530393 </span></span>
@@ -428,8 +387,7 @@ linear models to different variables:</p>
 <div class="section level3">
 <h3 id="shiny">Shiny<a class="anchor" aria-label="anchor" href="#shiny"></a>
 </h3>
-<p>An example to configure a <a href="https://shiny.rstudio.com/" class="external-link">Shiny
-app</a> with command line flags:</p>
+<p>An example to configure a <a href="https://shiny.rstudio.com/" class="external-link">Shiny app</a> with command line flags:</p>
 <div class="sourceCode" id="cb22"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>Rscript shiny<span class="sc">/</span>app.R</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>Rscript shiny<span class="sc">/</span>app.R \</span>
@@ -457,8 +415,7 @@ app</a> with command line flags:</p>
 <div class="section level3">
 <h3 id="plumber">Plumber<a class="anchor" aria-label="anchor" href="#plumber"></a>
 </h3>
-<p>An example to configure a <a href="https://www.rplumber.io/" class="external-link">Plumber
-API</a> with command line flags:</p>
+<p>An example to configure a <a href="https://www.rplumber.io/" class="external-link">Plumber API</a> with command line flags:</p>
 <div class="sourceCode" id="cb24"><pre class="sourceCode R"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>cd plumber</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>Rscript index.R</span>
@@ -478,8 +435,7 @@ API</a> with command line flags:</p>
 <div class="section level2">
 <h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
 </h2>
-<p><a href="./LICENSE">MIT License</a> © 2022 Peter Solymos and
-Analythium Solutions Inc.</p>
+<p><a href="./LICENSE">MIT License</a> © 2022 Peter Solymos and Analythium Solutions Inc.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -528,8 +484,7 @@ Analythium Solutions Inc.</p>
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a>
-2.0.2.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
 </div>
 
     </footer>
