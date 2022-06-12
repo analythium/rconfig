@@ -397,7 +397,7 @@ Rscript iris.R --species virginica
 
 ``` bash
 Rscript iris.R --species setosa --verbose
-# 2022-06-12 01:08:57 - Started
+# 2022-06-12 01:42:13 - Started
 # Getting summaries for species setosa
 #   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
 #  Min.   :4.300   Min.   :2.300   Min.   :1.000   Min.   :0.100  
@@ -406,12 +406,12 @@ Rscript iris.R --species setosa --verbose
 #  Mean   :5.006   Mean   :3.428   Mean   :1.462   Mean   :0.246  
 #  3rd Qu.:5.200   3rd Qu.:3.675   3rd Qu.:1.575   3rd Qu.:0.300  
 #  Max.   :5.800   Max.   :4.400   Max.   :1.900   Max.   :0.600  
-# 2022-06-12 01:08:57 - Done
+# 2022-06-12 01:42:13 - Done
 ```
 
 ``` bash
 Rscript iris.R --species maxima --verbose
-# 2022-06-12 01:08:57 - Started
+# 2022-06-12 01:42:13 - Started
 # Error: Provide a valid species
 # Execution halted
 ```
@@ -438,15 +438,15 @@ Rscript mtcars.R
 
 ``` bash
 Rscript mtcars.R --verbose --vars cyl
-# 2022-06-12 01:08:59 - Started
+# 2022-06-12 01:42:14 - Started
 # (Intercept)         cyl 
 #    37.88458    -2.87579 
-# 2022-06-12 01:08:59 - Done
+# 2022-06-12 01:42:14 - Done
 ```
 
 ``` bash
 Rscript mtcars.R --verbose --vars cal
-# 2022-06-12 01:09:00 - Started
+# 2022-06-12 01:42:15 - Started
 # Error: Not valid variable
 # Execution halted
 ```
@@ -472,6 +472,12 @@ Rscript commands.R predict
 ``` bash
 Rscript commands.R fit
 # Error: Command fit not found.
+# Execution halted
+```
+
+``` bash
+Rscript commands.R
+# Error: Specify a command.
 # Execution halted
 ```
 

@@ -240,6 +240,10 @@ Rscript commands.R predict
 Rscript commands.R fit
 ```
 
+```{bash error=TRUE}
+Rscript commands.R
+```
+
 ### Shiny
 
 An example to configure a [Shiny app](https://shiny.rstudio.com/) with command line flags:

@@ -1,20 +1,27 @@
 #!/usr/bin/env Rscript
 CONFIG <- rconfig::rconfig()
 
-model <- function(...) {
+model <- function() {
     message("Model ...")
     # your logic comes here
 }
 
-pred <- function(...) {
+pred <- function() {
     message("Predict ...")
     # your logic comes here
 }
 
-if (rconfig::command(CONFIG)[1L] == "model") {
-    model()
-} else if (rconfig::command(CONFIG)[1L] == "predict") {
-    pred()
-} else {
-    stop("Command ", rconfig::command(CONFIG)[1L], " not found.")
+main <- function() {
+    cmd <- rconfig::command(CONFIG)
+    if (length(cmd) == 0L)
+        stop("Specify a command.", call. = FALSE)
+    if (cmd[1L] == "model") {
+        model()
+    } else if (cmd[1L] == "predict") {
+        pred()
+    } else {
+        stop("Command ", cmd, " not found.", call. = FALSE)
+    }
 }
+
+main()
