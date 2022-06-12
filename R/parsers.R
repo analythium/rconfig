@@ -152,7 +152,22 @@ parse_default <- function(...) {
     l
 }
 
-## Parse cli arguments
+## Parse cli verb arguments
+## verb args are arguments not starting with '-' or '--'
+## following the script file name and preceding
+## any noun arguments (starting with '-' or '--')
+## eg: args <- c("deploy", "ps", "--test", "--some.value", "!expr pi", "--another.value", "abc", "def", "--another.stuff", "99.2")
+parse_args_verbs <- function(args) {
+    noun1 <- which(startsWith(args, "-"))
+    if (length(noun1) > 0L) {
+        verbs <- args[seq_len(noun1[1L]-1)]
+    } else {
+        verbs <- args
+    }
+    verbs
+}
+
+## Parse cli noun arguments
 ## except for:
 ## -f --file and -j --json
 ## eg: args <- c("--test", "--some.value", "!expr pi", "--another.value", "abc", "def", "--another.stuff", "99.2")
@@ -214,6 +229,7 @@ parse_args_file_and_json <- function(args, ...) {
 
 ## Parse files, json strings, and cli arguments for config
 ## this returns all the lists in order of precedence before merging
+## while separating cli verbs and cli nouns
 ##
 ## Precedence:
 ## 1. R_RCONFIG_FILE value or rconfig.yml
@@ -229,6 +245,7 @@ config_list <- function(file = NULL, list = NULL, ...) {
     l1 <- parse_default()
     l2 <- parse_args_file_and_json(args, ...)
     l3 <- parse_args_other(args)
+    verbs <- parse_args_verbs(args)
     lists <- list()
     if (!is.null(l1))
         lists[[1L]] <- l1
@@ -247,5 +264,6 @@ config_list <- function(file = NULL, list = NULL, ...) {
             value = deparse(list))
         lists[[length(lists)+1L]] <- list
     }
+    attr(lists, "command") <- verbs
     lists
 }

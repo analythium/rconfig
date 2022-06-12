@@ -82,7 +82,7 @@ Now you can override the default configuration using another file, a JSON string
 ```{bash}
 export USER=Jane
 
-Rscript --vanilla test.R \
+Rscript --vanilla test.R deploy \
   -f rconfig-prod.yml \
   -j '{"trials":30,"dataset":"full-data.csv"}' \
   --user.name $USER \
@@ -180,6 +180,14 @@ Rscript test.R \
   --user.name "unreal_Zh5z*$#="
 ```
 
+rconfig also interprets verb/noun syntax, where
+verbs are sub-commands following the R script file name
+and preceding the command line flags (starting with `-` or `--`):
+
+```{bash}
+Rscript test.R deploy --user.name "unreal_Zh5z*$#="
+```
+
 For a more realistic but still small example, let's use the `iris` data and get summaries by species using command line arguments:
 
 ```{bash}
@@ -217,6 +225,15 @@ Rscript mtcars.R --verbose --vars cal
 ```{bash}
 Rscript mtcars.R --vars cyl disp hp
 ```
+
+Let's see how to use sub-commands:
+
+```{bash error=TRUE}
+Rscript commands.R model
+Rscript commands.R predict
+Rscript commands.R fit
+```
+
 
 ### Shiny
 

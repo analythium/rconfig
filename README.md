@@ -101,7 +101,7 @@ user name!
 ``` bash
 export USER=Jane
 
-Rscript --vanilla test.R \
+Rscript --vanilla test.R deploy \
   -f rconfig-prod.yml \
   -j '{"trials":30,"dataset":"full-data.csv"}' \
   --user.name $USER \
@@ -128,7 +128,8 @@ Rscript --vanilla test.R \
 #   .. .. ..$ value: chr "{\"trials\":30,\"dataset\":\"full-data.csv\"}"
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "args"
-#   .. .. ..$ value: chr "--user.name Jane --verbose"
+#   .. .. ..$ value: chr "deploy --user.name Jane --verbose"
+#  - attr(*, "command")= chr "deploy"
 #  - attr(*, "class")= chr "rconfig"
 ```
 
@@ -153,6 +154,7 @@ str(rconfig::rconfig())
 #  $ user       :List of 1
 #   ..$ name: chr "demo"
 #  $ description: chr "This is a multi line\ndescription."
+#  - attr(*, "command")= chr(0) 
 #  - attr(*, "class")= chr "rconfig"
 
 str(rconfig::rconfig(
@@ -164,6 +166,7 @@ str(rconfig::rconfig(
 #  $ user       :List of 1
 #   ..$ name: chr "real_We4$#z*="
 #  $ description: chr "This is a multi line\ndescription."
+#  - attr(*, "command")= chr(0) 
 #  - attr(*, "class")= chr "rconfig"
 
 str(rconfig::rconfig(
@@ -177,6 +180,7 @@ str(rconfig::rconfig(
 #  $ user       :List of 1
 #   ..$ name: chr "Jack"
 #  $ description: chr "This is a multi line\ndescription."
+#  - attr(*, "command")= chr(0) 
 #  - attr(*, "class")= chr "rconfig"
 
 str(rconfig::rconfig(
@@ -190,6 +194,7 @@ str(rconfig::rconfig(
 #  $ cores      : int 1
 #  $ user.name  : chr "Jack"
 #  $ description: chr "This is a multi line\ndescription."
+#  - attr(*, "command")= chr(0) 
 #  - attr(*, "class")= chr "rconfig"
 ```
 
@@ -223,6 +228,7 @@ str(rconfig::rconfig(
 #  $ user       :List of 1
 #   ..$ name: chr "demo"
 #  $ description: chr "This is a multi line\ndescription."
+#  - attr(*, "command")= chr(0) 
 #  - attr(*, "class")= chr "rconfig"
 ```
 
@@ -245,6 +251,7 @@ Rscript test.R
 #  - attr(*, "trace")=List of 2
 #   ..$ kind : chr "file"
 #   ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"
+#  - attr(*, "command")= chr(0) 
 #  - attr(*, "class")= chr "rconfig"
 ```
 
@@ -259,6 +266,7 @@ R_RCONFIG_DEBUG="FALSE" Rscript test.R
 #  $ user       :List of 1
 #   ..$ name: chr "demo"
 #  $ description: chr "This is a multi line\ndescription."
+#  - attr(*, "command")= chr(0) 
 #  - attr(*, "class")= chr "rconfig"
 ```
 
@@ -274,6 +282,7 @@ R_RCONFIG_FILE="rconfig-prod.yml" Rscript test.R
 #  - attr(*, "trace")=List of 2
 #   ..$ kind : chr "file"
 #   ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig-prod.yml"
+#  - attr(*, "command")= chr(0) 
 #  - attr(*, "class")= chr "rconfig"
 ```
 
@@ -286,6 +295,7 @@ R_RCONFIG_FILE="rconfig-prod.yml" R_RCONFIG_DEBUG="FALSE" Rscript test.R
 #  $ dataset: chr "full-data.csv"
 #  $ user   :List of 1
 #   ..$ name: chr "real_We4$#z*="
+#  - attr(*, "command")= chr(0) 
 #  - attr(*, "class")= chr "rconfig"
 ```
 
@@ -312,6 +322,7 @@ Rscript test.R -f rconfig-prod.yml --user.name "unreal_Zh5z*$#="
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "args"
 #   .. .. ..$ value: chr "--user.name unreal_Zh5z*0="
+#  - attr(*, "command")= chr(0) 
 #  - attr(*, "class")= chr "rconfig"
 ```
 
@@ -340,6 +351,33 @@ Rscript test.R \
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "args"
 #   .. .. ..$ value: chr "--user.name unreal_Zh5z*0="
+#  - attr(*, "command")= chr(0) 
+#  - attr(*, "class")= chr "rconfig"
+```
+
+rconfig also interprets verb/noun syntax, where verbs are sub-commands
+following the R script file name and preceding the command line flags
+(starting with `-` or `--`):
+
+``` bash
+Rscript test.R deploy --user.name "unreal_Zh5z*$#="
+# List of 5
+#  $ trials     : int 5
+#  $ dataset    : chr "demo-data.csv"
+#  $ cores      : int 1
+#  $ user       :List of 1
+#   ..$ name: chr "unreal_Zh5z*0="
+#  $ description: chr "This is a multi line\ndescription."
+#  - attr(*, "trace")=List of 2
+#   ..$ kind : chr "merged"
+#   ..$ value:List of 2
+#   .. ..$ :List of 2
+#   .. .. ..$ kind : chr "file"
+#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"
+#   .. ..$ :List of 2
+#   .. .. ..$ kind : chr "args"
+#   .. .. ..$ value: chr "deploy --user.name unreal_Zh5z*0="
+#  - attr(*, "command")= chr "deploy"
 #  - attr(*, "class")= chr "rconfig"
 ```
 
@@ -359,7 +397,7 @@ Rscript iris.R --species virginica
 
 ``` bash
 Rscript iris.R --species setosa --verbose
-# 2022-04-18 19:03:36 - Started
+# 2022-06-12 01:05:54 - Started
 # Getting summaries for species setosa
 #   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
 #  Min.   :4.300   Min.   :2.300   Min.   :1.000   Min.   :0.100  
@@ -368,12 +406,12 @@ Rscript iris.R --species setosa --verbose
 #  Mean   :5.006   Mean   :3.428   Mean   :1.462   Mean   :0.246  
 #  3rd Qu.:5.200   3rd Qu.:3.675   3rd Qu.:1.575   3rd Qu.:0.300  
 #  Max.   :5.800   Max.   :4.400   Max.   :1.900   Max.   :0.600  
-# 2022-04-18 19:03:36 - Done
+# 2022-06-12 01:05:54 - Done
 ```
 
 ``` bash
 Rscript iris.R --species maxima --verbose
-# 2022-04-18 19:03:36 - Started
+# 2022-06-12 01:05:54 - Started
 # Error: Provide a valid species
 # Execution halted
 ```
@@ -400,15 +438,15 @@ Rscript mtcars.R
 
 ``` bash
 Rscript mtcars.R --verbose --vars cyl
-# 2022-04-18 19:03:37 - Started
+# 2022-06-12 01:05:55 - Started
 # (Intercept)         cyl 
 #    37.88458    -2.87579 
-# 2022-04-18 19:03:37 - Done
+# 2022-06-12 01:05:55 - Done
 ```
 
 ``` bash
 Rscript mtcars.R --verbose --vars cal
-# 2022-04-18 19:03:37 - Started
+# 2022-06-12 01:05:56 - Started
 # Error: Not valid variable
 # Execution halted
 ```
@@ -417,6 +455,18 @@ Rscript mtcars.R --verbose --vars cal
 Rscript mtcars.R --vars cyl disp hp
 # (Intercept)         cyl        disp          hp 
 # 34.18491917 -1.22741994 -0.01883809 -0.01467933
+```
+
+Let’s see how to use sub-commands:
+
+``` bash
+Rscript commands.R model
+Rscript commands.R predict
+Rscript commands.R fit
+# Model ...
+# Predict ...
+# Error: Command fit not found.
+# Execution halted
 ```
 
 ### Shiny

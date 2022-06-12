@@ -4,6 +4,8 @@
 \alias{rconfig}
 \alias{value}
 \alias{value.default}
+\alias{command}
+\alias{command.default}
 \title{Manage R Configuration at the Command Line}
 \usage{
 rconfig(
@@ -19,6 +21,10 @@ rconfig(
 value(x, ...)
 
 \method{value}{default}(x, default = NULL, ...)
+
+command(x, ...)
+
+\method{command}{default}(x, ...)
 }
 \arguments{
 \item{file}{Configuration file name or URL (\code{NULL} to not use
@@ -56,18 +62,25 @@ entry is not set.}
 \value{
 The configuration value (a named list, or an empty list).
 When debug mode is on, the \code{"trace"} attribute traces the
-merged configurations.
+merged configurations. The \code{value()} method returns the value
+of a given argument or the default value when it is not found
+(i.e. \code{NULL}). The \code{command()} method returns a character vector
+with command line sub-commands (can be of length 0).
 }
 \description{
 Manage R configuration using files (JSON, YAML, separated text)
 JSON strings and command line arguments. Command line arguments
-can be used to override configuration. Period-separated command line
-flags are parsed as hierarchical lists.
+can be used to provide commands and to override configuration.
+Period-separated command line flags are parsed as hierarchical
+lists.
 }
 \details{
 Merges configuration after parsing files, JSON strings,
 and command line arguments. Note that rconfig only considers
 trailing command line arguments from Rscript.
+rconfig differentiates verb/noun syntax, where
+verbs are sub-commands following the R script file name
+and preceding the command line flags (starting with \code{-} or \verb{--}).
 Configurations are merged in the following order
 (key-values from last element override previous values for the same key):
 \enumerate{
@@ -78,7 +91,9 @@ provided as command line arguments are parsed and applied
 in the order they appear (key-value pairs are separated by space,
 only atomic values considered, i.e. file name or string)
 for each flag, but multiple file/JSON flags are accepted in sequence
-\item the remaining other command line arguments, period-separated
+\item the remaining other command line arguments, that can be
+sub-commands or command line flags
+(starting with \code{-} or \verb{--}), period-separated
 command line flags are parsed as hierarchical lists
 (key-value pairs are separated by space, flags must begin
 with \verb{--}, values are treated as vectors when contain spaces,

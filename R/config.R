@@ -2,13 +2,17 @@
 #'
 #' Manage R configuration using files (JSON, YAML, separated text)
 #' JSON strings and command line arguments. Command line arguments
-#' can be used to override configuration. Period-separated command line
-#' flags are parsed as hierarchical lists.
+#' can be used to provide commands and to override configuration.
+#' Period-separated command line flags are parsed as hierarchical
+#' lists.
 #'
 #' @details
 #' Merges configuration after parsing files, JSON strings,
 #' and command line arguments. Note that rconfig only considers
 #' trailing command line arguments from Rscript.
+#' rconfig differentiates verb/noun syntax, where
+#' verbs are sub-commands following the R script file name
+#' and preceding the command line flags (starting with `-` or `--`).
 #' Configurations are merged in the following order
 #' (key-values from last element override previous values for the same key):
 #'
@@ -19,7 +23,9 @@
 #'    in the order they appear (key-value pairs are separated by space,
 #'    only atomic values considered, i.e. file name or string)
 #'    for each flag, but multiple file/JSON flags are accepted in sequence
-#' 3. the remaining other command line arguments, period-separated
+#' 3. the remaining other command line arguments, that can be
+#'    sub-commands or command line flags
+#'    (starting with `-` or `--`), period-separated
 #'    command line flags are parsed as hierarchical lists
 #'    (key-value pairs are separated by space, flags must begin
 #'    with `--`, values are treated as vectors when contain spaces,
@@ -91,7 +97,10 @@
 #'
 #' @return The configuration value (a named list, or an empty list).
 #'   When debug mode is on, the `"trace"` attribute traces the
-#'   merged configurations.
+#'   merged configurations. The `value()` method returns the value
+#'   of a given argument or the default value when it is not found
+#'   (i.e. `NULL`). The `command()` method returns a character vector
+#'   with command line sub-commands (can be of length 0).
 #'
 #' @examples
 #' cfile <- function(file) {
@@ -195,6 +204,7 @@ rconfig <- function(file = NULL,
 
     ## unmerged list
     lists <- config_list(file = file, list = list, ...)
+    verbs <- attr(lists, "command")
 
     ## merged list
     out <- list()
@@ -213,6 +223,7 @@ rconfig <- function(file = NULL,
         if (do_debug())
             attr(out, "trace") <- rc
     }
+    attr(out, "command") <- verbs
 
     class(out) <- "rconfig"
     out
@@ -230,6 +241,19 @@ value <- function(x, ...) {
 value.default <- function(x, default = NULL, ...) {
     if (is.null(x))
         default else x
+}
+
+#' @rdname rconfig
+#' @export
+command <- function(x, ...) {
+    UseMethod("command")
+}
+
+#' @rdname rconfig
+#' @export
+#' @method command default
+command.default <- function(x, ...) {
+    attr(x, "command")
 }
 
 ## trace is stored when debug mode is on
