@@ -228,12 +228,17 @@ Rscript mtcars.R --vars cyl disp hp
 
 Let's see how to use sub-commands:
 
-```{bash error=TRUE}
+```{bash}
 Rscript commands.R model
-Rscript commands.R predict
-Rscript commands.R fit
 ```
 
+```{bash}
+Rscript commands.R predict
+```
+
+```{bash error=TRUE}
+Rscript commands.R fit
+```
 
 ### Shiny
 
