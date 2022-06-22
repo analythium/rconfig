@@ -61,6 +61,7 @@ The rconfig package has the following features:
 - period-separated command line arguments are parsed as hierarchical lists, e.g. `--user.name Joe` will be added as `user$name` to the config list
 - nested configurations can also be flattened 
 - command line flags without a value will evaluate to `TRUE`, e.g. `--verbose`
+- differentiates verb/noun syntax, where verbs are sub-commands following the R script file name and preceding the command line flags (starting with `-` or `--`)
 
 This looks very similar to what [litter](https://CRAN.R-project.org/package=littler), [getopt](https://CRAN.R-project.org/package=getopt), and [optparse](https://CRAN.R-project.org/package=optparse) are supposed to do. You are right. These packages offer amazing command line experience once you have a solid interface. In an iterative and evolving research and development situation, however, rconfig gives you agility.
 
