@@ -67,6 +67,9 @@ The rconfig package has the following features:
 -   nested configurations can also be flattened
 -   command line flags without a value will evaluate to `TRUE`,
     e.g. `--verbose`
+-   differentiates verb/noun syntax, where verbs are sub-commands
+    following the R script file name and preceding the command line
+    flags (starting with `-` or `--`)
 
 This looks very similar to what
 [litter](https://CRAN.R-project.org/package=littler),
@@ -397,7 +400,7 @@ Rscript iris.R --species virginica
 
 ``` bash
 Rscript iris.R --species setosa --verbose
-# 2022-06-12 20:27:47 - Started
+# 2022-06-22 10:37:53 - Started
 # Getting summaries for species setosa
 #   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
 #  Min.   :4.300   Min.   :2.300   Min.   :1.000   Min.   :0.100  
@@ -406,12 +409,12 @@ Rscript iris.R --species setosa --verbose
 #  Mean   :5.006   Mean   :3.428   Mean   :1.462   Mean   :0.246  
 #  3rd Qu.:5.200   3rd Qu.:3.675   3rd Qu.:1.575   3rd Qu.:0.300  
 #  Max.   :5.800   Max.   :4.400   Max.   :1.900   Max.   :0.600  
-# 2022-06-12 20:27:47 - Done
+# 2022-06-22 10:37:53 - Done
 ```
 
 ``` bash
 Rscript iris.R --species maxima --verbose
-# 2022-06-12 20:27:47 - Started
+# 2022-06-22 10:37:53 - Started
 # Error: Provide a valid species
 # Execution halted
 ```
@@ -438,15 +441,15 @@ Rscript mtcars.R
 
 ``` bash
 Rscript mtcars.R --verbose --vars cyl
-# 2022-06-12 20:27:48 - Started
+# 2022-06-22 10:37:54 - Started
 # (Intercept)         cyl 
 #    37.88458    -2.87579 
-# 2022-06-12 20:27:48 - Done
+# 2022-06-22 10:37:54 - Done
 ```
 
 ``` bash
 Rscript mtcars.R --verbose --vars cal
-# 2022-06-12 20:27:48 - Started
+# 2022-06-22 10:37:54 - Started
 # Error: Not valid variable
 # Execution halted
 ```
@@ -489,7 +492,7 @@ sudo cp ./inst/examples/commands.R /usr/local/bin/
 sudo chmod +x /usr/local/bin/commands.R
 ```
 
-Make sure that the R script has the ‘shebang’ (`#!/usr/bin/env Rscript`)
+Make sure that the R script has the shebang (`#!/usr/bin/env Rscript`)
 as the 1st line, and now can drop the `Rscript` part and use the script
 as `commands.R model`.
 

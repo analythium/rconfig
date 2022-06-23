@@ -252,7 +252,7 @@ sudo cp ./inst/examples/commands.R /usr/local/bin/
 sudo chmod +x /usr/local/bin/commands.R
 ```
 
-Make sure that the R script has the 'shebang' (`#!/usr/bin/env Rscript`) as the 1st line, and now can drop the `Rscript` part and use the script as `commands.R model`.
+Make sure that the R script has the shebang (`#!/usr/bin/env Rscript`) as the 1st line, and now can drop the `Rscript` part and use the script as `commands.R model`.
 
 ### Shiny
 
