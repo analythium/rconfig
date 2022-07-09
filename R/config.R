@@ -157,10 +157,10 @@ rconfig <- function(file = NULL,
     ## handle eval
     if (!is.null(eval)) {
         oeval <- Sys.getenv("R_RCONFIG_EVAL", unset = NA)
-        Sys.setenv("R_RCONFIG_EVAL"=eval)
+        Sys.setenv("R_RCONFIG_EVAL" = eval)
         on.exit({
             if (!is.na(oeval))
-                Sys.setenv("R_RCONFIG_EVAL"=oeval)
+                Sys.setenv("R_RCONFIG_EVAL" = oeval)
             else
                 Sys.unsetenv("R_RCONFIG_EVAL")
         }, add = TRUE)
@@ -169,10 +169,10 @@ rconfig <- function(file = NULL,
     ## handle sep
     if (!is.null(sep)) {
         osep <- Sys.getenv("R_RCONFIG_SEP", unset = NA)
-        Sys.setenv("R_RCONFIG_SEP"=sep)
+        Sys.setenv("R_RCONFIG_SEP" = sep)
         on.exit({
             if (!is.na(osep))
-                Sys.setenv("R_RCONFIG_SEP"=osep)
+                Sys.setenv("R_RCONFIG_SEP" = osep)
             else
                 Sys.unsetenv("R_RCONFIG_SEP")
         }, add = TRUE)
@@ -181,10 +181,10 @@ rconfig <- function(file = NULL,
     ## handle debug
     if (!is.null(debug)) {
         odebug <- Sys.getenv("R_RCONFIG_DEBUG", unset = NA)
-        Sys.setenv("R_RCONFIG_DEBUG"=debug)
+        Sys.setenv("R_RCONFIG_DEBUG" = debug)
         on.exit({
             if (!is.na(odebug))
-                Sys.setenv("R_RCONFIG_DEBUG"=odebug)
+                Sys.setenv("R_RCONFIG_DEBUG" = odebug)
             else
                 Sys.unsetenv("R_RCONFIG_DEBUG")
         }, add = TRUE)
@@ -193,10 +193,10 @@ rconfig <- function(file = NULL,
     ## handle flatten
     if (!is.null(flatten)) {
         oflatten <- Sys.getenv("R_RCONFIG_FLATTEN", unset = NA)
-        Sys.setenv("R_RCONFIG_FLATTEN"=flatten)
+        Sys.setenv("R_RCONFIG_FLATTEN" = flatten)
         on.exit({
             if (!is.na(oflatten))
-                Sys.setenv("R_RCONFIG_FLATTEN"=oflatten)
+                Sys.setenv("R_RCONFIG_FLATTEN" = oflatten)
             else
                 Sys.unsetenv("R_RCONFIG_FLATTEN")
         }, add = TRUE)

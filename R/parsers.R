@@ -1,15 +1,8 @@
 ## Internal functions for reading/parsing config files
 
-## File extension of x
-file_ext <- function(x) {
-    #rev((x |> basename() |> strsplit("\\."))[[1L]])[1L]
-    ## make it functional on old R versions w/o native pipe
-    rev(strsplit(basename(x), "\\.")[[1L]])[1L]
-}
-
 ## Guess file extension
 guess_ext <- function(x) {
-    switch(tolower(file_ext(x)),
+    switch(tolower(tools::file_ext(x)),
         "yml" = "yml",
         "yaml" = "yml",
         "json" = "json",
@@ -69,10 +62,10 @@ parse_txt <- function(x, ...) {
 ## !expr evaluation is governed by do_eval()
 parse_yml <- function(x, ...) {
     if (do_eval()) {
-    yaml::yaml.load_file(x,
-        eval.expr = FALSE,
-        handlers = list(expr = function(x)
-            eval(parse(text = x), envir = baseenv())), ...)
+        yaml::yaml.load_file(x,
+            eval.expr = FALSE,
+            handlers = list(expr = function(x)
+                eval(parse(text = x), envir = baseenv())), ...)
     } else {
         yaml::yaml.load_file(x,
             eval.expr = FALSE,
