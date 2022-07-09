@@ -1,8 +1,8 @@
 pandoc: '2.18'
-pkgdown: 2.0.4
+pkgdown: 2.0.5
 pkgdown_sha: ~
 articles: {}
-last_built: 2022-06-23T00:43Z
+last_built: 2022-07-09T01:21Z
 urls:
   reference: https://hub.analythium.io/rconfig/reference
   article: https://hub.analythium.io/rconfig/articles

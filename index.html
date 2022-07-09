@@ -35,7 +35,7 @@ JSON strings, and command line arguments.
     
     <a class="navbar-brand me-2" href="index.html">rconfig</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.4</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -89,7 +89,7 @@ JSON strings, and command line arguments.
 <h2 id="install">Install<a class="anchor" aria-label="anchor" href="#install"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_packages</span><span class="op">(</span><span class="st">"analythium/rconfig"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_packages</span><span class="op">(</span><span class="st">"analythium/rconfig"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="another-config-package">Another config package?<a class="anchor" aria-label="anchor" href="#another-config-package"></a>
@@ -176,84 +176,84 @@ JSON strings, and command line arguments.
 </h3>
 <p>Open the project in RStudio or set the work directory to the folder root after cloning/downloading the repository.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">rconfig</span><span class="fu">::</span><span class="fu"><a href="reference/rconfig.html">rconfig</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>
-<span class="co"># List of 5</span>
-<span class="co">#  $ trials     : int 5</span>
-<span class="co">#  $ dataset    : chr "demo-data.csv"</span>
-<span class="co">#  $ cores      : int 1</span>
-<span class="co">#  $ user       :List of 1</span>
-<span class="co">#   ..$ name: chr "demo"</span>
-<span class="co">#  $ description: chr "This is a multi line\ndescription."</span>
-<span class="co">#  - attr(*, "command")= chr(0) </span>
-<span class="co">#  - attr(*, "class")= chr "rconfig"</span>
-
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">rconfig</span><span class="fu">::</span><span class="fu"><a href="reference/rconfig.html">rconfig</a></span><span class="op">(</span>
-    file <span class="op">=</span> <span class="st">"rconfig-prod.yml"</span><span class="op">)</span><span class="op">)</span>
-<span class="co"># List of 5</span>
-<span class="co">#  $ trials     : int 30</span>
-<span class="co">#  $ dataset    : chr "full-data.csv"</span>
-<span class="co">#  $ cores      : int 1</span>
-<span class="co">#  $ user       :List of 1</span>
-<span class="co">#   ..$ name: chr "real_We4$#z*="</span>
-<span class="co">#  $ description: chr "This is a multi line\ndescription."</span>
-<span class="co">#  - attr(*, "command")= chr(0) </span>
-<span class="co">#  - attr(*, "class")= chr "rconfig"</span>
-
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">rconfig</span><span class="fu">::</span><span class="fu"><a href="reference/rconfig.html">rconfig</a></span><span class="op">(</span>
-    file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rconfig.json"</span>,
-             <span class="st">"rconfig-prod.txt"</span><span class="op">)</span>,
-    list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>user <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Jack"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>
-<span class="co"># List of 5</span>
-<span class="co">#  $ trials     : int 30</span>
-<span class="co">#  $ dataset    : chr "full-data.csv"</span>
-<span class="co">#  $ cores      : int 1</span>
-<span class="co">#  $ user       :List of 1</span>
-<span class="co">#   ..$ name: chr "Jack"</span>
-<span class="co">#  $ description: chr "This is a multi line\ndescription."</span>
-<span class="co">#  - attr(*, "command")= chr(0) </span>
-<span class="co">#  - attr(*, "class")= chr "rconfig"</span>
-
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">rconfig</span><span class="fu">::</span><span class="fu"><a href="reference/rconfig.html">rconfig</a></span><span class="op">(</span>
-    file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rconfig.json"</span>,
-             <span class="st">"rconfig-prod.txt"</span><span class="op">)</span>,
-    list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>user <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Jack"</span><span class="op">)</span><span class="op">)</span>,
-    flatten <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span>
-<span class="co"># List of 5</span>
-<span class="co">#  $ trials     : int 30</span>
-<span class="co">#  $ dataset    : chr "full-data.csv"</span>
-<span class="co">#  $ cores      : int 1</span>
-<span class="co">#  $ user.name  : chr "Jack"</span>
-<span class="co">#  $ description: chr "This is a multi line\ndescription."</span>
-<span class="co">#  - attr(*, "command")= chr(0) </span>
-<span class="co">#  - attr(*, "class")= chr "rconfig"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">rconfig</span><span class="fu">::</span><span class="fu"><a href="reference/rconfig.html">rconfig</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># List of 5</span></span>
+<span><span class="co">#  $ trials     : int 5</span></span>
+<span><span class="co">#  $ dataset    : chr "demo-data.csv"</span></span>
+<span><span class="co">#  $ cores      : int 1</span></span>
+<span><span class="co">#  $ user       :List of 1</span></span>
+<span><span class="co">#   ..$ name: chr "demo"</span></span>
+<span><span class="co">#  $ description: chr "This is a multi line\ndescription."</span></span>
+<span><span class="co">#  - attr(*, "command")= chr(0) </span></span>
+<span><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">rconfig</span><span class="fu">::</span><span class="fu"><a href="reference/rconfig.html">rconfig</a></span><span class="op">(</span></span>
+<span>    file <span class="op">=</span> <span class="st">"rconfig-prod.yml"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># List of 5</span></span>
+<span><span class="co">#  $ trials     : int 30</span></span>
+<span><span class="co">#  $ dataset    : chr "full-data.csv"</span></span>
+<span><span class="co">#  $ cores      : int 1</span></span>
+<span><span class="co">#  $ user       :List of 1</span></span>
+<span><span class="co">#   ..$ name: chr "real_We4$#z*="</span></span>
+<span><span class="co">#  $ description: chr "This is a multi line\ndescription."</span></span>
+<span><span class="co">#  - attr(*, "command")= chr(0) </span></span>
+<span><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">rconfig</span><span class="fu">::</span><span class="fu"><a href="reference/rconfig.html">rconfig</a></span><span class="op">(</span></span>
+<span>    file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rconfig.json"</span>,</span>
+<span>             <span class="st">"rconfig-prod.txt"</span><span class="op">)</span>,</span>
+<span>    list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>user <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Jack"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># List of 5</span></span>
+<span><span class="co">#  $ trials     : int 30</span></span>
+<span><span class="co">#  $ dataset    : chr "full-data.csv"</span></span>
+<span><span class="co">#  $ cores      : int 1</span></span>
+<span><span class="co">#  $ user       :List of 1</span></span>
+<span><span class="co">#   ..$ name: chr "Jack"</span></span>
+<span><span class="co">#  $ description: chr "This is a multi line\ndescription."</span></span>
+<span><span class="co">#  - attr(*, "command")= chr(0) </span></span>
+<span><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">rconfig</span><span class="fu">::</span><span class="fu"><a href="reference/rconfig.html">rconfig</a></span><span class="op">(</span></span>
+<span>    file <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"rconfig.json"</span>,</span>
+<span>             <span class="st">"rconfig-prod.txt"</span><span class="op">)</span>,</span>
+<span>    list <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>user <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>name <span class="op">=</span> <span class="st">"Jack"</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>    flatten <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># List of 5</span></span>
+<span><span class="co">#  $ trials     : int 30</span></span>
+<span><span class="co">#  $ dataset    : chr "full-data.csv"</span></span>
+<span><span class="co">#  $ cores      : int 1</span></span>
+<span><span class="co">#  $ user.name  : chr "Jack"</span></span>
+<span><span class="co">#  $ description: chr "This is a multi line\ndescription."</span></span>
+<span><span class="co">#  - attr(*, "command")= chr(0) </span></span>
+<span><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
 <p>Set defaults in case some values are undefined:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">CONFIG</span> <span class="op">&lt;-</span> <span class="fu">rconfig</span><span class="fu">::</span><span class="fu"><a href="reference/rconfig.html">rconfig</a></span><span class="op">(</span>
-    file <span class="op">=</span> <span class="st">"rconfig-prod.yml"</span><span class="op">)</span>
-
-<span class="fu">rconfig</span><span class="fu">::</span><span class="fu"><a href="reference/rconfig.html">value</a></span><span class="op">(</span><span class="va">CONFIG</span><span class="op">$</span><span class="va">cores</span>, <span class="fl">2L</span><span class="op">)</span>   <span class="co"># set to 1L</span>
-<span class="co"># [1] 1</span>
-<span class="fu">rconfig</span><span class="fu">::</span><span class="fu"><a href="reference/rconfig.html">value</a></span><span class="op">(</span><span class="va">CONFIG</span><span class="op">$</span><span class="va">test</span>, <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># unset</span>
-<span class="co"># [1] FALSE</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">CONFIG</span> <span class="op">&lt;-</span> <span class="fu">rconfig</span><span class="fu">::</span><span class="fu"><a href="reference/rconfig.html">rconfig</a></span><span class="op">(</span></span>
+<span>    file <span class="op">=</span> <span class="st">"rconfig-prod.yml"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu">rconfig</span><span class="fu">::</span><span class="fu"><a href="reference/rconfig.html">value</a></span><span class="op">(</span><span class="va">CONFIG</span><span class="op">$</span><span class="va">cores</span>, <span class="fl">2L</span><span class="op">)</span>   <span class="co"># set to 1L</span></span>
+<span><span class="co"># [1] 1</span></span>
+<span><span class="fu">rconfig</span><span class="fu">::</span><span class="fu"><a href="reference/rconfig.html">value</a></span><span class="op">(</span><span class="va">CONFIG</span><span class="op">$</span><span class="va">test</span>, <span class="cn">FALSE</span><span class="op">)</span> <span class="co"># unset</span></span>
+<span><span class="co"># [1] FALSE</span></span></code></pre></div>
 <p>Using alongside of the config package:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="va">conf</span> <span class="op">&lt;-</span> <span class="fu">config</span><span class="fu">::</span><span class="fu">get</span><span class="op">(</span>
-    config <span class="op">=</span> <span class="st">"production"</span>,
-    file <span class="op">=</span> <span class="st">"config.yml"</span>,
-    use_parent <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span>
-
-<span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">rconfig</span><span class="fu">::</span><span class="fu"><a href="reference/rconfig.html">rconfig</a></span><span class="op">(</span>
-    file <span class="op">=</span> <span class="st">"rconfig.yml"</span>,
-    list <span class="op">=</span> <span class="va">conf</span><span class="op">)</span><span class="op">)</span>
-<span class="co"># List of 5</span>
-<span class="co">#  $ trials     : int 30</span>
-<span class="co">#  $ dataset    : chr "data.csv"</span>
-<span class="co">#  $ cores      : int 1</span>
-<span class="co">#  $ user       :List of 1</span>
-<span class="co">#   ..$ name: chr "demo"</span>
-<span class="co">#  $ description: chr "This is a multi line\ndescription."</span>
-<span class="co">#  - attr(*, "command")= chr(0) </span>
-<span class="co">#  - attr(*, "class")= chr "rconfig"</span></code></pre></div>
+<code class="sourceCode R"><span><span class="va">conf</span> <span class="op">&lt;-</span> <span class="fu">config</span><span class="fu">::</span><span class="fu">get</span><span class="op">(</span></span>
+<span>    config <span class="op">=</span> <span class="st">"production"</span>,</span>
+<span>    file <span class="op">=</span> <span class="st">"config.yml"</span>,</span>
+<span>    use_parent <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="fu">rconfig</span><span class="fu">::</span><span class="fu"><a href="reference/rconfig.html">rconfig</a></span><span class="op">(</span></span>
+<span>    file <span class="op">=</span> <span class="st">"rconfig.yml"</span>,</span>
+<span>    list <span class="op">=</span> <span class="va">conf</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># List of 5</span></span>
+<span><span class="co">#  $ trials     : int 30</span></span>
+<span><span class="co">#  $ dataset    : chr "data.csv"</span></span>
+<span><span class="co">#  $ cores      : int 1</span></span>
+<span><span class="co">#  $ user       :List of 1</span></span>
+<span><span class="co">#   ..$ name: chr "demo"</span></span>
+<span><span class="co">#  $ description: chr "This is a multi line\ndescription."</span></span>
+<span><span class="co">#  - attr(*, "command")= chr(0) </span></span>
+<span><span class="co">#  - attr(*, "class")= chr "rconfig"</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="using-with-rscript">Using with Rscript<a class="anchor" aria-label="anchor" href="#using-with-rscript"></a>
@@ -535,7 +535,7 @@ JSON strings, and command line arguments.
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.4.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.5.</p>
 </div>
 
     </footer>
