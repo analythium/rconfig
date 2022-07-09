@@ -1,8 +1,8 @@
 Package: rconfig
 Type: Package
 Title: Manage R Configuration at the Command Line
-Version: 0.1.3
-Date: 2022-06-22
+Version: 0.1.4
+Date: 2022-07-08
 Authors@R: c(
   person(given = "Peter",
     family = "Solymos",

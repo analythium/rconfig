@@ -1,3 +1,7 @@
+# Version 0.1.4
+
+*
+
 # Version 0.1.3
 
 * Empty flag is invalid and throws an error (#3).
