@@ -1,7 +1,5 @@
 #!/usr/bin/env Rscript
 
-#!/usr/bin/env Rscript
-
 library(plumber)
 library(rconfig)
 CONFIG <- rconfig()
