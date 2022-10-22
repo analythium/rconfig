@@ -24,18 +24,22 @@ Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https:/
 ## Install
 
 ``` r
-remotes::install_packages("analythium/rconfig")
+# CRAN version
+install.packages("rconfig")
+
+# Development version from R-universe
+install.packages("rconfig", repos = "https://analythium.r-universe.dev")
 ```
 
 ## Another config package?
 
 There are other R packages to manage configs:
 
--   [config](https://rstudio.github.io/config/) has nice inheritance
-    rules, and it even scans parent directories for YAML config files
--   [configr](https://CRAN.R-project.org/package=configr) has nice
-    substitution/interpolation features and supports YAML, JSON, TOML,
-    and INI file formats
+- [config](https://rstudio.github.io/config/) has nice inheritance
+  rules, and it even scans parent directories for YAML config files
+- [configr](https://CRAN.R-project.org/package=configr) has nice
+  substitution/interpolation features and supports YAML, JSON, TOML, and
+  INI file formats
 
 These package are fantastic if you are managing deployments at different
 stages of the life cycle, i.e. testing/staging/production.
@@ -51,25 +55,25 @@ very similar concepts, but not quite the same.
 
 The rconfig package has the following features:
 
--   uses default configuration file
--   file based override with the `-f` or `--file` flags (accepts JSON,
-    YAML, and plain text files)
--   JSON string based override with the `-j` or `--json` flags
--   other command line arguments are merged too, e.g. `--cores 4`
--   heuristic rules are used to coerce command line values to the right
-    type
--   R expressions starting with `!expr` are evaluated by default, this
-    behavior can be turned off (same feature can be found in the yaml
-    and config packages, but here it works with plain text and JSON too)
--   period-separated command line arguments are parsed as hierarchical
-    lists, e.g. `--user.name Joe` will be added as `user$name` to the
-    config list
--   nested configurations can also be flattened
--   command line flags without a value will evaluate to `TRUE`,
-    e.g. `--verbose`
--   differentiates verb/noun syntax, where verbs are sub-commands
-    following the R script file name and preceding the command line
-    flags (starting with `-` or `--`)
+- uses default configuration file
+- file based override with the `-f` or `--file` flags (accepts JSON,
+  YAML, and plain text files)
+- JSON string based override with the `-j` or `--json` flags
+- other command line arguments are merged too, e.g. `--cores 4`
+- heuristic rules are used to coerce command line values to the right
+  type
+- R expressions starting with `!expr` are evaluated by default, this
+  behavior can be turned off (same feature can be found in the yaml and
+  config packages, but here it works with plain text and JSON too)
+- period-separated command line arguments are parsed as hierarchical
+  lists, e.g. `--user.name Joe` will be added as `user$name` to the
+  config list
+- nested configurations can also be flattened
+- command line flags without a value will evaluate to `TRUE`,
+  e.g. `--verbose`
+- differentiates verb/noun syntax, where verbs are sub-commands
+  following the R script file name and preceding the command line flags
+  (starting with `-` or `--`)
 
 This looks very similar to what
 [litter](https://CRAN.R-project.org/package=littler),
@@ -122,10 +126,10 @@ Rscript --vanilla test.R deploy \
 #   ..$ value:List of 4
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "file"
-#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"
+#   .. .. ..$ value: chr "/Users/Peter/git/github.com/analythium/rconfig/inst/examples/rconfig.yml"
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "file"
-#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig-prod.yml"
+#   .. .. ..$ value: chr "/Users/Peter/git/github.com/analythium/rconfig/inst/examples/rconfig-prod.yml"
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "json"
 #   .. .. ..$ value: chr "{\"trials\":30,\"dataset\":\"full-data.csv\"}"
@@ -253,7 +257,7 @@ Rscript test.R
 #  $ description: chr "This is a multi line\ndescription."
 #  - attr(*, "trace")=List of 2
 #   ..$ kind : chr "file"
-#   ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"
+#   ..$ value: chr "/Users/Peter/git/github.com/analythium/rconfig/inst/examples/rconfig.yml"
 #  - attr(*, "command")= chr(0) 
 #  - attr(*, "class")= chr "rconfig"
 ```
@@ -284,7 +288,7 @@ R_RCONFIG_FILE="rconfig-prod.yml" Rscript test.R
 #   ..$ name: chr "real_We4$#z*="
 #  - attr(*, "trace")=List of 2
 #   ..$ kind : chr "file"
-#   ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig-prod.yml"
+#   ..$ value: chr "/Users/Peter/git/github.com/analythium/rconfig/inst/examples/rconfig-prod.yml"
 #  - attr(*, "command")= chr(0) 
 #  - attr(*, "class")= chr "rconfig"
 ```
@@ -318,10 +322,10 @@ Rscript test.R -f rconfig-prod.yml --user.name "unreal_Zh5z*$#="
 #   ..$ value:List of 3
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "file"
-#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"
+#   .. .. ..$ value: chr "/Users/Peter/git/github.com/analythium/rconfig/inst/examples/rconfig.yml"
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "file"
-#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig-prod.yml"
+#   .. .. ..$ value: chr "/Users/Peter/git/github.com/analythium/rconfig/inst/examples/rconfig-prod.yml"
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "args"
 #   .. .. ..$ value: chr "--user.name unreal_Zh5z*0="
@@ -347,7 +351,7 @@ Rscript test.R \
 #   ..$ value:List of 3
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "file"
-#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"
+#   .. .. ..$ value: chr "/Users/Peter/git/github.com/analythium/rconfig/inst/examples/rconfig.yml"
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "json"
 #   .. .. ..$ value: chr "{\"trials\":30,\"dataset\":\"full-data.csv\",\"user\":{\"name\": \"real_We4$#z*=\"}}"
@@ -376,7 +380,7 @@ Rscript test.R deploy --user.name "unreal_Zh5z*$#="
 #   ..$ value:List of 2
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "file"
-#   .. .. ..$ value: chr "/Users/Peter/dev/rconfig/inst/examples/rconfig.yml"
+#   .. .. ..$ value: chr "/Users/Peter/git/github.com/analythium/rconfig/inst/examples/rconfig.yml"
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "args"
 #   .. .. ..$ value: chr "deploy --user.name unreal_Zh5z*0="
@@ -400,7 +404,7 @@ Rscript iris.R --species virginica
 
 ``` bash
 Rscript iris.R --species setosa --verbose
-# 2022-06-22 10:37:53 - Started
+# 2022-10-21 18:54:00 - Started
 # Getting summaries for species setosa
 #   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
 #  Min.   :4.300   Min.   :2.300   Min.   :1.000   Min.   :0.100  
@@ -409,12 +413,12 @@ Rscript iris.R --species setosa --verbose
 #  Mean   :5.006   Mean   :3.428   Mean   :1.462   Mean   :0.246  
 #  3rd Qu.:5.200   3rd Qu.:3.675   3rd Qu.:1.575   3rd Qu.:0.300  
 #  Max.   :5.800   Max.   :4.400   Max.   :1.900   Max.   :0.600  
-# 2022-06-22 10:37:53 - Done
+# 2022-10-21 18:54:00 - Done
 ```
 
 ``` bash
 Rscript iris.R --species maxima --verbose
-# 2022-06-22 10:37:53 - Started
+# 2022-10-21 18:54:00 - Started
 # Error: Provide a valid species
 # Execution halted
 ```
@@ -441,15 +445,15 @@ Rscript mtcars.R
 
 ``` bash
 Rscript mtcars.R --verbose --vars cyl
-# 2022-06-22 10:37:54 - Started
+# 2022-10-21 18:54:00 - Started
 # (Intercept)         cyl 
 #    37.88458    -2.87579 
-# 2022-06-22 10:37:54 - Done
+# 2022-10-21 18:54:00 - Done
 ```
 
 ``` bash
 Rscript mtcars.R --verbose --vars cal
-# 2022-06-22 10:37:54 - Started
+# 2022-10-21 18:54:00 - Started
 # Error: Not valid variable
 # Execution halted
 ```
