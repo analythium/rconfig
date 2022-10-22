@@ -34,7 +34,11 @@ _Try rconfig in your browser: click the Gitpod button, then `cd inst/examples` i
 ## Install
 
 ```{r eval=FALSE}
-remotes::install_packages("analythium/rconfig")
+# CRAN version
+install.packages("rconfig")
+
+# Development version from R-universe
+install.packages("rconfig", repos = "https://analythium.r-universe.dev")
 ```
 
 ## Another config package?
