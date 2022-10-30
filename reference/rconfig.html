@@ -82,7 +82,7 @@ lists.</p>
 <span><span class="fu">value</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># S3 method for default</span></span>
-<span><span class="fu">value</span><span class="op">(</span><span class="va">x</span>, default <span class="op">=</span> <span class="cn">NULL</span>, <span class="va">...</span><span class="op">)</span></span>
+<span><span class="fu">value</span><span class="op">(</span><span class="va">x</span>, default <span class="op">=</span> <span class="cn">NULL</span>, coerce <span class="op">=</span> <span class="cn">TRUE</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu">command</span><span class="op">(</span><span class="va">x</span>, <span class="va">...</span><span class="op">)</span></span>
 <span></span>
@@ -140,6 +140,11 @@ source information are attached as the <code>"trace"</code> attribute.</p></dd>
 <dt>default</dt>
 <dd><p>A default value to be used when a configuration
 entry is not set.</p></dd>
+
+
+<dt>coerce</dt>
+<dd><p>Logical, should values of <code>x</code> coerced to the same
+type as <code>storage.mode(default).</code></p></dd>
 
 </dl></div>
     <div class="section level2">
