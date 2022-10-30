@@ -20,7 +20,7 @@ rconfig(
 
 value(x, ...)
 
-\method{value}{default}(x, default = NULL, ...)
+\method{value}{default}(x, default = NULL, coerce = TRUE, ...)
 
 command(x, ...)
 
@@ -58,6 +58,9 @@ source information are attached as the \code{"trace"} attribute.}
 
 \item{default}{A default value to be used when a configuration
 entry is not set.}
+
+\item{coerce}{Logical, should values of \code{x} coerced to the same
+type as \verb{storage.mode(default).}}
 }
 \value{
 The configuration value (a named list, or an empty list).
