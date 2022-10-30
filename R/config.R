@@ -94,6 +94,8 @@
 #' @param x A list, e.g. the `rconfig()` output.
 #' @param default A default value to be used when a configuration
 #'   entry is not set.
+#' @param coerce Logical, should values of `x` coerced to the same 
+#'   type as `storage.mode(default).`
 #'
 #' @return The configuration value (a named list, or an empty list).
 #'   When debug mode is on, the `"trace"` attribute traces the
@@ -238,9 +240,12 @@ value <- function(x, ...) {
 #' @rdname rconfig
 #' @export
 #' @method value default
-value.default <- function(x, default = NULL, ...) {
-    if (is.null(x))
+value.default <- function(x, default = NULL, coerce = TRUE, ...) {
+    x <- if (is.null(x))
         default else x
+    if (!is.null(default) && coerce)
+        storage.mode(x) <- storage.mode(default)
+    x
 }
 
 #' @rdname rconfig
