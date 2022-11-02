@@ -1,3 +1,7 @@
+# Version 0.1.5
+
+* Update date field (The Date field is over a month old).
+
 # Version 0.1.4
 
 * `value()` by default coerces the config value to the same storage type as the default value when the default value is not `NULL`.
