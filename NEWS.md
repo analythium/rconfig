@@ -1,6 +1,6 @@
 # Version 0.1.4
 
-*
+* `value()` by default coerces the config value to the same storage type as the default value when the default value is not `NULL`.
 
 # Version 0.1.3
 
