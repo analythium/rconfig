@@ -3,9 +3,9 @@ CONFIG <- rconfig::rconfig()
 verbose <- rconfig::value(CONFIG$verbose, FALSE)
 if (verbose)
     message(Sys.time(), " - Started")
-species <- rconfig::value(
-    CONFIG$species,
-    stop("Species not provided", call. = FALSE))
+species <- CONFIG$species
+if (is.null(species))
+    stop("Species not provided", call. = FALSE)
 if (!(species %in% iris$Species))
     stop("Provide a valid species")
 if (verbose)

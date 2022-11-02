@@ -213,8 +213,23 @@ CONFIG <- rconfig::rconfig(
 
 rconfig::value(CONFIG$cores, 2L)   # set to 1L
 # [1] 1
-rconfig::value(CONFIG$test, FALSE) # unset
+rconfig::value(CONFIG$test)        # unset
+# NULL
+rconfig::value(CONFIG$test, FALSE) # use default
 # [1] FALSE
+```
+
+The default values are used to ensure type safety:
+
+``` r
+str(rconfig::value(CONFIG$trials, 0L))    # integer
+#  int 30
+str(rconfig::value(CONFIG$trials, 0))     # numeric
+#  num 30
+str(rconfig::value(CONFIG$trials, "0"))   # character
+#  chr "30"
+str(rconfig::value(CONFIG$trials, FALSE)) # logical
+#  logi TRUE
 ```
 
 Using alongside of the config package:
@@ -404,7 +419,7 @@ Rscript iris.R --species virginica
 
 ``` bash
 Rscript iris.R --species setosa --verbose
-# 2022-11-01 22:12:36 - Started
+# 2022-11-02 09:21:25 - Started
 # Getting summaries for species setosa
 #   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
 #  Min.   :4.300   Min.   :2.300   Min.   :1.000   Min.   :0.100  
@@ -413,12 +428,12 @@ Rscript iris.R --species setosa --verbose
 #  Mean   :5.006   Mean   :3.428   Mean   :1.462   Mean   :0.246  
 #  3rd Qu.:5.200   3rd Qu.:3.675   3rd Qu.:1.575   3rd Qu.:0.300  
 #  Max.   :5.800   Max.   :4.400   Max.   :1.900   Max.   :0.600  
-# 2022-11-01 22:12:36 - Done
+# 2022-11-02 09:21:25 - Done
 ```
 
 ``` bash
 Rscript iris.R --species maxima --verbose
-# 2022-11-01 22:12:36 - Started
+# 2022-11-02 09:21:25 - Started
 # Error: Provide a valid species
 # Execution halted
 ```
@@ -445,15 +460,15 @@ Rscript mtcars.R
 
 ``` bash
 Rscript mtcars.R --verbose --vars cyl
-# 2022-11-01 22:12:37 - Started
+# 2022-11-02 09:21:26 - Started
 # (Intercept)         cyl 
 #    37.88458    -2.87579 
-# 2022-11-01 22:12:37 - Done
+# 2022-11-02 09:21:26 - Done
 ```
 
 ``` bash
 Rscript mtcars.R --verbose --vars cal
-# 2022-11-01 22:12:37 - Started
+# 2022-11-02 09:21:26 - Started
 # Error: Not valid variable
 # Execution halted
 ```
