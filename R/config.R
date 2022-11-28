@@ -393,7 +393,13 @@ flatten_list <- function(x, check=TRUE) {
     }
     out <- out[!is.na(nam)]
     names(out) <- nam[!is.na(nam)]
-    if (check && !identical(x, nest(out)))
-        stop("Something went wrong. Please report to package maintainer")
+    # if (check && !identical(x, nest(out)))
+    #     stop("Something went wrong. Please report to package maintainer")
+    if (check) {
+        nx <- nest(out)
+        attributes(nx) <- attributes(x)
+        if (!identical(x, nx))
+            stop("Something went wrong. Please report to package maintainer")
+    }
     out
 }
