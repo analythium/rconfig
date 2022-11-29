@@ -1,6 +1,6 @@
 # Version 0.1.6
 
-*
+* Added functionality to substitute variables (#8).
 
 # Version 0.1.5
 
