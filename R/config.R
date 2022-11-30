@@ -17,7 +17,6 @@
 #' (key-values from last element override previous values for the same key):
 #'
 #' 1. `R_RCONFIG_FILE` value or `"rconfig.yml"` from working directory
-#'    (natural map key/value pairs override any duplicate keys found in merged maps).
 #' 2. JSON strings (following `-j` and `--json` flags)
 #'    and files (following `-f` and `--file` flags)
 #'    provided as command line arguments are parsed and applied

@@ -64,13 +64,11 @@ parse_yml <- function(x, ...) {
     if (do_eval()) {
         yaml::yaml.load_file(x,
             eval.expr = FALSE,
-            merge.precedence = "override",
             handlers = list(expr = function(x)
                 eval(parse(text = x), envir = baseenv())), ...)
     } else {
         yaml::yaml.load_file(x,
             eval.expr = FALSE,
-            merge.precedence = "override",
             handlers = list(expr = function(x)
                 paste0("!expr ", x)), ...)
     }
