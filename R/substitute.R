@@ -130,6 +130,13 @@ eval_param <- function(d, fx) {
 
 #' Substitute values in a config list
 #' 
+#' Environment variables are already there (from outside and .Renviron),
+#' `!expr` expressions and other R session level variables need to be present
+#' at the time of config evaluation.
+#' At last, the config level variables are evaluated, thus config level values can
+#' refer to existing keys that are already substituted (i.e. not substituted from other
+#' config values).
+#' 
 #' @param x Config list.
 #' @return The config list with values substituted
 #' @export
@@ -141,14 +148,35 @@ substitute_list <- function(x) {
         X[[i]] <- lapply(fx[[i]], inspect_char)
         for (k in seq_along(X[[i]])) {
             pk <- eval_param(X[[i]][[k]], fx)
-            if (!is.null(pk)) {
-                v1 <- attr(pk, "split")
-                v2 <- pk[,"val"]
-                if (length(v2) < length(v1))
-                    v2 <- c(v2, "")
-                attr(pk, "subst") <- paste0(v1, v2, collapse="")
-                X[[i]][[k]] <- pk
-                fx[[i]][k] <- attr(pk, "subst")
+            if (any(pk[,"type"] == "#")) {
+                if (!all(pk[,"type"] == "#"))
+                    stop("Mixed variable substitution for config keys not allowed.")
+            } else {
+                if (!is.null(pk)) {
+                    v1 <- attr(pk, "split")
+                    v2 <- pk[,"val"]
+                    if (length(v2) < length(v1))
+                        v2 <- c(v2, "")
+                    attr(pk, "subst") <- paste0(v1, v2, collapse="")
+                    X[[i]][[k]] <- pk
+                    fx[[i]][k] <- attr(pk, "subst")
+                }
+            }
+        }
+    }
+    for (i in nam) {
+        for (k in seq_along(X[[i]])) {
+            pk <- eval_param(X[[i]][[k]], fx)
+            if (any(pk[,"type"] == "#")) {
+                if (!is.null(pk)) {
+                    v1 <- attr(pk, "split")
+                    v2 <- pk[,"val"]
+                    if (length(v2) < length(v1))
+                        v2 <- c(v2, "")
+                    attr(pk, "subst") <- paste0(v1, v2, collapse="")
+                    X[[i]][[k]] <- pk
+                    fx[[i]][k] <- attr(pk, "subst")
+                }
             }
         }
     }
@@ -158,7 +186,7 @@ substitute_list <- function(x) {
 }
 
 ## TODO
-## - order of precedence for env/renv/conf settings: conf to come at the end (env->renv->conf)
-## - how should !expr be handled for precedence? Probably env->renv\expr->conf
-## - allow .env to be listed as part of --file or --env-file
-## - function to set env vars based on .env file
+## - order of precedence for env/renv/conf settings: conf to come at the end (env->renv|expr->conf)
+## - OK how should !expr be handled for precedence? Probably env->renv\expr->conf
+## - DONTFIX allow .env to be listed as part of --file or --env-file
+## - DONTFIX function to set env vars based on .env file

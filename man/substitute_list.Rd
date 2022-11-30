@@ -13,5 +13,10 @@ substitute_list(x)
 The config list with values substituted
 }
 \description{
-Substitute values in a config list
+Environment variables are already there (from outside and .Renviron),
+\code{!expr} expressions and other R session level variables need to be present
+at the time of config evaluation.
+At last, the config level variables are evaluated, thus config level values can
+refer to existing keys that are already substituted (i.e. not substituted from other
+config values).
 }
