@@ -139,8 +139,10 @@ eval_param <- function(d, fx) {
 #' 
 #' @param x Config list.
 #' @return The config list with values substituted
-#' @export
+#' @noRd
 substitute_list <- function(x) {
+    if (length(x) <= 1L)
+        return(x)
     fx <- flatten_list(x)
     nam <- names(fx)[sapply(fx, is.character)]
     X <- list()

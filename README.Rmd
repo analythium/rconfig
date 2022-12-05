@@ -25,11 +25,23 @@ knitr::opts_knit$set(root.dir = 'inst/examples')
 Manage R configuration using files (JSON, YAML, separated text)
 JSON strings and command line arguments. Command line arguments
 can be used to override configuration. Period-separated command line
-flags are parsed as hierarchical lists.
+flags are parsed as hierarchical lists. Environment variables, R global variables,
+  and configuration values can be substituted.
 
 _Try rconfig in your browser: click the Gitpod button, then `cd inst/examples` in the VS Code terminal to run the `Rscript` example from this README!_
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/analythium/rconfig)
+
+- [Install](#install)
+- [Another config package?](#another-config-package)
+- [Usage](#usage)
+  - [R command line usage](#r-command-line-usage)
+  - [Variable substitution](#variable-substitution)
+  - [Using with Rscript](#using-with-rscript)
+  - [Shiny](#shiny)
+  - [Plumber](#plumber)
+- [License](#license)
+
 
 ## Install
 
@@ -50,9 +62,9 @@ There are other R packages to manage configs:
 
 These package are fantastic if you are managing deployments at different stages of the life cycle, i.e. testing/staging/production.
 
-However, when you use Rscript from the command line, you often do not want to manage too many configuration files, but want a quick way to override some of the default settings.
+However, when you use `Rscript` from the command line, you often do not want to manage too many configuration files, but want a quick way to override some of the default settings.
 
-The rconfig package provides various ways to override defaults, and instead of changing active configuration (as in the config package), you can merge lists in order to arrive at a final configuration. These are very similar concepts, but not quite the same.
+The rconfig package provides various ways to override defaults, and instead of changing the active configuration (as in the config package), you can merge lists in order to arrive at a final configuration. These are very similar concepts, but not quite the same.
 
 The rconfig package has the following features:
 
@@ -65,9 +77,13 @@ The rconfig package has the following features:
 - period-separated command line arguments are parsed as hierarchical lists, e.g. `--user.name Joe` will be added as `user$name` to the config list
 - nested configurations can also be flattened 
 - command line flags without a value will evaluate to `TRUE`, e.g. `--verbose`
+- environment variables (`${VALUE}`), R global variables (`@{VALUE}`), and configuration values (`#{VALUE}`) can be substituted
 - differentiates verb/noun syntax, where verbs are sub-commands following the R script file name and preceding the command line flags (starting with `-` or `--`)
 
 This looks very similar to what [litter](https://CRAN.R-project.org/package=littler), [getopt](https://CRAN.R-project.org/package=getopt), and [optparse](https://CRAN.R-project.org/package=optparse) are supposed to do. You are right. These packages offer amazing command line experience once you have a solid interface. In an iterative and evolving research and development situation, however, rconfig gives you agility.
+
+Moreover, the rconfig package offers various ways for substituting environment variables, R global variables, and even substituting configuration values. The [GetoptLong](https://CRAN.R-project.org/package=GetoptLong/vignettes/variable_interpolation.html) similar functionality but its focus is on command line interfaces and not configuration. Other tools, such as `sprintf`, [glue](https://CRAN.R-project.org/package=glue), [rprintf](https://CRAN.R-project.org/package=rprintf), and [whiskers](https://CRAN.R-project.org/package=whisker) are aimed at substituting values from R expressions.
+
 
 If you are not yet convinced, here is a quick teaser.
 This is the content of the default configuration file, `rconfig.yml`:
@@ -151,6 +167,48 @@ conf <- config::get(
 str(rconfig::rconfig(
     file = "rconfig.yml",
     list = conf))
+```
+
+### Variable substitution
+
+The rconfig package interprets 3 kinds of substitution patterns:
+
+- environment variables (`${VALUE}`): these variables are already present when the configurations is read from the calling environment or from `.Renviron` file in the project specific or home folder, set variables can be null or not-null
+- R global variables (`@{VALUE}`): the rconfig package looks for variables in the global environment at the time of configuration evaluation, however, expressions are not evaluated (unlike the `!expr` option for values)
+- configuration values (`#{VALUE}`): the configuration level variables are evaluated last, thus these values can refer to existing keys that are already substituted
+
+The substitution pattern can set defaults or error messages, following [bash](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_06_02) and [Docker](https://docs.docker.com/compose/environment-variables/) conventions:
+
+|              | `a` is set & not null            | `a` set but null                |  `a` is unset         |
+|--------------|--------------------------------|-------------------------------|---------------------|
+| `${a:-b}`     | substitute `a`                   | substitute `b`                  |  substitute `b`       |
+| `${a-b}`      | substitute `a`                   | substitute null               |  substitute `b`       |
+| `${a:?b}`     | substitute `a`                   | error, exit                   |  error, exit        |
+| `${a?b}`      | substitute `a`                   | substitute null               |  error, exit        |
+
+
+The following YAML example has all 3 kinds of variable substitution pattern:
+
+```{r echo=FALSE}
+cat(readLines("rconfig-sub.yml"), sep="\n")
+```
+
+Set the following variables:
+```{r}
+Sys.setenv(USER="Adele")
+Sys.setenv(ACCESS="admin")
+Type <- "simple"
+Lang <- "HU"
+```
+
+This is the substituted version:
+
+```{r echo=FALSE}
+# variables only looked for in global env
+Type <<- "simple"
+Lang <<- "HU"
+x <- rconfig::rconfig(file = "rconfig-sub.yml")
+cat(yaml::as.yaml(x))
 ```
 
 ### Using with Rscript

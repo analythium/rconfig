@@ -1,10 +1,13 @@
 Analythium
 CLI
+Config
+GetoptLong
 Gitpod
 INI
 JSON
 README
 RStudio
+Renviron
 Rscript
 TOML
 YAML
@@ -21,4 +24,5 @@ kubectl
 optparse
 parsers
 repo
+rprintf
 yaml
