@@ -15,6 +15,7 @@ rconfig(
   flatten = NULL,
   debug = NULL,
   sep = NULL,
+  sub = NULL,
   ...
 )
 
@@ -48,6 +49,8 @@ like \code{\link[=unlist]{unlist()}} but returning a list and preserving the val
 source information are attached as the \code{"trace"} attribute.}
 
 \item{sep}{Character, separator for text files.}
+
+\item{sub}{Logical, substitute environment variables (see Details).}
 
 \item{...}{Other arguments passed to file parsers:
 \code{\link[yaml:yaml.load]{yaml::yaml.load_file()}} for YAML,
@@ -117,6 +120,10 @@ R expressions starting with \code{!expr} should be evaluated in the
 namespace environment for the base package
 (overrides the value of \code{getOption("rconfig.eval")}).
 When not set the value assumed is \code{TRUE}.
+\item \code{R_RCONFIG_SUB}: coerced to logical, indicating whether
+environment variables should be substituted
+(overrides the value of \code{getOption("rconfig.sub")}).
+When not set the value assumed is \code{TRUE}.
 \item \code{R_RCONFIG_FLATTEN}: coerced to logical, flatten nested lists,
 i.e. \code{a$b$c} becomes the key \code{a.b.c}
 (overrides the value of \code{getOption("rconfig.flatten")}).
@@ -140,6 +147,13 @@ When the configuration is a file or a JSON string,
 values starting with \code{!expr} will be evaluated depending on the
 settings \code{R_RCONFIG_EVAL} and \code{getOption("rconfig.eval")}.
 E.g. \verb{cores: !expr getOption("mc.cores")}, etc.
+
+The rconfig package interprets 3 kinds of substitution patterns:
+\itemize{
+\item environment variables (\verb{$\{VALUE\}}): these variables are already present when the configurations is read from the calling environment or from \code{.Renviron} file in the project specific or home folder, set variables can be null or not-null
+\item R global variables (\verb{@\{VALUE\}}): the rconfig package looks for variables in the global environment at the time of configuration evaluation, however, expressions are not evaluated (unlike the \code{!expr} option for values)
+\item configuration values (\verb{#\{VALUE\}}): the configuration level variables are evaluated last, thus these values can refer to existing keys that are already substituted
+}
 
 For additional details see the package website at
 \href{https://github.com/analythium/rconfig}{https://github.com/analythium/rconfig}.

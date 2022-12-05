@@ -48,3 +48,9 @@ rconfig::rconfig(
     list = list(user = list(name = "Jack")),
     flatten = TRUE)
 
+## substitution
+Sys.setenv(USER="Adele")
+Sys.setenv(ACCESS="admin")
+Type <- "simple"
+Lang <- "HU"
+rconfig::rconfig(file = cfile("rconfig-sub.yml"))

@@ -12,7 +12,8 @@ downloads](http://cranlogs.r-pkg.org/badges/grand-total/rconfig)](https://hub.an
 Manage R configuration using files (JSON, YAML, separated text) JSON
 strings and command line arguments. Command line arguments can be used
 to override configuration. Period-separated command line flags are
-parsed as hierarchical lists.
+parsed as hierarchical lists. Environment variables, R global variables,
+and configuration values can be substituted.
 
 *Try rconfig in your browser: click the Gitpod button, then
 `cd inst/examples` in the VS Code terminal to run the `Rscript` example
@@ -20,6 +21,16 @@ from this README!*
 
 [![Open in
 Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/analythium/rconfig)
+
+- [Install](#install)
+- [Another config package?](#another-config-package)
+- [Usage](#usage)
+  - [R command line usage](#r-command-line-usage)
+  - [Variable substitution](#variable-substitution)
+  - [Using with Rscript](#using-with-rscript)
+  - [Shiny](#shiny)
+  - [Plumber](#plumber)
+- [License](#license)
 
 ## Install
 
@@ -44,14 +55,14 @@ There are other R packages to manage configs:
 These package are fantastic if you are managing deployments at different
 stages of the life cycle, i.e. testing/staging/production.
 
-However, when you use Rscript from the command line, you often do not
+However, when you use `Rscript` from the command line, you often do not
 want to manage too many configuration files, but want a quick way to
 override some of the default settings.
 
 The rconfig package provides various ways to override defaults, and
-instead of changing active configuration (as in the config package), you
-can merge lists in order to arrive at a final configuration. These are
-very similar concepts, but not quite the same.
+instead of changing the active configuration (as in the config package),
+you can merge lists in order to arrive at a final configuration. These
+are very similar concepts, but not quite the same.
 
 The rconfig package has the following features:
 
@@ -71,6 +82,8 @@ The rconfig package has the following features:
 - nested configurations can also be flattened
 - command line flags without a value will evaluate to `TRUE`,
   e.g. `--verbose`
+- environment variables (`${VALUE}`), R global variables (`@{VALUE}`),
+  and configuration values (`#{VALUE}`) can be substituted
 - differentiates verb/noun syntax, where verbs are sub-commands
   following the R script file name and preceding the command line flags
   (starting with `-` or `--`)
@@ -82,6 +95,17 @@ This looks very similar to what
 do. You are right. These packages offer amazing command line experience
 once you have a solid interface. In an iterative and evolving research
 and development situation, however, rconfig gives you agility.
+
+Moreover, the rconfig package offers various ways for substituting
+environment variables, R global variables, and even substituting
+configuration values. The
+[GetoptLong](https://CRAN.R-project.org/package=GetoptLong/vignettes/variable_interpolation.html)
+similar functionality but its focus is on command line interfaces and
+not configuration. Other tools, such as `sprintf`,
+[glue](https://CRAN.R-project.org/package=glue),
+[rprintf](https://CRAN.R-project.org/package=rprintf), and
+[whiskers](https://CRAN.R-project.org/package=whisker) are aimed at
+substituting values from R expressions.
 
 If you are not yet convinced, here is a quick teaser. This is the
 content of the default configuration file, `rconfig.yml`:
@@ -254,6 +278,88 @@ str(rconfig::rconfig(
 #  - attr(*, "class")= chr "rconfig"
 ```
 
+### Variable substitution
+
+The rconfig package interprets 3 kinds of substitution patterns:
+
+- environment variables (`${VALUE}`): these variables are already
+  present when the configurations is read from the calling environment
+  or from `.Renviron` file in the project specific or home folder, set
+  variables can be null or not-null
+- R global variables (`@{VALUE}`): the rconfig package looks for
+  variables in the global environment at the time of configuration
+  evaluation, however, expressions are not evaluated (unlike the `!expr`
+  option for values)
+- configuration values (`#{VALUE}`): the configuration level variables
+  are evaluated last, thus these values can refer to existing keys that
+  are already substituted
+
+The substitution pattern can set defaults or error messages, following
+[bash](https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html#tag_18_06_02)
+and [Docker](https://docs.docker.com/compose/environment-variables/)
+conventions:
+
+|           | `a` is set & not null | `a` set but null | `a` is unset   |
+|-----------|-----------------------|------------------|----------------|
+| `${a:-b}` | substitute `a`        | substitute `b`   | substitute `b` |
+| `${a-b}`  | substitute `a`        | substitute null  | substitute `b` |
+| `${a:?b}` | substitute `a`        | error, exit      | error, exit    |
+| `${a?b}`  | substitute `a`        | substitute null  | error, exit    |
+
+The following YAML example has all 3 kinds of variable substitution
+pattern:
+
+    # trials: 30
+    # unset:
+    # this-is-null: ""
+    # env:
+    #   dataset: "full-${DATA:-data}.csv"
+    #   url: "https://www.${URL-example}.com"
+    #   user:
+    #     name: "${USER:?Define user name}"
+    #     access: "${ACCESS?Define user access}"
+    # conf:
+    #   path: "#{env.url}/api/v1/"
+    #   text: "User: #{env.user.name} (#{env.user.access})"
+    #   lang: "#{renv.lang}"
+    # renv:
+    #   lang: "@{Lang:-EN}"
+    #   type: "@{Type?Type must be set}"
+
+Set the following variables:
+
+``` r
+Sys.setenv(USER="Adele")
+Sys.setenv(ACCESS="admin")
+Type <- "simple"
+Lang <- "HU"
+```
+
+This is the substituted version:
+
+    # trials: 30
+    # dataset: demo-data.csv
+    # cores: 1
+    # user:
+    #   name: demo
+    # description: |-
+    #   This is a multi line
+    #   description.
+    # this-is-null: ''
+    # env:
+    #   dataset: full-data.csv
+    #   url: https://www.example.com
+    #   user:
+    #     name: Adele
+    #     access: admin
+    # conf:
+    #   path: https://www.example.com/api/v1/
+    #   text: 'User: Adele (admin)'
+    #   lang: HU
+    # renv:
+    #   lang: HU
+    #   type: simple
+
 ### Using with Rscript
 
 Set the work directory to the `inst/examples` folder cloning/downloading
@@ -419,7 +525,7 @@ Rscript iris.R --species virginica
 
 ``` bash
 Rscript iris.R --species setosa --verbose
-# 2022-11-02 09:21:25 - Started
+# 2022-12-04 23:21:04 - Started
 # Getting summaries for species setosa
 #   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
 #  Min.   :4.300   Min.   :2.300   Min.   :1.000   Min.   :0.100  
@@ -428,12 +534,12 @@ Rscript iris.R --species setosa --verbose
 #  Mean   :5.006   Mean   :3.428   Mean   :1.462   Mean   :0.246  
 #  3rd Qu.:5.200   3rd Qu.:3.675   3rd Qu.:1.575   3rd Qu.:0.300  
 #  Max.   :5.800   Max.   :4.400   Max.   :1.900   Max.   :0.600  
-# 2022-11-02 09:21:25 - Done
+# 2022-12-04 23:21:04 - Done
 ```
 
 ``` bash
 Rscript iris.R --species maxima --verbose
-# 2022-11-02 09:21:25 - Started
+# 2022-12-04 23:21:04 - Started
 # Error: Provide a valid species
 # Execution halted
 ```
@@ -460,15 +566,15 @@ Rscript mtcars.R
 
 ``` bash
 Rscript mtcars.R --verbose --vars cyl
-# 2022-11-02 09:21:26 - Started
+# 2022-12-04 23:21:05 - Started
 # (Intercept)         cyl 
 #    37.88458    -2.87579 
-# 2022-11-02 09:21:26 - Done
+# 2022-12-04 23:21:05 - Done
 ```
 
 ``` bash
 Rscript mtcars.R --verbose --vars cal
-# 2022-11-02 09:21:26 - Started
+# 2022-12-04 23:21:05 - Started
 # Error: Not valid variable
 # Execution halted
 ```

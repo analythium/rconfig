@@ -1,0 +1,16 @@
+trials: 30
+unset:
+this-is-null: ""
+env:
+  dataset: "full-${DATA:-data}.csv"
+  url: "https://www.${URL-example}.com"
+  user:
+    name: "${USER:?Define user name}"
+    access: "${ACCESS?Define user access}"
+conf:
+  path: "#{env.url}/api/v1/"
+  text: "User: #{env.user.name} (#{env.user.access})"
+  lang: "#{renv.lang}"
+renv:
+  lang: "@{Lang:-EN}"
+  type: "@{Type?Type must be set}"

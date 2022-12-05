@@ -17,7 +17,6 @@
 #' (key-values from last element override previous values for the same key):
 #'
 #' 1. `R_RCONFIG_FILE` value or `"rconfig.yml"` from working directory
-#'    (natural map key/value pairs override any duplicate keys found in merged maps).
 #' 2. JSON strings (following `-j` and `--json` flags)
 #'    and files (following `-f` and `--file` flags)
 #'    provided as command line arguments are parsed and applied
@@ -46,6 +45,10 @@
 #'   namespace environment for the base package
 #'   (overrides the value of `getOption("rconfig.eval")`).
 #'   When not set the value assumed is `TRUE`.
+#' * `R_RCONFIG_SUB`: coerced to logical, indicating whether
+#'   environment variables should be substituted
+#'   (overrides the value of `getOption("rconfig.sub")`).
+#'   When not set the value assumed is `TRUE`.
 #' * `R_RCONFIG_FLATTEN`: coerced to logical, flatten nested lists,
 #'   i.e. `a$b$c` becomes the key `a.b.c`
 #'   (overrides the value of `getOption("rconfig.flatten")`).
@@ -69,6 +72,12 @@
 #' settings `R_RCONFIG_EVAL` and `getOption("rconfig.eval")`.
 #' E.g. `cores: !expr getOption("mc.cores")`, etc.
 #'
+#' The rconfig package interprets 3 kinds of substitution patterns:
+#' 
+#' * environment variables (`${VALUE}`): these variables are already present when the configurations is read from the calling environment or from `.Renviron` file in the project specific or home folder, set variables can be null or not-null
+#' * R global variables (`@{VALUE}`): the rconfig package looks for variables in the global environment at the time of configuration evaluation, however, expressions are not evaluated (unlike the `!expr` option for values)
+#' * configuration values (`#{VALUE}`): the configuration level variables are evaluated last, thus these values can refer to existing keys that are already substituted
+#' 
 #' For additional details see the package website at
 #'  \href{https://github.com/analythium/rconfig}{https://github.com/analythium/rconfig}.
 #'
@@ -88,6 +97,7 @@
 #' @param debug Logical, when debug mode is on the configuration
 #'   source information are attached as the `"trace"` attribute.
 #' @param sep Character, separator for text files.
+#' @param sub Logical, substitute environment variables (see Details).
 #' @param ... Other arguments passed to file parsers:
 #'   [yaml::yaml.load_file()] for YAML,
 #'   [jsonlite::fromJSON()] for JSON, and
@@ -155,6 +165,7 @@ rconfig <- function(file = NULL,
                     flatten = NULL,
                     debug = NULL,
                     sep = NULL,
+                    sub = NULL,
                     ...) {
 
     ## handle eval
@@ -205,6 +216,18 @@ rconfig <- function(file = NULL,
         }, add = TRUE)
     }
 
+    ## handle sub
+    if (!is.null(sub)) {
+        osub <- Sys.getenv("R_RCONFIG_SUB", unset = NA)
+        Sys.setenv("R_RCONFIG_SUB" = sub)
+        on.exit({
+            if (!is.na(osub))
+                Sys.setenv("R_RCONFIG_SUB" = osub)
+            else
+                Sys.unsetenv("R_RCONFIG_SUB")
+        }, add = TRUE)
+    }
+
     ## unmerged list
     lists <- config_list(file = file, list = list, ...)
     verbs <- attr(lists, "command")
@@ -213,6 +236,12 @@ rconfig <- function(file = NULL,
     out <- list()
     for (i in lists)
         out <- utils::modifyList(out, i)
+    
+    ## substitute variables
+    if (do_sub())
+        out <- substitute_list(out)
+
+    ## flatten if requested
     if (do_flatten())
         out <- flatten_list(out)
 
@@ -290,6 +319,20 @@ do_flatten <- function() {
     var
 }
 
+## check settings for env substitution
+do_sub <- function() {
+    default_val <- TRUE
+    var <- as.logical(Sys.getenv("R_RCONFIG_SUB"))
+    if (is.na(var)) {
+        opt <- getOption("rconfig.sub")
+        if (!is.null(opt))
+            opt <- suppressWarnings(as.logical(opt))
+        var <- if (!length(opt) || is.na(opt))
+            default_val else opt
+    }
+    var
+}
+
 ## assume here that the root of x1 and x2 are the same
 ## and we want that part (reversing unique naming side effects)
 findroot <- function(x1, x2) {
@@ -331,7 +374,7 @@ depth1 <- function(x) {
 
 ## flatten nested list to get period-separated keys
 flatten_list <- function(x, check=TRUE) {
-    if (length(x) == 1L)
+    if (length(x) <= 1L)
         return(x)
     if (is.null(names(x)))
         stop("No names found")
