@@ -76,6 +76,7 @@ lists.</p>
 <span>  flatten <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  debug <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  sep <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  sub <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -124,6 +125,10 @@ source information are attached as the <code>"trace"</code> attribute.</p></dd>
 
 <dt>sep</dt>
 <dd><p>Character, separator for text files.</p></dd>
+
+
+<dt>sub</dt>
+<dd><p>Logical, substitute environment variables (see Details).</p></dd>
 
 
 <dt>...</dt>
@@ -193,6 +198,10 @@ R expressions starting with <code>!expr</code> should be evaluated in the
 namespace environment for the base package
 (overrides the value of <code>getOption("rconfig.eval")</code>).
 When not set the value assumed is <code>TRUE</code>.</p></li>
+<li><p><code>R_RCONFIG_SUB</code>: coerced to logical, indicating whether
+environment variables should be substituted
+(overrides the value of <code>getOption("rconfig.sub")</code>).
+When not set the value assumed is <code>TRUE</code>.</p></li>
 <li><p><code>R_RCONFIG_FLATTEN</code>: coerced to logical, flatten nested lists,
 i.e. <code>a$b$c</code> becomes the key <code>a.b.c</code>
 (overrides the value of <code>getOption("rconfig.flatten")</code>).
@@ -213,7 +222,10 @@ period-separated keys are parsed as hierarchical lists
 values starting with <code>!expr</code> will be evaluated depending on the
 settings <code>R_RCONFIG_EVAL</code> and <code>getOption("rconfig.eval")</code>.
 E.g. <code>cores: !expr getOption("mc.cores")</code>, etc.</p>
-<p>For additional details see the package website at
+<p>The rconfig package interprets 3 kinds of substitution patterns:</p><ul><li><p>environment variables (<code>${VALUE}</code>): these variables are already present when the configurations is read from the calling environment or from <code>.Renviron</code> file in the project specific or home folder, set variables can be null or not-null</p></li>
+<li><p>R global variables (<code>@{VALUE}</code>): the rconfig package looks for variables in the global environment at the time of configuration evaluation, however, expressions are not evaluated (unlike the <code>!expr</code> option for values)</p></li>
+<li><p>configuration values (<code>#{VALUE}</code>): the configuration level variables are evaluated last, thus these values can refer to existing keys that are already substituted</p></li>
+</ul><p>For additional details see the package website at
 <a href="https://github.com/analythium/rconfig" class="external-link">https://github.com/analythium/rconfig</a>.</p>
     </div>
     <div class="section level2">
