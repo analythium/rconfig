@@ -207,7 +207,10 @@ This is the substituted version:
 # variables only looked for in global env
 Type <<- "simple"
 Lang <<- "HU"
-x <- rconfig::rconfig(file = "rconfig-sub.yml")
+Sys.setenv(R_RCONFIG_FILE = "rconfig-sub.yml")
+# x <- rconfig::rconfig(file = "rconfig-sub.yml")
+x <- rconfig::rconfig()
+Sys.unsetenv("R_RCONFIG_FILE")
 cat(yaml::as.yaml(x))
 ```
 
