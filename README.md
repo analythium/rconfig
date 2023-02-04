@@ -89,7 +89,7 @@ The rconfig package has the following features:
   (starting with `-` or `--`)
 
 This looks very similar to what
-[litter](https://CRAN.R-project.org/package=littler),
+[littler](https://CRAN.R-project.org/package=littler),
 [getopt](https://CRAN.R-project.org/package=getopt), and
 [optparse](https://CRAN.R-project.org/package=optparse) are supposed to
 do. You are right. These packages offer amazing command line experience
@@ -100,8 +100,8 @@ Moreover, the rconfig package offers various ways for substituting
 environment variables, R global variables, and even substituting
 configuration values. The
 [GetoptLong](https://CRAN.R-project.org/package=GetoptLong/vignettes/variable_interpolation.html)
-similar functionality but its focus is on command line interfaces and
-not configuration. Other tools, such as `sprintf`,
+package has similar functionality but its focus is on command line
+interfaces and not configuration. Other tools, such as `sprintf`,
 [glue](https://CRAN.R-project.org/package=glue),
 [rprintf](https://CRAN.R-project.org/package=rprintf), and
 [whiskers](https://CRAN.R-project.org/package=whisker) are aimed at
@@ -110,20 +110,24 @@ substituting values from R expressions.
 If you are not yet convinced, here is a quick teaser. This is the
 content of the default configuration file, `rconfig.yml`:
 
-    # trials: 5
-    # dataset: "demo-data.csv"
-    # cores: !expr getOption("mc.cores", 1L)
-    # user:
-    #   name: "demo"
-    # description: |
-    #   This is a multi line
-    #   description.
+``` yaml
+trials: 5
+dataset: "demo-data.csv"
+cores: !expr getOption("mc.cores", 1L)
+user:
+  name: "demo"
+description: |
+  This is a multi line
+  description.
+```
 
 Let’s use a simple R script to print out the configs:
 
-    # #!/usr/bin/env Rscript
-    # options("rconfig.debug"=TRUE)
-    # str(rconfig::rconfig())
+``` r
+#!/usr/bin/env Rscript
+options("rconfig.debug"=TRUE)
+str(rconfig::rconfig())
+```
 
 Now you can override the default configuration using another file, a
 JSON string, and some other flags. Notice the variable substitution for
@@ -150,10 +154,10 @@ Rscript --vanilla test.R deploy \
 #   ..$ value:List of 4
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "file"
-#   .. .. ..$ value: chr "/Users/Peter/git/github.com/analythium/rconfig/inst/examples/rconfig.yml"
+#   .. .. ..$ value: chr "/workspaces/rconfig/inst/examples/rconfig.yml"
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "file"
-#   .. .. ..$ value: chr "/Users/Peter/git/github.com/analythium/rconfig/inst/examples/rconfig-prod.yml"
+#   .. .. ..$ value: chr "/workspaces/rconfig/inst/examples/rconfig-prod.yml"
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "json"
 #   .. .. ..$ value: chr "{\"trials\":30,\"dataset\":\"full-data.csv\"}"
@@ -309,22 +313,24 @@ conventions:
 The following YAML example has all 3 kinds of variable substitution
 pattern:
 
-    # trials: 30
-    # unset:
-    # this-is-null: ""
-    # env:
-    #   dataset: "full-${DATA:-data}.csv"
-    #   url: "https://www.${URL-example}.com"
-    #   user:
-    #     name: "${USER:?Define user name}"
-    #     access: "${ACCESS?Define user access}"
-    # conf:
-    #   path: "#{env.url}/api/v1/"
-    #   text: "User: #{env.user.name} (#{env.user.access})"
-    #   lang: "#{renv.lang}"
-    # renv:
-    #   lang: "@{Lang:-EN}"
-    #   type: "@{Type?Type must be set}"
+``` yaml
+trials: 30
+unset:
+this-is-null: ""
+env:
+  dataset: "full-${DATA:-data}.csv"
+  url: "https://www.${URL-example}.com"
+  user:
+    name: "${USER:?Define user name}"
+    access: "${ACCESS?Define user access}"
+conf:
+  path: "#{env.url}/api/v1/"
+  text: "User: #{env.user.name} (#{env.user.access})"
+  lang: "#{renv.lang}"
+renv:
+  lang: "@{Lang:-EN}"
+  type: "@{Type?Type must be set}"
+```
 
 Set the following variables:
 
@@ -337,21 +343,23 @@ Lang <- "HU"
 
 This is the substituted version:
 
-    # trials: 30
-    # this-is-null: ''
-    # env:
-    #   dataset: full-data.csv
-    #   url: https://www.example.com
-    #   user:
-    #     name: Adele
-    #     access: admin
-    # conf:
-    #   path: https://www.example.com/api/v1/
-    #   text: 'User: Adele (admin)'
-    #   lang: HU
-    # renv:
-    #   lang: HU
-    #   type: simple
+``` yaml
+trials: 30
+this-is-null: ''
+env:
+  dataset: full-data.csv
+  url: https://www.example.com
+  user:
+    name: Adele
+    access: admin
+conf:
+  path: https://www.example.com/api/v1/
+  text: 'User: Adele (admin)'
+  lang: HU
+renv:
+  lang: HU
+  type: simple
+```
 
 ### Using with Rscript
 
@@ -371,7 +379,7 @@ Rscript test.R
 #  $ description: chr "This is a multi line\ndescription."
 #  - attr(*, "trace")=List of 2
 #   ..$ kind : chr "file"
-#   ..$ value: chr "/Users/Peter/git/github.com/analythium/rconfig/inst/examples/rconfig.yml"
+#   ..$ value: chr "/workspaces/rconfig/inst/examples/rconfig.yml"
 #  - attr(*, "command")= chr(0) 
 #  - attr(*, "class")= chr "rconfig"
 ```
@@ -402,7 +410,7 @@ R_RCONFIG_FILE="rconfig-prod.yml" Rscript test.R
 #   ..$ name: chr "real_We4$#z*="
 #  - attr(*, "trace")=List of 2
 #   ..$ kind : chr "file"
-#   ..$ value: chr "/Users/Peter/git/github.com/analythium/rconfig/inst/examples/rconfig-prod.yml"
+#   ..$ value: chr "/workspaces/rconfig/inst/examples/rconfig-prod.yml"
 #  - attr(*, "command")= chr(0) 
 #  - attr(*, "class")= chr "rconfig"
 ```
@@ -436,10 +444,10 @@ Rscript test.R -f rconfig-prod.yml --user.name "unreal_Zh5z*$#="
 #   ..$ value:List of 3
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "file"
-#   .. .. ..$ value: chr "/Users/Peter/git/github.com/analythium/rconfig/inst/examples/rconfig.yml"
+#   .. .. ..$ value: chr "/workspaces/rconfig/inst/examples/rconfig.yml"
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "file"
-#   .. .. ..$ value: chr "/Users/Peter/git/github.com/analythium/rconfig/inst/examples/rconfig-prod.yml"
+#   .. .. ..$ value: chr "/workspaces/rconfig/inst/examples/rconfig-prod.yml"
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "args"
 #   .. .. ..$ value: chr "--user.name unreal_Zh5z*0="
@@ -465,7 +473,7 @@ Rscript test.R \
 #   ..$ value:List of 3
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "file"
-#   .. .. ..$ value: chr "/Users/Peter/git/github.com/analythium/rconfig/inst/examples/rconfig.yml"
+#   .. .. ..$ value: chr "/workspaces/rconfig/inst/examples/rconfig.yml"
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "json"
 #   .. .. ..$ value: chr "{\"trials\":30,\"dataset\":\"full-data.csv\",\"user\":{\"name\": \"real_We4$#z*=\"}}"
@@ -494,7 +502,7 @@ Rscript test.R deploy --user.name "unreal_Zh5z*$#="
 #   ..$ value:List of 2
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "file"
-#   .. .. ..$ value: chr "/Users/Peter/git/github.com/analythium/rconfig/inst/examples/rconfig.yml"
+#   .. .. ..$ value: chr "/workspaces/rconfig/inst/examples/rconfig.yml"
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "args"
 #   .. .. ..$ value: chr "deploy --user.name unreal_Zh5z*0="
@@ -518,7 +526,7 @@ Rscript iris.R --species virginica
 
 ``` bash
 Rscript iris.R --species setosa --verbose
-# 2022-12-22 20:45:51 - Started
+# 2023-02-04 04:40:50 - Started
 # Getting summaries for species setosa
 #   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
 #  Min.   :4.300   Min.   :2.300   Min.   :1.000   Min.   :0.100  
@@ -527,12 +535,12 @@ Rscript iris.R --species setosa --verbose
 #  Mean   :5.006   Mean   :3.428   Mean   :1.462   Mean   :0.246  
 #  3rd Qu.:5.200   3rd Qu.:3.675   3rd Qu.:1.575   3rd Qu.:0.300  
 #  Max.   :5.800   Max.   :4.400   Max.   :1.900   Max.   :0.600  
-# 2022-12-22 20:45:51 - Done
+# 2023-02-04 04:40:50 - Done
 ```
 
 ``` bash
 Rscript iris.R --species maxima --verbose
-# 2022-12-22 20:45:51 - Started
+# 2023-02-04 04:40:51 - Started
 # Error: Provide a valid species
 # Execution halted
 ```
@@ -559,15 +567,15 @@ Rscript mtcars.R
 
 ``` bash
 Rscript mtcars.R --verbose --vars cyl
-# 2022-12-22 20:45:52 - Started
+# 2023-02-04 04:40:52 - Started
 # (Intercept)         cyl 
 #    37.88458    -2.87579 
-# 2022-12-22 20:45:52 - Done
+# 2023-02-04 04:40:52 - Done
 ```
 
 ``` bash
 Rscript mtcars.R --verbose --vars cal
-# 2022-12-22 20:45:52 - Started
+# 2023-02-04 04:40:52 - Started
 # Error: Not valid variable
 # Execution halted
 ```
@@ -619,52 +627,60 @@ as `commands.R model`.
 An example to configure a [Shiny app](https://shiny.rstudio.com/) with
 command line flags:
 
-    Rscript shiny/app.R
+``` bash
+Rscript shiny/app.R
 
-    Rscript shiny/app.R \
-      --test \
-      --value 1000 \
-      --color 'pink' \
-      --title 'Only Testing'
+Rscript shiny/app.R \
+  --test \
+  --value 1000 \
+  --color 'pink' \
+  --title 'Only Testing'
+```
 
 An example to configure a Shiny app using the
 [golem](https://golemverse.org/) with command line flags:
 
-    # app.R
-    CONFIG <- rconfig()
-    yourpkg::run_app(
-      title = value(CONFIG$title, "Hello Shiny!"),
-      test = value(CONFIG$test, FALSE),
-      color = value(CONFIG$color, "purple"),
-      options = list(port = value(CONFIG$port, 8080)))
+``` r
+# app.R
+CONFIG <- rconfig()
+yourpkg::run_app(
+  title = value(CONFIG$title, "Hello Shiny!"),
+  test = value(CONFIG$test, FALSE),
+  color = value(CONFIG$color, "purple"),
+  options = list(port = value(CONFIG$port, 8080)))
+```
 
-    ## then in terminal
-    Rscript app.R \
-      --test \
-      --value 1000 \
-      --color 'pink' \
-      --title 'Only Testing' \
-      --port 3838
+``` bash
+## then in terminal
+Rscript app.R \
+  --test \
+  --value 1000 \
+  --color 'pink' \
+  --title 'Only Testing' \
+  --port 3838
+```
 
 ### Plumber
 
 An example to configure a [Plumber API](https://www.rplumber.io/) with
 command line flags:
 
-    cd plumber
+``` bash
+cd plumber
 
-    Rscript index.R
+Rscript index.R
 
-    # httr::POST("http://127.0.0.1:8080/echo?msg=Cool") |> httr::content()
-    # httr::GET("http://127.0.0.1:8080/test") |> httr::content()
+# httr::POST("http://127.0.0.1:8080/echo?msg=Cool") |> httr::content()
+# httr::GET("http://127.0.0.1:8080/test") |> httr::content()
 
-    Rscript index.R \
-      --test \
-      --port 8000 \
-      --title 'The echoed message is'
+Rscript index.R \
+  --test \
+  --port 8000 \
+  --title 'The echoed message is'
 
-    # httr::POST("http://127.0.0.1:8000/echo?msg=Cool") |> httr::content()
-    # httr::GET("http://127.0.0.1:8000/test") |> httr::content()
+# httr::POST("http://127.0.0.1:8000/echo?msg=Cool") |> httr::content()
+# httr::GET("http://127.0.0.1:8000/test") |> httr::content()
+```
 
 ## License
 
