@@ -88,14 +88,12 @@ Moreover, the rconfig package offers various ways for substituting environment v
 If you are not yet convinced, here is a quick teaser.
 This is the content of the default configuration file, `rconfig.yml`:
 
-```{r echo=FALSE}
-cat(readLines("rconfig.yml"), sep="\n")
+```{verbatim lang="yaml", file="rconfig.yml"}
 ```
 
 Let's use a simple R script to print out the configs:
 
-```{r echo=FALSE}
-cat(readLines("test.R"), sep="\n")
+```{verbatim lang="r", file="test.R"}
 ```
 
 Now you can override the default configuration using another file, a JSON string, and some other flags. Notice the variable substitution for user name!
@@ -189,8 +187,7 @@ The substitution pattern can set defaults or error messages, following [bash](ht
 
 The following YAML example has all 3 kinds of variable substitution pattern:
 
-```{r echo=FALSE}
-cat(readLines("rconfig-sub.yml"), sep="\n")
+```{verbatim lang="yaml", file="rconfig-sub.yml"}
 ```
 
 Set the following variables:
@@ -203,7 +200,7 @@ Lang <- "HU"
 
 This is the substituted version:
 
-```{r echo=FALSE}
+```{r echo=FALSE, results="asis"}
 # variables only looked for in global env
 Type <<- "simple"
 Lang <<- "HU"
@@ -211,7 +208,7 @@ Sys.setenv(R_RCONFIG_FILE = "rconfig-sub.yml")
 # x <- rconfig::rconfig(file = "rconfig-sub.yml")
 x <- rconfig::rconfig()
 Sys.unsetenv("R_RCONFIG_FILE")
-cat(yaml::as.yaml(x))
+cat("```yaml\n", yaml::as.yaml(x), "```", sep = "")
 ```
 
 ### Using with Rscript
@@ -333,7 +330,7 @@ Make sure that the R script has the shebang (`#!/usr/bin/env Rscript`) as the 1s
 
 An example to configure a [Shiny app](https://shiny.rstudio.com/) with command line flags:
 
-```
+```bash
 Rscript shiny/app.R
 
 Rscript shiny/app.R \
@@ -345,7 +342,7 @@ Rscript shiny/app.R \
 
 An example to configure a Shiny app using the [golem](https://golemverse.org/) with command line flags:
 
-```
+```r
 # app.R
 CONFIG <- rconfig()
 yourpkg::run_app(
@@ -353,7 +350,9 @@ yourpkg::run_app(
   test = value(CONFIG$test, FALSE),
   color = value(CONFIG$color, "purple"),
   options = list(port = value(CONFIG$port, 8080)))
+```
 
+```bash
 ## then in terminal
 Rscript app.R \
   --test \
@@ -367,7 +366,7 @@ Rscript app.R \
 
 An example to configure a [Plumber API](https://www.rplumber.io/) with command line flags:
 
-```
+```bash
 cd plumber
 
 Rscript index.R
