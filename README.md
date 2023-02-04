@@ -154,10 +154,10 @@ Rscript --vanilla test.R deploy \
 #   ..$ value:List of 4
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "file"
-#   .. .. ..$ value: chr "/workspaces/rconfig/inst/examples/rconfig.yml"
+#   .. .. ..$ value: chr "/Users/Peter/git/github.com/analythium/rconfig/inst/examples/rconfig.yml"
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "file"
-#   .. .. ..$ value: chr "/workspaces/rconfig/inst/examples/rconfig-prod.yml"
+#   .. .. ..$ value: chr "/Users/Peter/git/github.com/analythium/rconfig/inst/examples/rconfig-prod.yml"
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "json"
 #   .. .. ..$ value: chr "{\"trials\":30,\"dataset\":\"full-data.csv\"}"
@@ -379,7 +379,7 @@ Rscript test.R
 #  $ description: chr "This is a multi line\ndescription."
 #  - attr(*, "trace")=List of 2
 #   ..$ kind : chr "file"
-#   ..$ value: chr "/workspaces/rconfig/inst/examples/rconfig.yml"
+#   ..$ value: chr "/Users/Peter/git/github.com/analythium/rconfig/inst/examples/rconfig.yml"
 #  - attr(*, "command")= chr(0) 
 #  - attr(*, "class")= chr "rconfig"
 ```
@@ -410,7 +410,7 @@ R_RCONFIG_FILE="rconfig-prod.yml" Rscript test.R
 #   ..$ name: chr "real_We4$#z*="
 #  - attr(*, "trace")=List of 2
 #   ..$ kind : chr "file"
-#   ..$ value: chr "/workspaces/rconfig/inst/examples/rconfig-prod.yml"
+#   ..$ value: chr "/Users/Peter/git/github.com/analythium/rconfig/inst/examples/rconfig-prod.yml"
 #  - attr(*, "command")= chr(0) 
 #  - attr(*, "class")= chr "rconfig"
 ```
@@ -444,10 +444,10 @@ Rscript test.R -f rconfig-prod.yml --user.name "unreal_Zh5z*$#="
 #   ..$ value:List of 3
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "file"
-#   .. .. ..$ value: chr "/workspaces/rconfig/inst/examples/rconfig.yml"
+#   .. .. ..$ value: chr "/Users/Peter/git/github.com/analythium/rconfig/inst/examples/rconfig.yml"
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "file"
-#   .. .. ..$ value: chr "/workspaces/rconfig/inst/examples/rconfig-prod.yml"
+#   .. .. ..$ value: chr "/Users/Peter/git/github.com/analythium/rconfig/inst/examples/rconfig-prod.yml"
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "args"
 #   .. .. ..$ value: chr "--user.name unreal_Zh5z*0="
@@ -473,7 +473,7 @@ Rscript test.R \
 #   ..$ value:List of 3
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "file"
-#   .. .. ..$ value: chr "/workspaces/rconfig/inst/examples/rconfig.yml"
+#   .. .. ..$ value: chr "/Users/Peter/git/github.com/analythium/rconfig/inst/examples/rconfig.yml"
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "json"
 #   .. .. ..$ value: chr "{\"trials\":30,\"dataset\":\"full-data.csv\",\"user\":{\"name\": \"real_We4$#z*=\"}}"
@@ -502,7 +502,7 @@ Rscript test.R deploy --user.name "unreal_Zh5z*$#="
 #   ..$ value:List of 2
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "file"
-#   .. .. ..$ value: chr "/workspaces/rconfig/inst/examples/rconfig.yml"
+#   .. .. ..$ value: chr "/Users/Peter/git/github.com/analythium/rconfig/inst/examples/rconfig.yml"
 #   .. ..$ :List of 2
 #   .. .. ..$ kind : chr "args"
 #   .. .. ..$ value: chr "deploy --user.name unreal_Zh5z*0="
@@ -526,7 +526,7 @@ Rscript iris.R --species virginica
 
 ``` bash
 Rscript iris.R --species setosa --verbose
-# 2023-02-04 04:40:50 - Started
+# 2023-02-04 00:30:52 - Started
 # Getting summaries for species setosa
 #   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
 #  Min.   :4.300   Min.   :2.300   Min.   :1.000   Min.   :0.100  
@@ -535,12 +535,12 @@ Rscript iris.R --species setosa --verbose
 #  Mean   :5.006   Mean   :3.428   Mean   :1.462   Mean   :0.246  
 #  3rd Qu.:5.200   3rd Qu.:3.675   3rd Qu.:1.575   3rd Qu.:0.300  
 #  Max.   :5.800   Max.   :4.400   Max.   :1.900   Max.   :0.600  
-# 2023-02-04 04:40:50 - Done
+# 2023-02-04 00:30:52 - Done
 ```
 
 ``` bash
 Rscript iris.R --species maxima --verbose
-# 2023-02-04 04:40:51 - Started
+# 2023-02-04 00:30:52 - Started
 # Error: Provide a valid species
 # Execution halted
 ```
@@ -567,15 +567,15 @@ Rscript mtcars.R
 
 ``` bash
 Rscript mtcars.R --verbose --vars cyl
-# 2023-02-04 04:40:52 - Started
+# 2023-02-04 00:30:52 - Started
 # (Intercept)         cyl 
 #    37.88458    -2.87579 
-# 2023-02-04 04:40:52 - Done
+# 2023-02-04 00:30:52 - Done
 ```
 
 ``` bash
 Rscript mtcars.R --verbose --vars cal
-# 2023-02-04 04:40:52 - Started
+# 2023-02-04 00:30:52 - Started
 # Error: Not valid variable
 # Execution halted
 ```
