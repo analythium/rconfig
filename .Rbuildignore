@@ -15,3 +15,4 @@
 ^RELEASE\.R$
 ^\.gitpod\.yml$
 ^\.gitpod\.Dockerfile$
+^\.testing\.Dockerfile$
