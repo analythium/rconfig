@@ -1,6 +1,7 @@
-# Version 0.1.6
+# Version 0.2.0
 
 * Added functionality to substitute variables (#8).
+* Nicer formatting for markdown code blocks (#10 by @eitsupi).
 
 # Version 0.1.5
 
