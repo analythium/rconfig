@@ -1,3 +1,7 @@
+# Version 0.2.1
+
+* Variable splitting did not consider the separator on the right hand side, now fixed.
+
 # Version 0.2.0
 
 * Added functionality to substitute variables (#8).
