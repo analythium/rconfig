@@ -24,7 +24,7 @@ split_param <- function(x) {
         if (length(w) < 2L) {
             w <- c(w, "")
         }
-        o <- c(w[1L], sep, w[2L])
+        o <- c(w[1L], sep, paste0(w[-1L], collapse = sep))
     }
     o
 }
