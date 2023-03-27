@@ -302,7 +302,11 @@ Rscript mtcars.R --vars cyl disp hp
 Let's see how to use sub-commands:
 
 ```{bash}
+## This will print messages:
 Rscript commands.R model
+
+## This will not print messages:
+Rscript commands.R model --silent
 ```
 
 ```{bash}

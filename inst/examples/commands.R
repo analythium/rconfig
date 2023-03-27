@@ -1,13 +1,17 @@
 #!/usr/bin/env Rscript
 CONFIG <- rconfig::rconfig()
 
+SILENT <- rconfig::value(CONFIG$silent, FALSE)
+
 model <- function() {
-    message("Model ...")
+    if (!SILENT)
+        message("Model ...")
     # your logic comes here
 }
 
 pred <- function() {
-    message("Predict ...")
+    if (!SILENT)
+        message("Predict ...")
     # your logic comes here
 }
 
