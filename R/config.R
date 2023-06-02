@@ -142,7 +142,6 @@
 #' value(CONFIG$test, FALSE) # unset
 #'
 #' @seealso [utils::modifyList()]
-#' @keywords models regression
 #' @name rconfig
 NULL
 

@@ -188,5 +188,3 @@ value(CONFIG$test, FALSE) # unset
 \seealso{
 \code{\link[utils:modifyList]{utils::modifyList()}}
 }
-\keyword{models}
-\keyword{regression}

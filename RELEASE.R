@@ -12,6 +12,8 @@ urlchecker::url_check()
 devtools::document()
 devtools::check()
 
+devtools::install()
+
 # multi-arch checks
 library(rhub)
 #validate_email("peter@analythium.io")

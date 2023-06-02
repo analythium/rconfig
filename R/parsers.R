@@ -6,6 +6,7 @@ guess_ext <- function(x) {
         "yml" = "yml",
         "yaml" = "yml",
         "json" = "json",
+        "ini" = "ini",
         "txt")
 }
 
@@ -117,13 +118,14 @@ parse_json <- function(x, ...) {
     }
 }
 
-## Parse the file depending on file type (yml, json, txt)
-## note: YAML, JSON, txt accept URLs or file names
+## Parse the file depending on file type (yml, json, ini, txt)
+## note: YAML, JSON, INI, txt accept URLs or file names
 parse_file <- function(x, ...) {
     x <- normalizePath(x, mustWork = FALSE)
     out <- switch(guess_ext(x),
         "yml" = parse_yml(x, ...),
         "json" = parse_json(x, ...),
+        "ini" = parse_ini(x, ...),
         "txt" = parse_txt(x, ...))
     attr(out, "trace") <- list(
         kind = "file",
@@ -259,4 +261,142 @@ config_list <- function(file = NULL, list = NULL, ...) {
     }
     attr(lists, "command") <- verbs
     lists
+}
+
+#' Read INI Files
+#' 
+#' Read INI (`.ini` file extension) configuration files.
+#' 
+#' @details
+#' An INI configuration file consists of sections, each led by a `[section]` header,
+#' followed by key/value entries separated by a specific string (`=` or `:` by default).
+#' By default, section names are case sensitive but keys are not.
+#' Leading and trailing whitespace is removed from keys and values.
+#' Values can be omitted if the parser is configured to allow it,
+#' in which case the key/value delimiter may also be left out.
+#' Values can also span multiple lines, as long as they are indented deeper than the first line of the value.
+#' Depending on the parser's mode, blank lines may be treated as parts of multiline values or ignored.
+#' By default, a valid section name can be any string that does not contain `\n` or `]`.
+#' Configuration files may include comments, prefixed by specific characters (`#` and `;` by default).
+#' Comments may appear on their own on an otherwise empty line, possibly indented.
+#' 
+#' @param file The name and path of the INI configuration file.
+#' @param ... Other arguments passed to the function (currently there is none).
+#' 
+#' @return The configuration value a named list, 
+#'   each element of the list being a section of the INI file.
+#'   Each element (section) containing the key-value pairs from the INI file.
+#'   When no value is provided in the file, the value is `""`.
+#'   By convention, all values returned by the function are of character type.
+#'   R expressions following `!expr` are evaluated according to the settings of
+#'   the `R_RCONFIG_EVAL` environment variable or the option `"rconfig.eval"`.
+#'
+#' @examples
+#' inifile <- system.file("examples", "tox.ini", package = "rconfig")
+#'
+#' ## not evaluating R expressions
+#' ini <- rconfig::read_ini(file = inifile)
+#' str(ini)
+#'
+#' ## evaluating R expressions
+#' op <- options("rconfig.eval" = TRUE)
+#' ini <- rconfig::read_ini(file = inifile)
+#' str(ini)
+#'
+#' # reset options
+#' options(op)
+#'
+#' @name read_ini
+#' @export
+read_ini <- function(file, ...) {
+    parse_ini(file, ...)
+}
+
+## Parse INI file
+## convert to YAML when !expr evaluation needed
+## !expr evaluation is governed by do_eval()
+parse_ini <- function(x, ...) {
+    z <- readLines(x)
+    l <- .parse_ini(z, ...)
+    if (do_eval()) {
+        y <- yaml::as.yaml(l)
+        yaml::yaml.load(y,
+            eval.expr = FALSE,
+            handlers = list(
+                expr = function(x)
+                    eval(parse(text = x), envir = baseenv())))
+    } else {
+        l
+    }
+}
+
+## Workhorse function to parse contents of an INI file
+## following rules specified at:
+## https://docs.python.org/3/library/configparser.html#supported-ini-file-structure
+.parse_ini <- function(lines, ...) {
+
+    n <- length(lines)
+    nls <- nchar(lines) - nchar(trimws(lines, "left"))
+    v <- character(n)
+    ini <- list()
+    for (i in seq_len(n)) {
+        l <- trimws(lines[i])
+        # blanks
+        if (grepl("^\\s*$", l)) {
+            v[i] <- "b"
+        }
+        # comments
+        if (startsWith(l, "#") || startsWith(l, ";")) {
+            v[i] <- "c"
+        }
+        # section headers
+        if (grepl("^\\[(.*)\\]$", l)) {
+            section <- regmatches(l, regexec("^\\[(.*)\\]$", l))[[1L]][2L]
+            if (grepl("]", section) || grepl("\n", section))
+                stop("Section cannot contain `]` or `\\n`.")
+            ini[[section]] <- list()
+            v[i] <- "h"
+        }
+        # key-value pairs that are on the same line
+        if (grepl("^.*=.*$", l) || grepl("^.*:.*$", l)) {
+            key <- if (grepl("^.*=.*$", l))
+                "=" else ":"
+            kv <- strsplit(l, paste0("\\s*", key, "\\s*"))[[1L]]
+            if (length(kv) == 2L) {
+                if (identical(kv[1L], ""))
+                    stop(paste0("Key missing on line ", i, "."))
+                ini[[section]][[kv[1L]]] <- kv[2L]
+                v[i] <- "k"
+            }
+            if (length(kv) == 1L) {
+                ini[[section]][[kv[1L]]] <- ""
+                v[i] <- "k"
+            }
+        }
+        if (i == 1L && v[i] != "h")
+            stop("The 1st line must be a section header.")
+        if (v[i] == "") {
+            # keys without value
+            if (nls[i] == 0L) {
+                ini[[section]][[l]] <- ""
+                v[i] <- "k"
+            } else {
+                if (nls[i] < nls[i-1L]) {
+                    ini[[section]][[l]] <- ""
+                    v[i] <- "k"
+                }
+                if (v[i-1L] == "m" && nls[i] == nls[i-1L]) {
+                    # indented multi-line text
+                    ini[[section]][[length(ini[[section]])]] <- c(ini[[section]][[length(ini[[section]])]], l)
+                    v[i] <- "m"
+                }
+                if (v[i-1L] == "k" && nls[i] > nls[i-1L]) {
+                    # indented multi-line text
+                    ini[[section]][[length(ini[[section]])]] <- c(ini[[section]][[length(ini[[section]])]], l)
+                    v[i] <- "m"
+                }
+            }
+        }
+    }
+    ini
 }

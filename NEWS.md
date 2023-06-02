@@ -1,6 +1,7 @@
 # Version 0.2.1
 
 * Variable splitting did not consider the separator on the right hand side, now fixed.
+* Added new function `read_ini` to read INI configuration files.
 
 # Version 0.2.0
 
