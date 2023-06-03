@@ -102,6 +102,7 @@ Comments may appear on their own on an otherwise empty line, possibly indented.<
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">inifile</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/system.file.html" class="external-link">system.file</a></span><span class="op">(</span><span class="st">"examples"</span>, <span class="st">"example.ini"</span>, package <span class="op">=</span> <span class="st">"rconfig"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## not evaluating R expressions</span></span></span>
+<span class="r-in"><span><span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="st">"rconfig.eval"</span> <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ini</span> <span class="op">&lt;-</span> <span class="fu">rconfig</span><span class="fu">::</span><span class="fu">read_ini</span><span class="op">(</span>file <span class="op">=</span> <span class="va">inifile</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">ini</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 7</span>
@@ -132,10 +133,10 @@ Comments may appear on their own on an otherwise empty line, possibly indented.<
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ trials : int 5</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ pi     : num 3.14</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ dataset: chr "demo-data.csv"</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ cores  : int 1</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   ..$ cores  : chr "!expr getOption(\"mc.cores\", 1L)"</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## evaluating R expressions</span></span></span>
-<span class="r-in"><span><span class="va">op</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="st">"rconfig.eval"</span> <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span><span class="st">"rconfig.eval"</span> <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">ini</span> <span class="op">&lt;-</span> <span class="fu">rconfig</span><span class="fu">::</span><span class="fu">read_ini</span><span class="op">(</span>file <span class="op">=</span> <span class="va">inifile</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/str.html" class="external-link">str</a></span><span class="op">(</span><span class="va">ini</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> List of 7</span>
