@@ -74,7 +74,7 @@ of a given argument or the default value when it is not found
 with command line sub-commands (can be of length 0).
 }
 \description{
-Manage R configuration using files (JSON, YAML, separated text)
+Manage R configuration using files (YAML, JSON, INI, TXT)
 JSON strings and command line arguments. Command line arguments
 can be used to provide commands and to override configuration.
 Period-separated command line flags are parsed as hierarchical

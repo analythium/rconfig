@@ -5,9 +5,9 @@
 [![Build
 status](https://github.com/analythium/rconfig/actions/workflows/check.yml/badge.svg)](https://github.com/analythium/rconfig/actions)
 [![CRAN
-version](http://www.r-pkg.org/badges/version/rconfig)](https://CRAN.R-project.org/package=rconfig)
+version](https://www.r-pkg.org/badges/version/rconfig)](https://CRAN.R-project.org/package=rconfig)
 [![CRAN RStudio mirror
-downloads](http://cranlogs.r-pkg.org/badges/grand-total/rconfig)](https://hub.analythium.io/rconfig/)
+downloads](https://cranlogs.r-pkg.org/badges/grand-total/rconfig)](https://hub.analythium.io/rconfig/)
 
 Manage R configuration using files (YAML, JSON, INI, TXT) JSON strings
 and command line arguments. Command line arguments can be used to
@@ -526,7 +526,7 @@ Rscript iris.R --species virginica
 
 ``` bash
 Rscript iris.R --species setosa --verbose
-# 2023-06-02 19:24:06 - Started
+# 2023-06-02 20:06:32 - Started
 # Getting summaries for species setosa
 #   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
 #  Min.   :4.300   Min.   :2.300   Min.   :1.000   Min.   :0.100  
@@ -535,12 +535,12 @@ Rscript iris.R --species setosa --verbose
 #  Mean   :5.006   Mean   :3.428   Mean   :1.462   Mean   :0.246  
 #  3rd Qu.:5.200   3rd Qu.:3.675   3rd Qu.:1.575   3rd Qu.:0.300  
 #  Max.   :5.800   Max.   :4.400   Max.   :1.900   Max.   :0.600  
-# 2023-06-02 19:24:06 - Done
+# 2023-06-02 20:06:32 - Done
 ```
 
 ``` bash
 Rscript iris.R --species maxima --verbose
-# 2023-06-02 19:24:06 - Started
+# 2023-06-02 20:06:32 - Started
 # Error: Provide a valid species
 # Execution halted
 ```
@@ -567,15 +567,15 @@ Rscript mtcars.R
 
 ``` bash
 Rscript mtcars.R --verbose --vars cyl
-# 2023-06-02 19:24:06 - Started
+# 2023-06-02 20:06:33 - Started
 # (Intercept)         cyl 
 #    37.88458    -2.87579 
-# 2023-06-02 19:24:06 - Done
+# 2023-06-02 20:06:33 - Done
 ```
 
 ``` bash
 Rscript mtcars.R --verbose --vars cal
-# 2023-06-02 19:24:06 - Started
+# 2023-06-02 20:06:33 - Started
 # Error: Not valid variable
 # Execution halted
 ```
@@ -628,7 +628,7 @@ as `commands.R model`.
 
 ### Shiny
 
-An example to configure a [Shiny app](https://shiny.rstudio.com/) with
+An example to configure a [Shiny app](https://shiny.posit.co/) with
 command line flags:
 
 ``` bash

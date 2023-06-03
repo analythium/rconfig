@@ -31,13 +31,13 @@ Leading and trailing whitespace is removed from keys and values.
 Values can be omitted if the parser is configured to allow it,
 in which case the key/value delimiter may also be left out.
 Values can also span multiple lines, as long as they are indented deeper than the first line of the value.
-Depending on the parser's mode, blank lines may be treated as parts of multiline values or ignored.
+Blank lines may be treated as parts of multiline values or ignored.
 By default, a valid section name can be any string that does not contain \verb{\\n} or \verb{]}.
 Configuration files may include comments, prefixed by specific characters (\verb{#} and \verb{;} by default).
 Comments may appear on their own on an otherwise empty line, possibly indented.
 }
 \examples{
-inifile <- system.file("examples", "tox.ini", package = "rconfig")
+inifile <- system.file("examples", "example.ini", package = "rconfig")
 
 ## not evaluating R expressions
 ini <- rconfig::read_ini(file = inifile)

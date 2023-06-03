@@ -19,8 +19,8 @@ knitr::opts_knit$set(root.dir = 'inst/examples')
 > Manage R Configuration at the Command Line
 
 [![Build status](https://github.com/analythium/rconfig/actions/workflows/check.yml/badge.svg)](https://github.com/analythium/rconfig/actions)
-[![CRAN version](http://www.r-pkg.org/badges/version/rconfig)](https://CRAN.R-project.org/package=rconfig)
-[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/grand-total/rconfig)](https://hub.analythium.io/rconfig/)
+[![CRAN version](https://www.r-pkg.org/badges/version/rconfig)](https://CRAN.R-project.org/package=rconfig)
+[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/grand-total/rconfig)](https://hub.analythium.io/rconfig/)
 
 Manage R configuration using files (YAML, JSON, INI, TXT)
 JSON strings and command line arguments. Command line arguments
@@ -332,7 +332,7 @@ Make sure that the R script has the shebang (`#!/usr/bin/env Rscript`) as the 1s
 
 ### Shiny
 
-An example to configure a [Shiny app](https://shiny.rstudio.com/) with command line flags:
+An example to configure a [Shiny app](https://shiny.posit.co/) with command line flags:
 
 ```bash
 Rscript shiny/app.R
