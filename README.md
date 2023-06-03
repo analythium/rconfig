@@ -9,11 +9,11 @@ version](http://www.r-pkg.org/badges/version/rconfig)](https://CRAN.R-project.or
 [![CRAN RStudio mirror
 downloads](http://cranlogs.r-pkg.org/badges/grand-total/rconfig)](https://hub.analythium.io/rconfig/)
 
-Manage R configuration using files (JSON, YAML, separated text) JSON
-strings and command line arguments. Command line arguments can be used
-to override configuration. Period-separated command line flags are
-parsed as hierarchical lists. Environment variables, R global variables,
-and configuration values can be substituted.
+Manage R configuration using files (YAML, JSON, INI, TXT) JSON strings
+and command line arguments. Command line arguments can be used to
+override configuration. Period-separated command line flags are parsed
+as hierarchical lists. Environment variables, R global variables, and
+configuration values can be substituted.
 
 *Try rconfig in your browser: click the Gitpod button, then
 `cd inst/examples` in the VS Code terminal to run the `Rscript` example
@@ -68,7 +68,7 @@ The rconfig package has the following features:
 
 - uses default configuration file
 - file based override with the `-f` or `--file` flags (accepts JSON,
-  YAML, and plain text files)
+  YAML, INI, and plain text files)
 - JSON string based override with the `-j` or `--json` flags
 - other command line arguments are merged too, e.g. `--cores 4`
 - heuristic rules are used to coerce command line values to the right
@@ -526,7 +526,7 @@ Rscript iris.R --species virginica
 
 ``` bash
 Rscript iris.R --species setosa --verbose
-# 2023-02-10 18:35:22 - Started
+# 2023-06-02 19:24:06 - Started
 # Getting summaries for species setosa
 #   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
 #  Min.   :4.300   Min.   :2.300   Min.   :1.000   Min.   :0.100  
@@ -535,12 +535,12 @@ Rscript iris.R --species setosa --verbose
 #  Mean   :5.006   Mean   :3.428   Mean   :1.462   Mean   :0.246  
 #  3rd Qu.:5.200   3rd Qu.:3.675   3rd Qu.:1.575   3rd Qu.:0.300  
 #  Max.   :5.800   Max.   :4.400   Max.   :1.900   Max.   :0.600  
-# 2023-02-10 18:35:22 - Done
+# 2023-06-02 19:24:06 - Done
 ```
 
 ``` bash
 Rscript iris.R --species maxima --verbose
-# 2023-02-10 18:35:22 - Started
+# 2023-06-02 19:24:06 - Started
 # Error: Provide a valid species
 # Execution halted
 ```
@@ -567,15 +567,15 @@ Rscript mtcars.R
 
 ``` bash
 Rscript mtcars.R --verbose --vars cyl
-# 2023-02-10 18:35:22 - Started
+# 2023-06-02 19:24:06 - Started
 # (Intercept)         cyl 
 #    37.88458    -2.87579 
-# 2023-02-10 18:35:22 - Done
+# 2023-06-02 19:24:06 - Done
 ```
 
 ``` bash
 Rscript mtcars.R --verbose --vars cal
-# 2023-02-10 18:35:22 - Started
+# 2023-06-02 19:24:06 - Started
 # Error: Not valid variable
 # Execution halted
 ```
@@ -589,7 +589,11 @@ Rscript mtcars.R --vars cyl disp hp
 Let’s see how to use sub-commands:
 
 ``` bash
+## This will print messages:
 Rscript commands.R model
+
+## This will not print messages:
+Rscript commands.R model --silent
 # Model ...
 ```
 
