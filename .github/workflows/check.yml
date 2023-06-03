@@ -33,9 +33,6 @@ jobs:
         uses: r-lib/actions/check-r-package@v2
 
       - name: Build site
-        run: Rscript -e 'pkgdown::build_site_github_pages(install=TRUE)'
-
-      - name: Build site
         run: pkgdown::build_site_github_pages(new_process = FALSE, install = FALSE)
         shell: Rscript {0}
 
