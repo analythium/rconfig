@@ -312,23 +312,20 @@ read_ini <- function(file, ...) {
     parse_ini(file, ...)
 }
 
-## Parse INI file
-## convert to YAML when !expr evaluation needed
-## !expr evaluation is governed by do_eval()
-parse_ini <- function(x, ...) {
-    z <- readLines(x)
-    if (do_eval()) {
-        z <- gsub("!expr ", "__excl__expr ", z)
-        l <- .parse_ini(z, ...)
-        y <- yaml::as.yaml(l)
-        y <- gsub("__excl__expr ", "!expr ", y)
-        yaml::yaml.load(y,
-            eval.expr = FALSE,
-            handlers = list(expr = function(x)
-                eval(parse(text = x), envir = baseenv())))
-    } else {
-        .parse_ini(z, ...)
+# parse INI
+parse_ini <- function(file, ...) {
+    z <- readLines(file)
+    ini <- .parse_ini(z, ...)
+    ## handling dot separated keys and type conversions (also !expr)
+    for (j in seq_along(ini)) {
+        e <- ini[[j]]
+        if (length(e) > 0L) {
+            parts <- strsplit(names(e), "\\.")
+            values <- lapply(e, convert_type)
+            ini[[j]] <- make_list(parts, values)
+        }
     }
+    ini
 }
 
 ## Workhorse function to parse contents of an INI file
@@ -404,9 +401,5 @@ parse_ini <- function(x, ...) {
             }
         }
     }
-    ## handling dot separated keys and type conversions
-    # values <- lapply(txt[[2L]], convert_type)
-    # make_list(parts, values)
-
     ini
 }
