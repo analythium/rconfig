@@ -3,7 +3,7 @@ url: https://hub.analythium.io/rconfig
 home:
   title: "rconfig: Manage R Configuration at the Command Line"
   description: |
-    Configuration management using files (JSON, YAML, separated text),
+    Configuration management using files (JSON, YAML, INI, TXT),
     JSON strings, and command line arguments.
 
 template:
