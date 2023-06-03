@@ -127,6 +127,8 @@ parse_file <- function(x, ...) {
         "json" = parse_json(x, ...),
         "ini" = parse_ini(x, ...),
         "txt" = parse_txt(x, ...))
+    if (is.null(out))
+        return(NULL)
     attr(out, "trace") <- list(
         kind = "file",
         value = x)
@@ -141,6 +143,8 @@ parse_default <- function(...) {
     if (!file.exists(f))
         return(NULL)
     l <- parse_file(f, ...)
+    if (is.null(l))
+        return(NULL)
     attr(l, "trace") <- list(
         kind = "file",
         value = f)
