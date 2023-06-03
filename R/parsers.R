@@ -275,7 +275,7 @@ config_list <- function(file = NULL, list = NULL, ...) {
 #' Values can be omitted if the parser is configured to allow it,
 #' in which case the key/value delimiter may also be left out.
 #' Values can also span multiple lines, as long as they are indented deeper than the first line of the value.
-#' Depending on the parser's mode, blank lines may be treated as parts of multiline values or ignored.
+#' Blank lines may be treated as parts of multiline values or ignored.
 #' By default, a valid section name can be any string that does not contain `\n` or `]`.
 #' Configuration files may include comments, prefixed by specific characters (`#` and `;` by default).
 #' Comments may appear on their own on an otherwise empty line, possibly indented.
@@ -292,7 +292,7 @@ config_list <- function(file = NULL, list = NULL, ...) {
 #'   the `R_RCONFIG_EVAL` environment variable or the option `"rconfig.eval"`.
 #'
 #' @examples
-#' inifile <- system.file("examples", "tox.ini", package = "rconfig")
+#' inifile <- system.file("examples", "example.ini", package = "rconfig")
 #'
 #' ## not evaluating R expressions
 #' ini <- rconfig::read_ini(file = inifile)
@@ -317,16 +317,17 @@ read_ini <- function(file, ...) {
 ## !expr evaluation is governed by do_eval()
 parse_ini <- function(x, ...) {
     z <- readLines(x)
-    l <- .parse_ini(z, ...)
     if (do_eval()) {
+        z <- gsub("!expr ", "__excl__expr ", z)
+        l <- .parse_ini(z, ...)
         y <- yaml::as.yaml(l)
+        y <- gsub("__excl__expr ", "!expr ", y)
         yaml::yaml.load(y,
             eval.expr = FALSE,
-            handlers = list(
-                expr = function(x)
-                    eval(parse(text = x), envir = baseenv())))
+            handlers = list(expr = function(x)
+                eval(parse(text = x), envir = baseenv())))
     } else {
-        l
+        .parse_ini(z, ...)
     }
 }
 
@@ -341,14 +342,6 @@ parse_ini <- function(x, ...) {
     ini <- list()
     for (i in seq_len(n)) {
         l <- trimws(lines[i])
-        # blanks
-        if (grepl("^\\s*$", l)) {
-            v[i] <- "b"
-        }
-        # comments
-        if (startsWith(l, "#") || startsWith(l, ";")) {
-            v[i] <- "c"
-        }
         # section headers
         if (grepl("^\\[(.*)\\]$", l)) {
             section <- regmatches(l, regexec("^\\[(.*)\\]$", l))[[1L]][2L]
@@ -357,24 +350,37 @@ parse_ini <- function(x, ...) {
             ini[[section]] <- list()
             v[i] <- "h"
         }
-        # key-value pairs that are on the same line
-        if (grepl("^.*=.*$", l) || grepl("^.*:.*$", l)) {
-            key <- if (grepl("^.*=.*$", l))
-                "=" else ":"
-            kv <- strsplit(l, paste0("\\s*", key, "\\s*"))[[1L]]
-            if (length(kv) == 2L) {
-                if (identical(kv[1L], ""))
-                    stop(paste0("Key missing on line ", i, "."))
-                ini[[section]][[kv[1L]]] <- kv[2L]
-                v[i] <- "k"
-            }
-            if (length(kv) == 1L) {
-                ini[[section]][[kv[1L]]] <- ""
-                v[i] <- "k"
-            }
-        }
         if (i == 1L && v[i] != "h")
             stop("The 1st line must be a section header.")
+        # comments
+        if (startsWith(l, "#") || startsWith(l, ";")) {
+            v[i] <- "c"
+        }
+        # blanks
+        if (grepl("^\\s*$", l)) {
+            v[i] <- "b"
+        }
+        # key-value pairs that are on the same line
+        if (v[i] == "") {
+            if (grepl("^.*=.*$", l) || grepl("^.*:.*$", l)) {
+                key <- if (grepl("^.*=.*$", l))
+                    "=" else ":"
+                kv <- strsplit(l, paste0("\\s*", key, "\\s*"))[[1L]]
+                ## empty key might be part of multiline text
+                if (kv[1L] != "") {
+                    if (length(kv) == 2L) {
+                        # if (identical(kv[1L], ""))
+                        #     stop(paste0("Key missing on line ", i, "."))
+                        ini[[section]][[kv[1L]]] <- kv[2L]
+                        v[i] <- "k"
+                    }
+                    if (length(kv) == 1L) {
+                        ini[[section]][[kv[1L]]] <- ""
+                        v[i] <- "k"
+                    }
+                }
+            }
+        }
         if (v[i] == "") {
             # keys without value
             if (nls[i] == 0L) {
@@ -398,5 +404,9 @@ parse_ini <- function(x, ...) {
             }
         }
     }
+    ## handling dot separated keys and type conversions
+    # values <- lapply(txt[[2L]], convert_type)
+    # make_list(parts, values)
+
     ini
 }
