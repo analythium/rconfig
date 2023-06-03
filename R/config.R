@@ -245,7 +245,7 @@ rconfig <- function(file = NULL,
         out <- flatten_list(out)
 
     ## trace
-    if (length(lists)) {
+    if (length(lists) > 0L) {
         rc <- if (length(lists) > 1L) {
             list(
                 kind = "merged",
