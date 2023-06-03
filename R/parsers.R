@@ -299,11 +299,12 @@ config_list <- function(file = NULL, list = NULL, ...) {
 #' inifile <- system.file("examples", "example.ini", package = "rconfig")
 #'
 #' ## not evaluating R expressions
+#' op <- options("rconfig.eval" = FALSE)
 #' ini <- rconfig::read_ini(file = inifile)
 #' str(ini)
 #'
 #' ## evaluating R expressions
-#' op <- options("rconfig.eval" = TRUE)
+#' options("rconfig.eval" = TRUE)
 #' ini <- rconfig::read_ini(file = inifile)
 #' str(ini)
 #'
