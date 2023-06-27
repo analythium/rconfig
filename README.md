@@ -526,7 +526,7 @@ Rscript iris.R --species virginica
 
 ``` bash
 Rscript iris.R --species setosa --verbose
-# 2023-06-03 01:53:06 - Started
+# 2023-06-26 22:27:09 - Started
 # Getting summaries for species setosa
 #   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
 #  Min.   :4.300   Min.   :2.300   Min.   :1.000   Min.   :0.100  
@@ -535,12 +535,12 @@ Rscript iris.R --species setosa --verbose
 #  Mean   :5.006   Mean   :3.428   Mean   :1.462   Mean   :0.246  
 #  3rd Qu.:5.200   3rd Qu.:3.675   3rd Qu.:1.575   3rd Qu.:0.300  
 #  Max.   :5.800   Max.   :4.400   Max.   :1.900   Max.   :0.600  
-# 2023-06-03 01:53:06 - Done
+# 2023-06-26 22:27:09 - Done
 ```
 
 ``` bash
 Rscript iris.R --species maxima --verbose
-# 2023-06-03 01:53:06 - Started
+# 2023-06-26 22:27:09 - Started
 # Error: Provide a valid species
 # Execution halted
 ```
@@ -567,15 +567,15 @@ Rscript mtcars.R
 
 ``` bash
 Rscript mtcars.R --verbose --vars cyl
-# 2023-06-03 01:53:07 - Started
+# 2023-06-26 22:27:09 - Started
 # (Intercept)         cyl 
 #    37.88458    -2.87579 
-# 2023-06-03 01:53:07 - Done
+# 2023-06-26 22:27:09 - Done
 ```
 
 ``` bash
 Rscript mtcars.R --verbose --vars cal
-# 2023-06-03 01:53:07 - Started
+# 2023-06-26 22:27:09 - Started
 # Error: Not valid variable
 # Execution halted
 ```
