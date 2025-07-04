@@ -138,8 +138,8 @@
 #'
 #' CONFIG <- rconfig::rconfig(
 #'     file = cfile("rconfig.yml"))
-#' value(CONFIG$cores, 2L)   # set to 1L
-#' value(CONFIG$test, FALSE) # unset
+#' rconfig::value(CONFIG[["cores"]], 2L)   # set to 1L
+#' rconfig::value(CONFIG[["test"]], FALSE) # unset
 #'
 #' @seealso [utils::modifyList()]
 #' @name rconfig

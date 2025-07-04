@@ -1,7 +1,7 @@
 #!/usr/bin/env Rscript
 CONFIG <- rconfig::rconfig()
 
-SILENT <- rconfig::value(CONFIG$silent, FALSE)
+SILENT <- rconfig::value(CONFIG[["silent"]], FALSE)
 
 model <- function() {
     if (!SILENT)

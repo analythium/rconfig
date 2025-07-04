@@ -29,7 +29,7 @@ CONFIG <- rconfig::rconfig()
 info("Started")
 
 species <- rconfig::value(
-    CONFIG$species,
+    CONFIG[["species"]],
     error("Species not provided")) # anticipated error
 
 ## Make invalid species names a non-anticipated error

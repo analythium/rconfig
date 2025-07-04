@@ -233,30 +233,31 @@ str(rconfig::rconfig(
 #  - attr(*, "class")= chr "rconfig"
 ```
 
-Set defaults in case some values are undefined:
+Set defaults in case some values are undefined (best to use `[[`
+notation instead of `$` to avoid surprises):
 
 ``` r
 CONFIG <- rconfig::rconfig(
     file = "rconfig-prod.yml")
 
-rconfig::value(CONFIG$cores, 2L)   # set to 1L
+rconfig::value(CONFIG[["cores"]], 2L)   # set to 1L
 # [1] 1
-rconfig::value(CONFIG$test)        # unset
+rconfig::value(CONFIG[["test"]])        # unset
 # NULL
-rconfig::value(CONFIG$test, FALSE) # use default
+rconfig::value(CONFIG[["test"]], FALSE) # use default
 # [1] FALSE
 ```
 
 The default values are used to ensure type safety:
 
 ``` r
-str(rconfig::value(CONFIG$trials, 0L))    # integer
+str(rconfig::value(CONFIG[["trials"]], 0L))    # integer
 #  int 30
-str(rconfig::value(CONFIG$trials, 0))     # numeric
+str(rconfig::value(CONFIG[["trials"]], 0))     # numeric
 #  num 30
-str(rconfig::value(CONFIG$trials, "0"))   # character
+str(rconfig::value(CONFIG[["trials"]], "0"))   # character
 #  chr "30"
-str(rconfig::value(CONFIG$trials, FALSE)) # logical
+str(rconfig::value(CONFIG[["trials"]], FALSE)) # logical
 #  logi TRUE
 ```
 
@@ -526,7 +527,7 @@ Rscript iris.R --species virginica
 
 ``` bash
 Rscript iris.R --species setosa --verbose
-# 2023-06-26 22:27:09 - Started
+# 2025-07-03 23:03:29.72101 - Started
 # Getting summaries for species setosa
 #   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
 #  Min.   :4.300   Min.   :2.300   Min.   :1.000   Min.   :0.100  
@@ -535,12 +536,12 @@ Rscript iris.R --species setosa --verbose
 #  Mean   :5.006   Mean   :3.428   Mean   :1.462   Mean   :0.246  
 #  3rd Qu.:5.200   3rd Qu.:3.675   3rd Qu.:1.575   3rd Qu.:0.300  
 #  Max.   :5.800   Max.   :4.400   Max.   :1.900   Max.   :0.600  
-# 2023-06-26 22:27:09 - Done
+# 2025-07-03 23:03:29.7243 - Done
 ```
 
 ``` bash
 Rscript iris.R --species maxima --verbose
-# 2023-06-26 22:27:09 - Started
+# 2025-07-03 23:03:29.849726 - Started
 # Error: Provide a valid species
 # Execution halted
 ```
@@ -567,15 +568,15 @@ Rscript mtcars.R
 
 ``` bash
 Rscript mtcars.R --verbose --vars cyl
-# 2023-06-26 22:27:09 - Started
+# 2025-07-03 23:03:30.233205 - Started
 # (Intercept)         cyl 
 #    37.88458    -2.87579 
-# 2023-06-26 22:27:09 - Done
+# 2025-07-03 23:03:30.235869 - Done
 ```
 
 ``` bash
 Rscript mtcars.R --verbose --vars cal
-# 2023-06-26 22:27:09 - Started
+# 2025-07-03 23:03:30.356792 - Started
 # Error: Not valid variable
 # Execution halted
 ```

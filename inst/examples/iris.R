@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 CONFIG <- rconfig::rconfig()
-verbose <- rconfig::value(CONFIG$verbose, FALSE)
+verbose <- rconfig::value(CONFIG[["verbose"]], FALSE)
 if (verbose)
     message(Sys.time(), " - Started")
 species <- CONFIG$species

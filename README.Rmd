@@ -134,24 +134,25 @@ str(rconfig::rconfig(
     flatten = TRUE))
 ```
 
-Set defaults in case some values are undefined:
+Set defaults in case some values are undefined (best to use `[[` notation 
+instead of `$` to avoid surprises):
 
 ```{r}
 CONFIG <- rconfig::rconfig(
     file = "rconfig-prod.yml")
 
-rconfig::value(CONFIG$cores, 2L)   # set to 1L
-rconfig::value(CONFIG$test)        # unset
-rconfig::value(CONFIG$test, FALSE) # use default
+rconfig::value(CONFIG[["cores"]], 2L)   # set to 1L
+rconfig::value(CONFIG[["test"]])        # unset
+rconfig::value(CONFIG[["test"]], FALSE) # use default
 ```
 
 The default values are used to ensure type safety:
 
 ```{r}
-str(rconfig::value(CONFIG$trials, 0L))    # integer
-str(rconfig::value(CONFIG$trials, 0))     # numeric
-str(rconfig::value(CONFIG$trials, "0"))   # character
-str(rconfig::value(CONFIG$trials, FALSE)) # logical
+str(rconfig::value(CONFIG[["trials"]], 0L))    # integer
+str(rconfig::value(CONFIG[["trials"]], 0))     # numeric
+str(rconfig::value(CONFIG[["trials"]], "0"))   # character
+str(rconfig::value(CONFIG[["trials"]], FALSE)) # logical
 ```
 
 Using alongside of the config package:

@@ -3,7 +3,7 @@
 #* @post /echo
 function(msg="") {
     list(msg = paste0(
-        value(CONFIG$title, "The message is"),
+        value(CONFIG[["title"]], "The message is"),
         ": '", msg, "'"))
 }
 
