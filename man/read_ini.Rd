@@ -16,9 +16,10 @@ The configuration value a named list,
 each element of the list being a section of the INI file.
 Each element (section) containing the key-value pairs from the INI file.
 When no value is provided in the file, the value is \code{""}.
-By convention, all values returned by the function are of character type.
-R expressions following \code{!expr} are evaluated according to the settings of
-the \code{R_RCONFIG_EVAL} environment variable or the option \code{"rconfig.eval"}.
+Literal values are returned as character vectors. R expressions following
+\code{!expr} are evaluated according to the settings of the \code{R_RCONFIG_EVAL}
+environment variable or the option \code{"rconfig.eval"}; their results retain
+the expression's type.
 }
 \description{
 Read INI (\code{.ini} file extension) configuration files.

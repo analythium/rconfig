@@ -291,9 +291,10 @@ config_list <- function(file = NULL, list = NULL, ...) {
 #'   each element of the list being a section of the INI file.
 #'   Each element (section) containing the key-value pairs from the INI file.
 #'   When no value is provided in the file, the value is `""`.
-#'   By convention, all values returned by the function are of character type.
-#'   R expressions following `!expr` are evaluated according to the settings of
-#'   the `R_RCONFIG_EVAL` environment variable or the option `"rconfig.eval"`.
+#'   Literal values are returned as character vectors. R expressions following
+#'   `!expr` are evaluated according to the settings of the `R_RCONFIG_EVAL`
+#'   environment variable or the option `"rconfig.eval"`; their results retain
+#'   the expression's type.
 #'
 #' @examples
 #' inifile <- system.file("examples", "example.ini", package = "rconfig")
@@ -314,11 +315,11 @@ config_list <- function(file = NULL, list = NULL, ...) {
 #' @name read_ini
 #' @export
 read_ini <- function(file, ...) {
-    parse_ini(file, ...)
+    parse_ini(file, ..., convert = FALSE)
 }
 
 # parse INI
-parse_ini <- function(file, ...) {
+parse_ini <- function(file, ..., convert = TRUE) {
     z <- readLines(file)
     ini <- .parse_ini(z, ...)
     ## handling dot separated keys and type conversions (also !expr)
@@ -326,7 +327,11 @@ parse_ini <- function(file, ...) {
         e <- ini[[j]]
         if (length(e) > 0L) {
             parts <- strsplit(names(e), "\\.")
-            values <- lapply(e, convert_type)
+            values <- lapply(e, function(x) {
+                if (convert || is_expression(x))
+                    convert_type(x)
+                else x
+            })
             ini[[j]] <- make_list(parts, values)
         }
     }
