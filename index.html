@@ -7,8 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>rconfig: Manage R Configuration at the Command Line • rconfig</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="rconfig: Manage R Configuration at the Command Line">
 <meta name="description" content="Configuration management using files (JSON, YAML, INI, TXT),
@@ -32,7 +32,7 @@ JSON strings, and command line arguments.
 
     <a class="navbar-brand me-2" href="index.html">rconfig</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.3.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -121,6 +121,7 @@ JSON strings, and command line arguments.
 <li>environment variables (<code>${VALUE}</code>), R global variables (<code>@{VALUE}</code>), and configuration values (<code>#{VALUE}</code>) can be substituted</li>
 <li>differentiates verb/noun syntax, where verbs are sub-commands following the R script file name and preceding the command line flags (starting with <code>-</code> or <code>--</code>)</li>
 </ul>
+<p><strong>Security note:</strong> <code>!expr</code> values are executable R code and are evaluated by default. Evaluation in <code><a href="https://rdrr.io/r/base/environment.html" class="external-link">baseenv()</a></code> is not a security sandbox, so only use configuration inputs you trust. Disable evaluation with <code>eval = FALSE</code> in <code><a href="reference/rconfig.html">rconfig()</a></code> or <code><a href="reference/read_ini.html">read_ini()</a></code>, or set <code>R_RCONFIG_EVAL=FALSE</code>. When <code><a href="reference/read_ini.html">read_ini()</a></code>’s <code>eval</code> argument is <code>NULL</code>, it follows the environment variable or <code>options(rconfig.eval)</code>.</p>
 <p>This looks very similar to what <a href="https://CRAN.R-project.org/package=littler" class="external-link">littler</a>, <a href="https://CRAN.R-project.org/package=getopt" class="external-link">getopt</a>, and <a href="https://CRAN.R-project.org/package=optparse" class="external-link">optparse</a> are supposed to do. You are right. These packages offer amazing command line experience once you have a solid interface. In an iterative and evolving research and development situation, however, rconfig gives you agility.</p>
 <p>Moreover, the rconfig package offers various ways for substituting environment variables, R global variables, and even substituting configuration values. The <a href="https://CRAN.R-project.org/package=GetoptLong/vignettes/variable_interpolation.html" class="external-link">GetoptLong</a> package has similar functionality but its focus is on command line interfaces and not configuration. Other tools, such as <code>sprintf</code>, <a href="https://CRAN.R-project.org/package=glue" class="external-link">glue</a>, <a href="https://CRAN.R-project.org/package=rprintf" class="external-link">rprintf</a>, and <a href="https://CRAN.R-project.org/package=whisker" class="external-link">whiskers</a> are aimed at substituting values from R expressions.</p>
 <p>If you are not yet convinced, here is a quick teaser. This is the content of the default configuration file, <code>rconfig.yml</code>:</p>
@@ -288,7 +289,7 @@ JSON strings, and command line arguments.
 <col width="26%">
 <col width="23%">
 </colgroup>
-<thead><tr class="header">
+<thead><tr>
 <th></th>
 <th>
 <code>a</code> is set &amp; not null</th>
@@ -298,7 +299,7 @@ JSON strings, and command line arguments.
 <code>a</code> is unset</th>
 </tr></thead>
 <tbody>
-<tr class="odd">
+<tr>
 <td><code>${a:-b}</code></td>
 <td>substitute <code>a</code>
 </td>
@@ -307,7 +308,7 @@ JSON strings, and command line arguments.
 <td>substitute <code>b</code>
 </td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>${a-b}</code></td>
 <td>substitute <code>a</code>
 </td>
@@ -315,14 +316,14 @@ JSON strings, and command line arguments.
 <td>substitute <code>b</code>
 </td>
 </tr>
-<tr class="odd">
+<tr>
 <td><code>${a:?b}</code></td>
 <td>substitute <code>a</code>
 </td>
 <td>error, exit</td>
 <td>error, exit</td>
 </tr>
-<tr class="even">
+<tr>
 <td><code>${a?b}</code></td>
 <td>substitute <code>a</code>
 </td>
@@ -499,7 +500,7 @@ JSON strings, and command line arguments.
 <span id="cb19-7"><a href="#cb19-7" tabindex="-1"></a><span class="co">#  3rd Qu.:6.900   3rd Qu.:3.175   3rd Qu.:5.875   3rd Qu.:2.300  </span></span>
 <span id="cb19-8"><a href="#cb19-8" tabindex="-1"></a><span class="co">#  Max.   :7.900   Max.   :3.800   Max.   :6.900   Max.   :2.500</span></span></code></pre></div>
 <div class="sourceCode" id="cb20"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb20-1"><a href="#cb20-1" tabindex="-1"></a><span class="ex">Rscript</span> iris.R <span class="at">--species</span> setosa <span class="at">--verbose</span></span>
-<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="co"># 2025-07-03 23:03:29.72101 - Started</span></span>
+<span id="cb20-2"><a href="#cb20-2" tabindex="-1"></a><span class="co"># 2026-10-25 17:09:32.742489 - Started</span></span>
 <span id="cb20-3"><a href="#cb20-3" tabindex="-1"></a><span class="co"># Getting summaries for species setosa</span></span>
 <span id="cb20-4"><a href="#cb20-4" tabindex="-1"></a><span class="co">#   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   </span></span>
 <span id="cb20-5"><a href="#cb20-5" tabindex="-1"></a><span class="co">#  Min.   :4.300   Min.   :2.300   Min.   :1.000   Min.   :0.100  </span></span>
@@ -508,9 +509,9 @@ JSON strings, and command line arguments.
 <span id="cb20-8"><a href="#cb20-8" tabindex="-1"></a><span class="co">#  Mean   :5.006   Mean   :3.428   Mean   :1.462   Mean   :0.246  </span></span>
 <span id="cb20-9"><a href="#cb20-9" tabindex="-1"></a><span class="co">#  3rd Qu.:5.200   3rd Qu.:3.675   3rd Qu.:1.575   3rd Qu.:0.300  </span></span>
 <span id="cb20-10"><a href="#cb20-10" tabindex="-1"></a><span class="co">#  Max.   :5.800   Max.   :4.400   Max.   :1.900   Max.   :0.600  </span></span>
-<span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a><span class="co"># 2025-07-03 23:03:29.7243 - Done</span></span></code></pre></div>
+<span id="cb20-11"><a href="#cb20-11" tabindex="-1"></a><span class="co"># 2026-10-25 17:09:32.746343 - Done</span></span></code></pre></div>
 <div class="sourceCode" id="cb21"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb21-1"><a href="#cb21-1" tabindex="-1"></a><span class="ex">Rscript</span> iris.R <span class="at">--species</span> maxima <span class="at">--verbose</span></span>
-<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="co"># 2025-07-03 23:03:29.849726 - Started</span></span>
+<span id="cb21-2"><a href="#cb21-2" tabindex="-1"></a><span class="co"># 2026-10-25 17:09:32.896485 - Started</span></span>
 <span id="cb21-3"><a href="#cb21-3" tabindex="-1"></a><span class="co"># Error: Provide a valid species</span></span>
 <span id="cb21-4"><a href="#cb21-4" tabindex="-1"></a><span class="co"># Execution halted</span></span></code></pre></div>
 <div class="sourceCode" id="cb22"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb22-1"><a href="#cb22-1" tabindex="-1"></a><span class="ex">Rscript</span> iris.R</span>
@@ -524,12 +525,12 @@ JSON strings, and command line arguments.
 <span id="cb23-4"><a href="#cb23-4" tabindex="-1"></a><span class="co">#        qsec          vs          am        gear        carb </span></span>
 <span id="cb23-5"><a href="#cb23-5" tabindex="-1"></a><span class="co">#  0.82104075  0.31776281  2.52022689  0.65541302 -0.19941925</span></span></code></pre></div>
 <div class="sourceCode" id="cb24"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb24-1"><a href="#cb24-1" tabindex="-1"></a><span class="ex">Rscript</span> mtcars.R <span class="at">--verbose</span> <span class="at">--vars</span> cyl</span>
-<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="co"># 2025-07-03 23:03:30.233205 - Started</span></span>
+<span id="cb24-2"><a href="#cb24-2" tabindex="-1"></a><span class="co"># 2026-10-25 17:09:33.349533 - Started</span></span>
 <span id="cb24-3"><a href="#cb24-3" tabindex="-1"></a><span class="co"># (Intercept)         cyl </span></span>
 <span id="cb24-4"><a href="#cb24-4" tabindex="-1"></a><span class="co">#    37.88458    -2.87579 </span></span>
-<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a><span class="co"># 2025-07-03 23:03:30.235869 - Done</span></span></code></pre></div>
+<span id="cb24-5"><a href="#cb24-5" tabindex="-1"></a><span class="co"># 2026-10-25 17:09:33.352277 - Done</span></span></code></pre></div>
 <div class="sourceCode" id="cb25"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb25-1"><a href="#cb25-1" tabindex="-1"></a><span class="ex">Rscript</span> mtcars.R <span class="at">--verbose</span> <span class="at">--vars</span> cal</span>
-<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="co"># 2025-07-03 23:03:30.356792 - Started</span></span>
+<span id="cb25-2"><a href="#cb25-2" tabindex="-1"></a><span class="co"># 2026-10-25 17:09:33.501842 - Started</span></span>
 <span id="cb25-3"><a href="#cb25-3" tabindex="-1"></a><span class="co"># Error: Not valid variable</span></span>
 <span id="cb25-4"><a href="#cb25-4" tabindex="-1"></a><span class="co"># Execution halted</span></span></code></pre></div>
 <div class="sourceCode" id="cb26"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb26-1"><a href="#cb26-1" tabindex="-1"></a><span class="ex">Rscript</span> mtcars.R <span class="at">--vars</span> cyl disp hp</span>
@@ -653,7 +654,7 @@ JSON strings, and command line arguments.
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>
