@@ -42,7 +42,7 @@
 #'   The file name can be an URL or it can can be missing.
 #' * `R_RCONFIG_EVAL`: coerced to logical, indicating whether
 #'   R expressions starting with `!expr` should be evaluated in the
-#'   namespace environment for the base package
+#'   base environment (`baseenv()`)
 #'   (overrides the value of `getOption("rconfig.eval")`).
 #'   When not set the value assumed is `TRUE`.
 #' * `R_RCONFIG_SUB`: coerced to logical, indicating whether
@@ -67,10 +67,16 @@
 #' period-separated keys are parsed as hierarchical lists
 #' (i.e. `a.b.c=12` is treated as `a$b$c = 12`) by default.
 #'
-#' When the configuration is a file or a JSON string,
-#' values starting with `!expr` will be evaluated depending on the
-#' settings `R_RCONFIG_EVAL` and `getOption("rconfig.eval")`.
+#' Configuration values starting with `!expr` will be evaluated depending
+#' on the settings `R_RCONFIG_EVAL` and `getOption("rconfig.eval")`.
 #' E.g. `cores: !expr getOption("mc.cores")`, etc.
+#'
+#' **Security:** `!expr` values are executable R code. Evaluation is enabled
+#' by default, and `baseenv()` is not a security sandbox. Only parse
+#' configuration inputs you trust. For `rconfig()`, disable evaluation with
+#' `eval = FALSE` or `R_RCONFIG_EVAL=FALSE`. `read_ini()` also accepts
+#' `eval = FALSE`; when `eval` is `NULL`, it uses the environment variable
+#' or option.
 #'
 #' The rconfig package interprets 3 kinds of substitution patterns:
 #' 
