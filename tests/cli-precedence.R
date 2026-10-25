@@ -50,13 +50,10 @@ local({
         "cat('CLI_PRECEDENCE_OK\\n')"
     ), script)
 
-    rscript <- Sys.which("Rscript")
-    if (!nzchar(rscript)) {
-        rscript <- file.path(
-            R.home("bin"),
-            if (.Platform$OS.type == "windows") "Rscript.exe" else "Rscript"
-        )
-    }
+    rscript <- file.path(
+        R.home("bin"),
+        if (.Platform$OS.type == "windows") "Rscript.exe" else "Rscript"
+    )
     json <- '{"shared":"json","json_level":"json","flag_level":"json","file_level":"json","list_level":"json","json_only":"json"}'
     output <- system2(
         rscript,
