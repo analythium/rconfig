@@ -18,6 +18,8 @@ local({
         "token = a=b:c",
         "url: https://example.test/query?a=b:c",
         "count = 12",
+        "empty =",
+        "no_value",
         "expr = !expr 2 + 3"
     ), file)
 
@@ -34,6 +36,8 @@ local({
         identical(config$app$token, "a=b:c"),
         identical(config$app$url, "https://example.test/query?a=b:c"),
         identical(config$app$count, "12"),
+        identical(config$app$empty, ""),
+        identical(config$app$no_value, ""),
         identical(config$app$expr, 5),
         identical(unevaluated_config$app$expr, "!expr 2 + 3"),
         identical(evaluated_config$app$expr, 5),
