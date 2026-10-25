@@ -51,22 +51,24 @@ txt_sep <- function() {
 ## Parse text files (second separator as part of value must be quoted
 ## because parts beyond that are dropped)
 ## separator is '=' by default, governed by txt_sep()
-parse_txt <- function(x, ...) {
+parse_txt <- function(x, eval = NULL, ...) {
+    eval <- if (is.null(eval)) do_eval() else eval
     txt <- utils::read.table(x, sep = txt_sep(), ...)
     parts <- strsplit(txt[[1L]], "\\.")
     ## convert_type handles !expr when needed
-    values <- lapply(txt[[2L]], convert_type)
+    values <- lapply(txt[[2L]], convert_type, eval = eval)
     make_list(parts, values)
 }
 
 ## Parse YAML files
 ## !expr evaluation is governed by do_eval()
-parse_yml <- function(x, ...) {
-    if (do_eval()) {
+parse_yml <- function(x, eval = NULL, ...) {
+    eval <- if (is.null(eval)) do_eval() else eval
+    if (isTRUE(eval)) {
         yaml::yaml.load_file(x,
             eval.expr = FALSE,
             handlers = list(expr = function(x)
-                eval(parse(text = x), envir = baseenv())), ...)
+                base::eval(parse(text = x), envir = baseenv())), ...)
     } else {
         yaml::yaml.load_file(x,
             eval.expr = FALSE,
@@ -102,9 +104,10 @@ parse_json_string <- function(x, ...) {
 ## convert to YAML when !expr evaluation needed
 ## need to work around ! being special char in YAML
 ## !expr evaluation is governed by do_eval()
-parse_json <- function(x, ...) {
+parse_json <- function(x, eval = NULL, ...) {
+    eval <- if (is.null(eval)) do_eval() else eval
     z <- readLines(x)
-    if (do_eval()) {
+    if (isTRUE(eval)) {
         z <- gsub("!expr ", "__excl__expr ", z)
         l <- jsonlite::fromJSON(z, ...)
         y <- yaml::as.yaml(l)
@@ -112,7 +115,7 @@ parse_json <- function(x, ...) {
         yaml::yaml.load(y,
             eval.expr = FALSE,
             handlers = list(expr = function(x)
-                eval(parse(text = x), envir = baseenv())))
+                base::eval(parse(text = x), envir = baseenv())))
     } else {
         jsonlite::fromJSON(z, ...)
     }
@@ -285,6 +288,8 @@ config_list <- function(file = NULL, list = NULL, ...) {
 #' Comments may appear on their own on an otherwise empty line, possibly indented.
 #' 
 #' @param file The name and path of the INI configuration file.
+#' @param eval Logical, whether to evaluate `!expr` expressions. If `NULL`,
+#'   use the `R_RCONFIG_EVAL` environment variable or `"rconfig.eval"` option.
 #' @param ... Other arguments passed to the function (currently there is none).
 #' 
 #' @return The configuration value a named list, 
@@ -300,26 +305,22 @@ config_list <- function(file = NULL, list = NULL, ...) {
 #' inifile <- system.file("examples", "example.ini", package = "rconfig")
 #'
 #' ## not evaluating R expressions
-#' op <- options("rconfig.eval" = FALSE)
-#' ini <- rconfig::read_ini(file = inifile)
+#' ini <- rconfig::read_ini(file = inifile, eval = FALSE)
 #' str(ini)
 #'
 #' ## evaluating R expressions
-#' options("rconfig.eval" = TRUE)
-#' ini <- rconfig::read_ini(file = inifile)
+#' ini <- rconfig::read_ini(file = inifile, eval = TRUE)
 #' str(ini)
-#'
-#' # reset options
-#' options(op)
 #'
 #' @name read_ini
 #' @export
-read_ini <- function(file, ...) {
-    parse_ini(file, ..., convert = FALSE)
+read_ini <- function(file, eval = NULL, ...) {
+    eval <- if (is.null(eval)) do_eval() else eval
+    parse_ini(file, ..., convert = FALSE, eval = eval)
 }
 
 # parse INI
-parse_ini <- function(file, ..., convert = TRUE) {
+parse_ini <- function(file, ..., convert = TRUE, eval = do_eval()) {
     z <- readLines(file)
     ini <- .parse_ini(z, ...)
     ## handling dot separated keys and type conversions (also !expr)
@@ -328,8 +329,8 @@ parse_ini <- function(file, ..., convert = TRUE) {
         if (length(e) > 0L) {
             parts <- strsplit(names(e), "\\.")
             values <- lapply(e, function(x) {
-                if (convert || is_expression(x))
-                    convert_type(x)
+                if (convert || is_expression(x, eval = eval))
+                    convert_type(x, eval = eval)
                 else x
             })
             ini[[j]] <- make_list(parts, values)

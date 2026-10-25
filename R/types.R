@@ -16,8 +16,8 @@ do_eval <- function() {
 }
 
 ## Check type of x
-is_expression <- function(x) {
-    do_eval() && length(x) == 1L && startsWith(x, "!expr ")
+is_expression <- function(x, eval = do_eval()) {
+    isTRUE(eval) && length(x) == 1L && startsWith(x, "!expr ")
 }
 is_logical <- function(x) {
     !any(is.na(suppressWarnings(as.logical(x))))
@@ -32,23 +32,23 @@ is_integer <- function(x, tol = 1e-6) {
 }
 
 ## Guess type of x
-guess_type <- function(x) {
+guess_type <- function(x, eval = do_eval()) {
     if (is_integer(x))
         "int"
     else if (is_numeric(x))
         "num"
     else if (is_logical(x))
         "logi"
-    else if (is_expression(x))
+    else if (is_expression(x, eval = eval))
         "expr"
     else "chr"
 }
 
 ## Evaluate/coerce character to guessed type
-convert_type <- function(x) {
-    tp <- guess_type(x)
-    if (tp == "expr")
-        return(eval(
+convert_type <- function(x, eval = do_eval()) {
+    tp <- guess_type(x, eval = eval)
+    if (tp == "expr" && isTRUE(eval))
+        return(base::eval(
             expr = parse(text = substr(x, 7L, nchar(x))),
             envir = baseenv()))
     switch(tp,
