@@ -364,22 +364,14 @@ parse_ini <- function(file, ...) {
         }
         # key-value pairs that are on the same line
         if (v[i] == "") {
-            if (grepl("^.*=.*$", l) || grepl("^.*:.*$", l)) {
-                key <- if (grepl("^.*=.*$", l))
-                    "=" else ":"
-                kv <- strsplit(l, paste0("\\s*", key, "\\s*"))[[1L]]
+            separator <- regexpr("[=:]", l)[1L]
+            if (separator > 0L) {
+                key <- trimws(substr(l, 1L, separator - 1L))
                 ## empty key might be part of multiline text
-                if (kv[1L] != "") {
-                    if (length(kv) == 2L) {
-                        # if (identical(kv[1L], ""))
-                        #     stop(paste0("Key missing on line ", i, "."))
-                        ini[[section]][[kv[1L]]] <- kv[2L]
-                        v[i] <- "k"
-                    }
-                    if (length(kv) == 1L) {
-                        ini[[section]][[kv[1L]]] <- ""
-                        v[i] <- "k"
-                    }
+                if (key != "") {
+                    value <- trimws(substr(l, separator + 1L, nchar(l)))
+                    ini[[section]][[key]] <- value
+                    v[i] <- "k"
                 }
             }
         }
