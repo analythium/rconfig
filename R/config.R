@@ -297,6 +297,13 @@ command.default <- function(x, ...) {
 }
 
 ## trace is stored when debug mode is on
+#' Determine whether debug tracing is enabled.
+#'
+#' The `R_RCONFIG_DEBUG` environment variable takes precedence over the
+#' `rconfig.debug` option. The default is `FALSE`.
+#'
+#' @return A length-one logical value.
+#' @noRd
 do_debug <- function() {
     default_val <- FALSE
     var <- as.logical(Sys.getenv("R_RCONFIG_DEBUG"))
@@ -311,6 +318,13 @@ do_debug <- function() {
 }
 
 ## check settings for flattening
+#' Determine whether nested configuration lists should be flattened.
+#'
+#' The `R_RCONFIG_FLATTEN` environment variable takes precedence over the
+#' `rconfig.flatten` option. The default is `FALSE`.
+#'
+#' @return A length-one logical value.
+#' @noRd
 do_flatten <- function() {
     default_val <- FALSE
     var <- as.logical(Sys.getenv("R_RCONFIG_FLATTEN"))
@@ -325,6 +339,13 @@ do_flatten <- function() {
 }
 
 ## check settings for env substitution
+#' Determine whether configuration values should be substituted.
+#'
+#' The `R_RCONFIG_SUB` environment variable takes precedence over the
+#' `rconfig.sub` option. The default is `TRUE`.
+#'
+#' @return A length-one logical value.
+#' @noRd
 do_sub <- function() {
     default_val <- TRUE
     var <- as.logical(Sys.getenv("R_RCONFIG_SUB"))
@@ -340,6 +361,14 @@ do_sub <- function() {
 
 ## assume here that the root of x1 and x2 are the same
 ## and we want that part (reversing unique naming side effects)
+#' Find the common prefix of two strings.
+#'
+#' Used to recover shared roots in flattened configuration names.
+#'
+#' @param x1,x2 Character strings to compare.
+#' @return The common leading substring, or `NA_character_` if its length
+#'   cannot be determined.
+#' @noRd
 findroot <- function(x1, x2) {
     n1 <- nchar(x1)
     n2 <- nchar(x2)
@@ -356,11 +385,21 @@ findroot <- function(x1, x2) {
 }
 
 ## the reverse of flatten list
+#' Reconstruct a nested list from flattened names.
+#'
+#' @param x A named list with dot-separated paths.
+#' @return A nested list built from the paths in `names(x)`.
+#' @noRd
 nest <- function(x) {
     make_list(strsplit(names(x), "\\."), x)
 }
 
 ## check for depth-1 vectors
+#' Describe the first-level names represented in a nested list.
+#'
+#' @param x A nested list.
+#' @return A data frame mapping flattened names to their first-level names.
+#' @noRd
 depth1 <- function(x) {
     nam <- names(unlist(x))
     out <- data.frame(unlist=nam)
@@ -378,6 +417,13 @@ depth1 <- function(x) {
 }
 
 ## flatten nested list to get period-separated keys
+#' Flatten a nested list to dot-separated names.
+#'
+#' @param x A nested list.
+#' @param check If `TRUE`, validate names and verify that nesting the result
+#'   reconstructs `x`.
+#' @return A named list with flattened paths.
+#' @noRd
 flatten_list <- function(x, check=TRUE) {
     if (length(x) <= 1L)
         return(x)

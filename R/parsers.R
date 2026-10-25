@@ -1,6 +1,12 @@
 ## Internal functions for reading/parsing config files
 
 ## Guess file extension
+#' Guess the supported configuration format from a path.
+#'
+#' @param x A file path or URL.
+#' @return One of `"yml"`, `"json"`, `"ini"`, or `"txt"`; unrecognized
+#'   extensions default to `"txt"`.
+#' @noRd
 guess_ext <- function(x) {
     switch(tolower(tools::file_ext(x)),
         "yml" = "yml",
@@ -15,6 +21,12 @@ guess_ext <- function(x) {
 ## parts turned into named lists (e.g. a$b$c)
 ## values is a list of values to assign to the tips (e.g. a$b$c <- v)
 ## note: values used as is (no coercion/evaluation)
+#' Build a nested list from path components and values.
+#'
+#' @param parts A list of character vectors describing nested paths.
+#' @param values A list of values to assign at the ends of those paths.
+#' @return A nested named list; values are used without coercion.
+#' @noRd
 make_list <- function(parts, values) {
     to_merge <- list()
     for (i in seq_along(parts)) {
@@ -37,6 +49,13 @@ make_list <- function(parts, values) {
 
 ## find the separator for the text parser
 ## env var R_RCONFIG_SEP overrides the rconfig.sep option
+#' Determine the separator used by the text parser.
+#'
+#' `R_RCONFIG_SEP` takes precedence over the `rconfig.sep` option. The default
+#' separator is `"="`.
+#'
+#' @return A length-one character value.
+#' @noRd
 txt_sep <- function() {
     default_val <- "="
     var <- as.character(Sys.getenv("R_RCONFIG_SEP"))
@@ -51,6 +70,13 @@ txt_sep <- function() {
 ## Parse text files (second separator as part of value must be quoted
 ## because parts beyond that are dropped)
 ## separator is '=' by default, governed by txt_sep()
+#' Parse a delimited text configuration file.
+#'
+#' @param x A file path or URL.
+#' @param eval Whether to evaluate `!expr` values; `NULL` uses `do_eval()`.
+#' @param ... Additional arguments passed to [utils::read.table()].
+#' @return A nested named list with values coerced to their guessed types.
+#' @noRd
 parse_txt <- function(x, eval = NULL, ...) {
     eval <- if (is.null(eval)) do_eval() else eval
     txt <- utils::read.table(x, sep = txt_sep(), ...)
@@ -62,6 +88,13 @@ parse_txt <- function(x, eval = NULL, ...) {
 
 ## Parse YAML files
 ## !expr evaluation is governed by do_eval()
+#' Parse a YAML configuration file.
+#'
+#' @param x A file path or URL.
+#' @param eval Whether to evaluate `!expr` values; `NULL` uses `do_eval()`.
+#' @param ... Additional arguments passed to [yaml::yaml.load_file()].
+#' @return The parsed configuration list.
+#' @noRd
 parse_yml <- function(x, eval = NULL, ...) {
     eval <- if (is.null(eval)) do_eval() else eval
     if (isTRUE(eval)) {
@@ -81,6 +114,15 @@ parse_yml <- function(x, eval = NULL, ...) {
 ## convert to YAML when !expr evaluation needed
 ## need to work around ! being special char in YAML
 ## !expr evaluation is governed by do_eval()
+#' Parse a JSON configuration string.
+#'
+#' When evaluation is enabled, JSON is converted through YAML to support
+#' `!expr` values.
+#'
+#' @param x A JSON string.
+#' @param ... Additional arguments passed to [jsonlite::fromJSON()].
+#' @return The parsed configuration with a `"trace"` attribute.
+#' @noRd
 parse_json_string <- function(x, ...) {
     if (do_eval()) {
         z <- gsub("!expr ", "__excl__expr ", x)
@@ -104,6 +146,16 @@ parse_json_string <- function(x, ...) {
 ## convert to YAML when !expr evaluation needed
 ## need to work around ! being special char in YAML
 ## !expr evaluation is governed by do_eval()
+#' Parse a JSON configuration file.
+#'
+#' When evaluation is enabled, JSON is converted through YAML to support
+#' `!expr` values.
+#'
+#' @param x A file path or URL.
+#' @param eval Whether to evaluate `!expr` values; `NULL` uses `do_eval()`.
+#' @param ... Additional arguments passed to [jsonlite::fromJSON()].
+#' @return The parsed configuration list.
+#' @noRd
 parse_json <- function(x, eval = NULL, ...) {
     eval <- if (is.null(eval)) do_eval() else eval
     z <- readLines(x)
@@ -123,6 +175,13 @@ parse_json <- function(x, eval = NULL, ...) {
 
 ## Parse the file depending on file type (yml, json, ini, txt)
 ## note: YAML, JSON, INI, txt accept URLs or file names
+#' Parse a configuration file according to its extension.
+#'
+#' @param x A file path or URL.
+#' @param ... Parser-specific arguments.
+#' @return The parsed configuration with a `"trace"` attribute, or `NULL` if
+#'   the parser returns `NULL`.
+#' @noRd
 parse_file <- function(x, ...) {
     x <- normalizePath(x, mustWork = FALSE)
     out <- switch(guess_ext(x),
@@ -140,6 +199,14 @@ parse_file <- function(x, ...) {
 
 ## Parse default config file
 ## defined by R_RCONFIG_FILE
+#' Parse the default configuration file, if present.
+#'
+#' The path is taken from `R_RCONFIG_FILE`, defaulting to `rconfig.yml`.
+#'
+#' @param ... Parser-specific arguments passed to `parse_file()`.
+#' @return The parsed configuration with a `"trace"` attribute, or `NULL` if
+#'   the file does not exist or parses to `NULL`.
+#' @noRd
 parse_default <- function(...) {
     f <- Sys.getenv("R_RCONFIG_FILE", "rconfig.yml")
     f <- normalizePath(f, mustWork = FALSE)
@@ -159,6 +226,13 @@ parse_default <- function(...) {
 ## following the script file name and preceding
 ## any noun arguments (starting with '-' or '--')
 ## eg: args <- c("deploy", "ps", "--test", "--some.value", "!expr pi", "--another.value", "abc", "def", "--another.stuff", "99.2")
+#' Extract positional command verbs from trailing arguments.
+#'
+#' Verbs are the arguments before the first option beginning with `-`.
+#'
+#' @param args A character vector of command-line arguments.
+#' @return The positional arguments preceding the first option.
+#' @noRd
 parse_args_verbs <- function(args) {
     noun1 <- which(startsWith(args, "-"))
     if (length(noun1) > 0L) {
@@ -176,6 +250,14 @@ parse_args_verbs <- function(args) {
 ## note: period-separated command line
 ## arguments are parsed as hierarchical lists
 ## values are coerced/evaluated using convert_type(value)
+#' Parse configuration values from command-line flags.
+#'
+#' File and JSON flags are excluded; remaining dotted flag names become nested
+#' list paths.
+#'
+#' @param args A character vector of command-line arguments.
+#' @return A nested named list, or `NULL` when there are no flags.
+#' @noRd
 parse_args_other <- function(args) {
     foj <- args %in% c("-f", "--file", "-j", "--json")
     foj[which(foj)+1L] <- TRUE
@@ -212,6 +294,13 @@ parse_args_other <- function(args) {
 ## Parse cli arguments for:
 ## -f --file and -j --json
 ## eg: args <- c("--test", "--some.value", "!expr pi", "--another.value", "abc", "def", "-j", "{\"a\":1, \"b\":\"c\"}", "--another.stuff", "99.2", "-f", "inst/config/rconfig.yml")
+#' Parse configuration files and JSON strings named on the command line.
+#'
+#' @param args A character vector of command-line arguments.
+#' @param ... Parser-specific arguments passed to file parsers.
+#' @return A list of parsed sources in command-line order, or `NULL` if no
+#'   file or JSON flags are present.
+#' @noRd
 parse_args_file_and_json <- function(args, ...) {
     idx <- which(args %in% c("-f", "--file", "-j", "--json"))
     if (!length(idx))
@@ -242,6 +331,18 @@ parse_args_file_and_json <- function(args, ...) {
 ##
 ## last element overrides previous
 ## preserves all the rconfig attributes
+#' Collect configuration sources before merging.
+#'
+#' Sources are returned in override order: default file, command-line file or
+#' JSON inputs, other command-line flags, explicit files, then the explicit
+#' list.
+#'
+#' @param file Optional vector of configuration file paths.
+#' @param list Optional named list of configuration values.
+#' @param ... Parser-specific arguments passed to file parsers.
+#' @return The ordered list of configuration sources, with command verbs
+#'   stored in its `"command"` attribute.
+#' @noRd
 config_list <- function(file = NULL, list = NULL, ...) {
     args <- commandArgs(trailingOnly=TRUE)
     l1 <- parse_default()
@@ -320,6 +421,14 @@ read_ini <- function(file, eval = NULL, ...) {
 }
 
 # parse INI
+#' Parse an INI configuration file into section lists.
+#'
+#' @param file A file path or URL.
+#' @param ... Arguments passed to `.parse_ini()`.
+#' @param convert If `TRUE`, coerce values to guessed types.
+#' @param eval Whether to evaluate `!expr` values; defaults to `do_eval()`.
+#' @return A named list of sections with dot-separated keys nested.
+#' @noRd
 parse_ini <- function(file, ..., convert = TRUE, eval = do_eval()) {
     z <- readLines(file)
     ini <- .parse_ini(z, ...)
@@ -342,6 +451,12 @@ parse_ini <- function(file, ..., convert = TRUE, eval = do_eval()) {
 ## Workhorse function to parse contents of an INI file
 ## following rules specified at:
 ## https://docs.python.org/3/library/configparser.html#supported-ini-file-structure
+#' Parse INI file lines into section and key-value lists.
+#'
+#' @param lines Character vector of INI file lines.
+#' @param ... Reserved for parser compatibility.
+#' @return A named list of sections containing character values.
+#' @noRd
 .parse_ini <- function(lines, ...) {
 
     n <- length(lines)
