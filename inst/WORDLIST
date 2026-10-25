@@ -3,17 +3,13 @@ CLI
 GetoptLong
 Gitpod
 INI
-JSON
 README
 RStudio
 Rscript
 TOML
-YAML
 analythium
 caddy
-config
 configr
-configs
 getopt
 github
 golem
@@ -21,6 +17,5 @@ https
 kubectl
 optparse
 parsers
-repo
 rprintf
 yaml

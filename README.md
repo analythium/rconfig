@@ -88,6 +88,13 @@ The rconfig package has the following features:
   following the R script file name and preceding the command line flags
   (starting with `-` or `--`)
 
+**Security note:** `!expr` values are executable R code and are
+evaluated by default. Evaluation in `baseenv()` is not a security
+sandbox, so only use configuration inputs you trust. Disable evaluation
+with `eval = FALSE` in `rconfig()` or `read_ini()`, or set
+`R_RCONFIG_EVAL=FALSE`. When `read_ini()`’s `eval` argument is `NULL`,
+it follows the environment variable or `options(rconfig.eval)`.
+
 This looks very similar to what
 [littler](https://CRAN.R-project.org/package=littler),
 [getopt](https://CRAN.R-project.org/package=getopt), and
@@ -527,7 +534,7 @@ Rscript iris.R --species virginica
 
 ``` bash
 Rscript iris.R --species setosa --verbose
-# 2025-07-03 23:03:29.72101 - Started
+# 2026-10-25 17:09:32.742489 - Started
 # Getting summaries for species setosa
 #   Sepal.Length    Sepal.Width     Petal.Length    Petal.Width   
 #  Min.   :4.300   Min.   :2.300   Min.   :1.000   Min.   :0.100  
@@ -536,12 +543,12 @@ Rscript iris.R --species setosa --verbose
 #  Mean   :5.006   Mean   :3.428   Mean   :1.462   Mean   :0.246  
 #  3rd Qu.:5.200   3rd Qu.:3.675   3rd Qu.:1.575   3rd Qu.:0.300  
 #  Max.   :5.800   Max.   :4.400   Max.   :1.900   Max.   :0.600  
-# 2025-07-03 23:03:29.7243 - Done
+# 2026-10-25 17:09:32.746343 - Done
 ```
 
 ``` bash
 Rscript iris.R --species maxima --verbose
-# 2025-07-03 23:03:29.849726 - Started
+# 2026-10-25 17:09:32.896485 - Started
 # Error: Provide a valid species
 # Execution halted
 ```
@@ -568,15 +575,15 @@ Rscript mtcars.R
 
 ``` bash
 Rscript mtcars.R --verbose --vars cyl
-# 2025-07-03 23:03:30.233205 - Started
+# 2026-10-25 17:09:33.349533 - Started
 # (Intercept)         cyl 
 #    37.88458    -2.87579 
-# 2025-07-03 23:03:30.235869 - Done
+# 2026-10-25 17:09:33.352277 - Done
 ```
 
 ``` bash
 Rscript mtcars.R --verbose --vars cal
-# 2025-07-03 23:03:30.356792 - Started
+# 2026-10-25 17:09:33.501842 - Started
 # Error: Not valid variable
 # Execution halted
 ```

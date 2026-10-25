@@ -1,8 +1,8 @@
 Package: rconfig
 Type: Package
 Title: Manage R Configuration at the Command Line
-Version: 0.3.0
-Date: 2023-06-26
+Version: 0.3.1
+Date: 2026-10-25
 Authors@R: c(
   person(given = "Peter",
     family = "Solymos",
@@ -19,7 +19,7 @@ Description: Configuration management using files (YAML, JSON, INI, TXT),
 License: MIT + file LICENSE
 LazyLoad: yes
 Imports: yaml, jsonlite
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 BugReports: https://github.com/analythium/rconfig/issues

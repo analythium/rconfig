@@ -117,7 +117,7 @@ it is assumed to be \code{rconfig.yml} in the current working directory.
 The file name can be an URL or it can can be missing.
 \item \code{R_RCONFIG_EVAL}: coerced to logical, indicating whether
 R expressions starting with \code{!expr} should be evaluated in the
-namespace environment for the base package
+base environment (\code{baseenv()})
 (overrides the value of \code{getOption("rconfig.eval")}).
 When not set the value assumed is \code{TRUE}.
 \item \code{R_RCONFIG_SUB}: coerced to logical, indicating whether
@@ -143,10 +143,16 @@ separator (\code{R_RCONFIG_SEP} or \code{getOption("rconfig.sep")}) and
 period-separated keys are parsed as hierarchical lists
 (i.e. \code{a.b.c=12} is treated as \code{a$b$c = 12}) by default.
 
-When the configuration is a file or a JSON string,
-values starting with \code{!expr} will be evaluated depending on the
-settings \code{R_RCONFIG_EVAL} and \code{getOption("rconfig.eval")}.
+Configuration values starting with \code{!expr} will be evaluated depending
+on the settings \code{R_RCONFIG_EVAL} and \code{getOption("rconfig.eval")}.
 E.g. \verb{cores: !expr getOption("mc.cores")}, etc.
+
+\strong{Security:} \code{!expr} values are executable R code. Evaluation is enabled
+by default, and \code{baseenv()} is not a security sandbox. Only parse
+configuration inputs you trust. For \code{rconfig()}, disable evaluation with
+\code{eval = FALSE} or \code{R_RCONFIG_EVAL=FALSE}. \code{read_ini()} also accepts
+\code{eval = FALSE}; when \code{eval} is \code{NULL}, it uses the environment variable
+or option.
 
 The rconfig package interprets 3 kinds of substitution patterns:
 \itemize{
