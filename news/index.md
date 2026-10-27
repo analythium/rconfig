@@ -1,5 +1,16 @@
 # Changelog
 
+## Version 0.3.1
+
+- Fixed issue with variable substitution when the default value is
+  empty.
+- Improved handling of substitution rules.
+- Added tests for various substitution scenarios, parsers, and
+  precedence rules.
+- Hardened expression evaluations.
+- Fixed INI file parsing for edge cases.
+- Updated documentation.
+
 ## Version 0.3.0
 
 CRAN release: 2023-06-27
